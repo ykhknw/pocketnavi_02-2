@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクトダウンロード</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .file-list { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; }
+        .download-btn { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .download-btn:hover { background: #005a87; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .command { background: #f8f8f8; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🚀 建築家.com プロジェクト GitHub アップロード手順</h1>
+    
+    <div class="section">
+        <h2>📁 必要なファイル一覧</h2>
+        <div class="file-list">
+            <strong>ルートファイル:</strong><br>
+            • package.json<br>
+            • package-lock.json<br>
+            • tsconfig.json<br>
+            • tsconfig.app.json<br>
+            • tsconfig.node.json<br>
+            • vite.config.ts<br>
+            • tailwind.config.js<br>
+            • postcss.config.js<br>
+            • eslint.config.js<br>
+            • components.json<br>
+            • index.html<br>
+            • README.md<br>
+            • CHANGELOG.md<br>
+            <br>
+            <strong>srcフォルダ:</strong><br>
+            • src/ 以下の全ファイル（約30ファイル）<br>
+            <br>
+            <strong>docsフォルダ:</strong><br>
+            • docs/ 以下の全ファイル（5ファイル）
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🌐 方法1: GitHub Web UI（推奨）</h2>
+        <ol>
+            <li><strong>GitHubリポジトリ作成</strong>
+                <ul>
+                    <li><a href="https://github.com/new" target="_blank">GitHub新規リポジトリ作成</a></li>
+                    <li>Repository name: <code>pocketnavi_02</code></li>
+                    <li>Public/Private を選択</li>
+                    <li>「Create repository」をクリック</li>
+                </ul>
+            </li>
+            <li><strong>ファイルアップロード</strong>
+                <ul>
+                    <li>「uploading an existing file」をクリック</li>
+                    <li>プロジェクトファイルを全選択してドラッグ&ドロップ</li>
+                    <li>Commit message: "Initial commit with Supabase integration"</li>
+                    <li>「Commit changes」をクリック</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>💻 方法2: ローカル環境でGit操作</h2>
+        
+        <h3>Step 1: ローカルにプロジェクト作成</h3>
+        <div class="command">
+mkdir pocketnavi_02<br>
+cd pocketnavi_02<br>
+git init
+        </div>
+        
+        <h3>Step 2: ファイルをローカルにコピー</h3>
+        <p>WebContainerからダウンロードしたファイルを配置</p>
+        
+        <h3>Step 3: Git操作</h3>
+        <div class="command">
+git add .<br>
+git commit -m "Initial commit with Supabase integration"<br>
+git branch -M main<br>
+git remote add origin https://github.com/ykhknw/pocketnavi_02.git<br>
+git push -u origin main
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📋 .gitignore ファイル</h2>
+        <p>以下の内容で <code>.gitignore</code> ファイルを作成してください：</p>
+        <div class="command">
+# Dependencies<br>
+node_modules<br>
+<br>
+# Build outputs<br>
+dist<br>
+dist-ssr<br>
+*.local<br>
+<br>
+# Environment variables<br>
+.env<br>
+.env.local<br>
+.env.development.local<br>
+.env.test.local<br>
+.env.production.local<br>
+<br>
+# Editor<br>
+.vscode/*<br>
+!.vscode/extensions.json<br>
+.idea<br>
+*.suo<br>
+*.ntvs*<br>
+*.njsproj<br>
+*.sln<br>
+*.sw?<br>
+<br>
+# OS<br>
+.DS_Store<br>
+Thumbs.db<br>
+<br>
+# Logs<br>
+logs<br>
+*.log<br>
+npm-debug.log*<br>
+yarn-debug.log*<br>
+yarn-error.log*<br>
+pnpm-debug.log*<br>
+lerna-debug.log*
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔧 環境変数の設定</h2>
+        <p><strong>重要:</strong> <code>.env</code> ファイルはGitHubにアップロードしないでください。</p>
+        <p>代わりに <code>.env.example</code> ファイルを作成：</p>
+        <div class="command">
+# Supabase設定<br>
+VITE_SUPABASE_URL=https://your-project.supabase.co<br>
+VITE_SUPABASE_ANON_KEY=your-anon-key<br>
+VITE_USE_SUPABASE=true
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>✅ 完了後の確認</h2>
+        <ul>
+            <li>✅ 全ファイルがアップロードされている</li>
+            <li>✅ .env ファイルが除外されている</li>
+            <li>✅ README.md が適切に表示されている</li>
+            <li>✅ package.json の依存関係が正しい</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 デプロイ準備</h2>
+        <p>GitHubにアップロード後、以下のプラットフォームでデプロイ可能：</p>
+        <ul>
+            <li><strong>Vercel:</strong> GitHub連携で自動デプロイ</li>
+            <li><strong>Netlify:</strong> ドラッグ&ドロップまたはGit連携</li>
+            <li><strong>GitHub Pages:</strong> 静的サイトホスティング</li>
+        </ul>
+    </div>
+
+    <script>
+        // 簡易的なファイル構造表示
+        function showProjectStructure() {
+            const structure = `建築家.com プロジェクト構造
+
+pocketnavi_02/
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── eslint.config.js
+├── components.json
+├── index.html
+├── README.md
+├── CHANGELOG.md
+├── .gitignore
+├── .env.example
+├── src/
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── index.css
+│   ├── vite-env.d.ts
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── Header.tsx
+│   │   ├── SearchForm.tsx
+│   │   ├── BuildingCard.tsx
+│   │   ├── BuildingDetail.tsx
+│   │   ├── Map.tsx
+│   │   ├── DetailMap.tsx
+│   │   ├── LoginModal.tsx
+│   │   ├── AdminPanel.tsx
+│   │   ├── DataMigration.tsx
+│   │   ├── LanguageSwitch.tsx
+│   │   ├── LikedBuildings.tsx
+│   │   └── SearchHistory.tsx
+│   ├── hooks/
+│   │   ├── useLanguage.ts
+│   │   ├── useGeolocation.ts
+│   │   ├── useSupabaseBuildings.ts
+│   │   └── useSupabaseToggle.ts
+│   ├── services/
+│   │   └── supabase-api.ts
+│   ├── lib/
+│   │   ├── utils.ts
+│   │   └── supabase.ts
+│   ├── types/
+│   │   └── index.ts
+│   ├── data/
+│   │   ├── mockData.ts
+│   │   └── searchData.ts
+│   └── utils/
+│       ├── distance.ts
+│       ├── search.ts
+│       ├── translations.ts
+│       ├── pexels.ts
+│       ├── unsplash.ts
+│       ├── photo-checker.ts
+│       └── mysql-to-postgresql.ts
+└── docs/
+    ├── database-optimization.md
+    ├── supabase-optimization.md
+    ├── supabase-migration-guide.md
+    ├── windows-postgresql-setup.md
+    └── supabase-connection-troubleshooting.md`;
+
+            const blob = new Blob([structure], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'project-structure.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button class="download-btn" onclick="showProjectStructure()">
+            📁 プロジェクト構造をダウンロード
+        </button>
+    </div>
+</body>
+</html>
