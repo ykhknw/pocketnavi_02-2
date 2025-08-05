@@ -39,7 +39,7 @@ function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFi
 }
 
 // フィルターとページ情報をURLに反映する関数
-function updateURLWithFilters(navigate: any, filters: SearchFilters, currentPage: number) {
+function updateURLWithFilters(navigate: (path: string, options?: { replace?: boolean }) => void, filters: SearchFilters, currentPage: number) {
   const searchParams = new URLSearchParams();
   
   if (filters.query) searchParams.set('q', filters.query);

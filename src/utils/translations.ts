@@ -183,7 +183,7 @@ export const translations = {
 
 export function t(key: string, language: 'ja' | 'en', params?: Record<string, any>): string {
   const keys = key.split('.');
-  let value: any = translations[language];
+      let value: unknown = translations[language];
   
   for (const k of keys) {
     value = value?.[k];

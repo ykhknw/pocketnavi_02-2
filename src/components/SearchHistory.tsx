@@ -19,6 +19,10 @@ export function SearchHistoryComponent({
   language, 
   onSearchClick 
 }: SearchHistoryProps) {
+  // undefinedチェックを追加
+  const safeRecentSearches = recentSearches || [];
+  const safePopularSearches = popularSearches || [];
+
   return (
     <div className="space-y-4">
       {/* Recent Searches */}
@@ -30,14 +34,14 @@ export function SearchHistoryComponent({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {recentSearches.length === 0 ? (
+          {safeRecentSearches.length === 0 ? (
             <div className="text-center py-4">
               <Search className="h-8 w-8 text-gray-400 mx-auto mb-2" />
               <p className="text-gray-500 text-sm">{t('noSearchHistory', language)}</p>
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {recentSearches.slice(0, 10).map((search, index) => (
+              {safeRecentSearches.slice(0, 10).map((search, index) => (
                 <Button
                   key={index}
                   variant="outline"
@@ -63,7 +67,7 @@ export function SearchHistoryComponent({
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {popularSearches.slice(0, 8).map((search, index) => (
+            {safePopularSearches.slice(0, 8).map((search, index) => (
               <Button
                 key={index}
                 variant="outline"

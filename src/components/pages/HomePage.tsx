@@ -1,77 +1,41 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
 import { Sidebar } from '../layout/Sidebar';
-import { LoginModal } from '../LoginModal';
-import { AdminPanel } from '../AdminPanel';
-import { DataMigration } from '../DataMigration';
 import { Button } from '../ui/button';
 
+// 重いコンポーネントを動的インポート
+const LoginModal = lazy(() => import('../LoginModal').then(module => ({ default: module.LoginModal })));
+const AdminPanel = lazy(() => import('../AdminPanel').then(module => ({ default: module.AdminPanel })));
+const DataMigration = lazy(() => import('../DataMigration').then(module => ({ default: module.DataMigration })));
+
+// ローディングコンポーネント
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-4">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+);
+
 export function HomePage() {
+  const context = useAppContext();
+  
+  if (!context) {
+    return <div>Loading...</div>;
+  }
+
   const {
-    // 状態
-    selectedBuilding,
-    showDetail,
-    showAdminPanel,
-    showDataMigration,
     isAuthenticated,
     currentUser,
-    likedBuildings,
-    searchHistory,
     showLoginModal,
-    currentPage,
-    filters,
-    
-    // アクション
-    setSelectedBuilding,
-    setShowDetail,
-    setShowAdminPanel,
-    setShowDataMigration,
-    setIsAuthenticated,
-    setCurrentUser,
-    setLikedBuildings,
-    setSearchHistory,
     setShowLoginModal,
-    setCurrentPage,
-    setFilters,
-    
-    // ハンドラー
-    handleBuildingSelect,
-    handleLike,
-    handlePhotoLike,
-    handleLogin,
-    handleRegister,
-    handleLogout,
-    handleAddBuilding,
-    handleUpdateBuilding,
-    handleDeleteBuilding,
-    handleSearchFromHistory,
-    handleLikedBuildingClick,
-    handleSearchAround,
-    handlePageChange,
-    
-    // その他の状態
+    showAdminPanel,
+    setShowAdminPanel,
+    showDataMigration,
+    setShowDataMigration,
     language,
-    toggleLanguage,
-    getCurrentLocation,
-    locationLoading,
-    locationError,
-    buildingsLoading,
-    buildingsError,
-    buildings,
-    filteredBuildings,
-    currentBuildings,
-    totalBuildings,
-    totalPages,
-    startIndex,
-    itemsPerPage,
-    useApi,
-    apiStatus,
-    isSupabaseConnected,
-    popularSearches,
-    getPaginationRange,
-  } = useAppContext();
+    toggleLanguage
+  } = context;
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,106 +43,107 @@ export function HomePage() {
         isAuthenticated={isAuthenticated}
         currentUser={currentUser}
         onLoginClick={() => setShowLoginModal(true)}
-        onLogout={handleLogout}
+        onLogout={() => {/* handle logout */}}
         onAdminClick={() => setShowAdminPanel(true)}
         language={language}
         onLanguageToggle={toggleLanguage}
       />
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <MainContent
-            selectedBuilding={selectedBuilding}
-            buildingsLoading={buildingsLoading}
-            buildingsError={buildingsError}
-            currentBuildings={currentBuildings}
-            filteredBuildings={filteredBuildings}
-            totalBuildings={totalBuildings}
-            totalPages={totalPages}
-            startIndex={startIndex}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            useApi={useApi}
-            apiStatus={apiStatus}
-            isSupabaseConnected={isSupabaseConnected}
+            selectedBuilding={context.selectedBuilding}
+            buildingsLoading={context.buildingsLoading}
+            buildingsError={context.buildingsError}
+            currentBuildings={context.currentBuildings}
+            filteredBuildings={context.filteredBuildings}
+            totalBuildings={context.totalBuildings}
+            totalPages={context.totalPages}
+            startIndex={context.startIndex}
+            currentPage={context.currentPage}
+            itemsPerPage={context.itemsPerPage}
+            useApi={context.useApi}
+            apiStatus={context.apiStatus}
+            isSupabaseConnected={context.isSupabaseConnected}
             showDataMigration={showDataMigration}
             setShowDataMigration={setShowDataMigration}
-            filters={filters}
-            setFilters={setFilters}
-            locationLoading={locationLoading}
-            locationError={locationError}
-            getCurrentLocation={getCurrentLocation}
+            filters={context.filters}
+            setFilters={context.setFilters}
+            locationLoading={context.locationLoading}
+            locationError={context.locationError}
+            getCurrentLocation={context.getCurrentLocation}
             language={language}
-            handleBuildingSelect={handleBuildingSelect}
-            handleLike={handleLike}
-            handlePhotoLike={handlePhotoLike}
-            handleSearchAround={handleSearchAround}
-            handlePageChange={handlePageChange}
-            getPaginationRange={getPaginationRange}
+            handleBuildingSelect={context.handleBuildingSelect}
+            handleLike={context.handleLike}
+            handlePhotoLike={context.handlePhotoLike}
+            handleSearchAround={context.handleSearchAround}
+            handlePageChange={context.handlePageChange}
+            getPaginationRange={context.getPaginationRange}
           />
-
+          
           <Sidebar
-            buildings={currentBuildings}
-            selectedBuilding={selectedBuilding}
-            onBuildingSelect={handleBuildingSelect}
-            currentLocation={filters.currentLocation}
+            buildings={context.currentBuildings}
+            selectedBuilding={context.selectedBuilding}
+            onBuildingSelect={context.handleBuildingSelect}
+            currentLocation={context.filters.currentLocation}
             language={language}
-            startIndex={startIndex}
-            onSearchAround={handleSearchAround}
-            likedBuildings={likedBuildings}
-            onLikedBuildingClick={handleLikedBuildingClick}
-            recentSearches={searchHistory}
-            popularSearches={popularSearches}
-            onSearchClick={handleSearchFromHistory}
+            startIndex={context.startIndex}
+            onSearchAround={context.handleSearchAround}
+            likedBuildings={context.likedBuildings}
+            onLikedBuildingClick={context.handleLikedBuildingClick}
+            recentSearches={context.searchHistory}
+            popularSearches={context.popularSearches}
+            onSearchClick={context.handleSearchFromHistory}
           />
         </div>
-      </main>
+      </div>
 
-      <footer className="bg-background border-t mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="text-center text-sm text-muted-foreground">
-            &copy; 2024-{new Date().getFullYear()} {language === 'ja' ? '建築家.com - 建築作品データベース' : 'kenchikuka.com - Architectural Works Database'}
-          </div>
-        </div>
-      </footer>
+      {/* モーダルコンポーネント */}
+      {showLoginModal && (
+        <Suspense fallback={<LoadingSpinner />}>
+          <LoginModal
+            isOpen={showLoginModal}
+            onClose={() => setShowLoginModal(false)}
+            onLogin={context.handleLogin}
+            onRegister={context.handleRegister}
+            language={language}
+          />
+        </Suspense>
+      )}
 
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLogin={handleLogin}
-        onRegister={handleRegister}
-        language={language}
-      />
-
-      {isAuthenticated && (
-        <AdminPanel
-          isOpen={showAdminPanel}
-          onClose={() => setShowAdminPanel(false)}
-          buildings={filteredBuildings}
-          onAddBuilding={handleAddBuilding}
-          onUpdateBuilding={handleUpdateBuilding}
-          onDeleteBuilding={handleDeleteBuilding}
-          language={language}
-        />
+      {isAuthenticated && showAdminPanel && (
+        <Suspense fallback={<LoadingSpinner />}>
+          <AdminPanel
+            isOpen={showAdminPanel}
+            onClose={() => setShowAdminPanel(false)}
+            buildings={context.filteredBuildings}
+            onAddBuilding={context.handleAddBuilding}
+            onUpdateBuilding={context.handleUpdateBuilding}
+            onDeleteBuilding={context.handleDeleteBuilding}
+            language={language}
+          />
+        </Suspense>
       )}
 
       {showDataMigration && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="text-xl font-bold">Supabaseデータ移行</h2>
-              <Button
-                variant="ghost"
-                onClick={() => setShowDataMigration(false)}
-              >
-                ×
-              </Button>
-            </div>
-            <div className="p-6">
-              <DataMigration />
+        <Suspense fallback={<LoadingSpinner />}>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h2 className="text-xl font-bold">Supabaseデータ移行</h2>
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowDataMigration(false)}
+                >
+                  ×
+                </Button>
+              </div>
+              <div className="p-6">
+                <DataMigration />
+              </div>
             </div>
           </div>
-        </div>
+        </Suspense>
       )}
     </div>
   );

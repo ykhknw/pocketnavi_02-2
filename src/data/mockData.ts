@@ -625,6 +625,126 @@ export const mockBuildings: Building[] = [
     likes: 105,
     created_at: '2024-01-15T00:00:00Z',
     updated_at: '2024-01-01T18:30:00Z'
+  },
+  {
+    id: 16,
+    uid: 'building_016',
+    title: '三重県立美術館',
+    titleEn: 'Mie Prefectural Art Museum',
+    thumbnailUrl: 'https://images.pexels.com/photos/208736/pexels-photo-208736.jpeg?auto=compress&cs=tinysrgb&w=800',
+    youtubeUrl: 'https://www.youtube.com/watch?v=example16',
+    completionYears: 1982,
+    parentBuildingTypes: ['文化施設'],
+    buildingTypes: ['美術館'],
+    parentStructures: ['鉄筋コンクリート造'],
+    structures: ['RC造'],
+    prefectures: '三重県',
+    areas: '津市',
+    location: '三重県津市大谷町11',
+    architectDetails: '三重県の芸術文化の拠点となる美術館',
+    lat: 34.7303,
+    lng: 136.5086,
+    architects: [
+      {
+        architect_id: 14,
+        architectJa: '磯崎新',
+        architectEn: 'Arata Isozaki',
+        websites: []
+      }
+    ],
+    photos: [
+      {
+        id: 11,
+        building_id: 16,
+        url: 'https://images.pexels.com/photos/208736/pexels-photo-208736.jpeg?auto=compress&cs=tinysrgb&w=1200',
+        thumbnail_url: 'https://images.pexels.com/photos/208736/pexels-photo-208736.jpeg?auto=compress&cs=tinysrgb&w=400',
+        likes: 25,
+        created_at: '2024-01-01T12:00:00Z'
+      }
+    ],
+    likes: 67,
+    created_at: '2024-01-16T00:00:00Z',
+    updated_at: '2024-01-01T12:00:00Z'
+  },
+  {
+    id: 17,
+    uid: 'building_017',
+    title: '伊勢神宮',
+    titleEn: 'Ise Grand Shrine',
+    thumbnailUrl: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=800',
+    youtubeUrl: '',
+    completionYears: 2013,
+    parentBuildingTypes: ['宗教施設'],
+    buildingTypes: ['神社'],
+    parentStructures: ['木造'],
+    structures: ['木造'],
+    prefectures: '三重県',
+    areas: '伊勢市',
+    location: '三重県伊勢市神田町1',
+    architectDetails: '日本最高の神宮として知られる神社',
+    lat: 34.4583,
+    lng: 136.7256,
+    architects: [
+      {
+        architect_id: 15,
+        architectJa: '伝統工芸',
+        architectEn: 'Traditional Craft',
+        websites: []
+      }
+    ],
+    photos: [
+      {
+        id: 12,
+        building_id: 17,
+        url: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=1200',
+        thumbnail_url: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=400',
+        likes: 89,
+        created_at: '2024-01-01T15:30:00Z'
+      }
+    ],
+    likes: 156,
+    created_at: '2024-01-17T00:00:00Z',
+    updated_at: '2024-01-01T15:30:00Z'
+  },
+  {
+    id: 18,
+    uid: 'building_018',
+    title: '鈴鹿サーキット',
+    titleEn: 'Suzuka Circuit',
+    thumbnailUrl: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=800',
+    youtubeUrl: 'https://www.youtube.com/watch?v=example18',
+    completionYears: 1962,
+    parentBuildingTypes: ['スポーツ施設'],
+    buildingTypes: ['サーキット'],
+    parentStructures: ['鉄筋コンクリート造'],
+    structures: ['RC造', 'アスファルト'],
+    prefectures: '三重県',
+    areas: '鈴鹿市',
+    location: '三重県鈴鹿市稲生町7992',
+    architectDetails: 'F1日本グランプリが開催される国際的なレーシングコース',
+    lat: 34.8431,
+    lng: 136.5411,
+    architects: [
+      {
+        architect_id: 16,
+        architectJa: '本田宗一郎',
+        architectEn: 'Soichiro Honda',
+        websites: []
+      }
+    ],
+    photos: [
+      {
+        id: 13,
+        building_id: 18,
+        url: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=1200',
+        thumbnail_url: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=400',
+        likes: 112,
+        created_at: '2024-01-01T20:45:00Z'
+      }
+    ],
+    likes: 234,
+    created_at: '2024-01-18T00:00:00Z',
+    updated_at: '2024-01-01T20:45:00Z'
   }
 ];
 
@@ -645,5 +765,5 @@ export const areas = [
   '港区', '渋谷区', '新宿区', '千代田区', '中央区', '品川区', '目黒区',
   '世田谷区', '杉並区', '中野区', '豊島区', '北区', '荒川区', '足立区',
   '葛飾区', '江戸川区', '台東区', '墨田区', '江東区', '文京区', '板橋区',
-  '練馬区', '大田区'
+  '練馬区', '大田区', '津市', '伊勢市', '鈴鹿市'
 ]

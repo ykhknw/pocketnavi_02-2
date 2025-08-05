@@ -12,7 +12,7 @@ interface AppHeaderProps {
   onLanguageToggle: () => void;
 }
 
-export function AppHeader({
+function AppHeaderComponent({
   isAuthenticated,
   currentUser,
   onLoginClick,
@@ -32,4 +32,20 @@ export function AppHeader({
       onLanguageToggle={onLanguageToggle}
     />
   );
-} 
+}
+
+// Props比較関数
+const arePropsEqual = (prevProps: AppHeaderProps, nextProps: AppHeaderProps): boolean => {
+  return (
+    prevProps.isAuthenticated === nextProps.isAuthenticated &&
+    prevProps.currentUser?.id === nextProps.currentUser?.id &&
+    prevProps.currentUser?.email === nextProps.currentUser?.email &&
+    prevProps.language === nextProps.language &&
+    prevProps.onLoginClick === nextProps.onLoginClick &&
+    prevProps.onLogout === nextProps.onLogout &&
+    prevProps.onAdminClick === nextProps.onAdminClick &&
+    prevProps.onLanguageToggle === nextProps.onLanguageToggle
+  );
+};
+
+export const AppHeader = React.memo(AppHeaderComponent, arePropsEqual); 

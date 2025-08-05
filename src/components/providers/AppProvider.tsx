@@ -1,272 +1,176 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Building, SearchFilters, User, LikedBuilding, SearchHistory } from '../../types';
-import { searchBuildings } from '../../utils/search';
-import { useGeolocation } from '../../hooks/useGeolocation';
-import { useLanguage } from '../../hooks/useLanguage';
-import { useSupabaseBuildings } from '../../hooks/useSupabaseBuildings';
-import { useSupabaseToggle } from '../../hooks/useSupabaseToggle';
+import React, { createContext, useContext, useCallback } from 'react';
 import { AppContextType } from '../../types/app';
+import { Building } from '../../types';
+import { useAppState } from '../../hooks/useAppState';
+import { useAppActions } from '../../hooks/useAppActions';
+import { useAppHandlers } from '../../hooks/useAppHandlers';
+import { useAppEffects } from '../../hooks/useAppEffects';
 
 const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
   // 状態管理
-  const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
-  const [showDataMigration, setShowDataMigration] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [likedBuildings, setLikedBuildings] = useState<LikedBuilding[]>([]);
-  const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
-  const [popularSearches] = useState<SearchHistory[]>([
-    { query: '安藤忠雄', searchedAt: '', count: 45 },
-    { query: '美術館', searchedAt: '', count: 38 },
-    { query: '東京', searchedAt: '', count: 32 },
-    { query: '現代建築', searchedAt: '', count: 28 },
-    { query: 'コンクリート', searchedAt: '', count: 24 },
-    { query: '隈研吾', searchedAt: '', count: 22 },
-    { query: '図書館', searchedAt: '', count: 19 },
-    { query: '駅舎', searchedAt: '', count: 16 }
-  ]);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const itemsPerPage = 10;
+  const state = useAppState();
   
-  // URLから初期状態を読み込む
-  const searchParams = new URLSearchParams(location.search);
-  const { filters: initialFilters, currentPage: initialPage } = parseFiltersFromURL(searchParams);
+  // アクション管理
+  const actions = useAppActions();
   
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [filters, setFilters] = useState<SearchFilters>(initialFilters);
-
-  // フックの使用
-  const { location: geoLocation, error: locationError, loading: locationLoading, getCurrentLocation } = useGeolocation();
-  const { language, toggleLanguage } = useLanguage();
-  const { useApi, apiStatus, isApiAvailable, isSupabaseConnected } = useSupabaseToggle();
+  // イベントハンドラー
+  const handlers = useAppHandlers();
   
-  // Supabase統合: 段階的にAPI化
-  const { 
-    buildings, 
-    loading: buildingsLoading, 
-    error: buildingsError, 
-    total: totalBuildings,
-    refetch 
-  } = useSupabaseBuildings(filters, currentPage, itemsPerPage, useApi);
+  // 副作用管理
+  const effects = useAppEffects();
   
-  // 検索結果のフィルタリング（モックデータ使用時）
-  const [filteredBuildings, setFilteredBuildings] = useState<Building[]>([]);
-
-  // URLが変更されたときに状態を更新
-  useEffect(() => {
-    isUpdatingFromURL.current = true;
-    const { filters: urlFilters, currentPage: urlPage } = parseFiltersFromURL(searchParams);
-    setFilters(urlFilters);
-    setCurrentPage(urlPage);
-  }, [location.search]);
-
-  // フィルターまたはページが変更されたときにURLを更新（ただし、URLからの変更でない場合のみ）
-  const isUpdatingFromURL = useRef(false);
-  useEffect(() => {
-    if (isUpdatingFromURL.current) {
-      isUpdatingFromURL.current = false;
-      return;
-    }
-    updateURLWithFilters(navigate, filters, currentPage);
-  }, [filters, currentPage, navigate]);
-
-  useEffect(() => {
-    if (geoLocation) {
-      setFilters(prev => ({ ...prev, currentLocation: geoLocation }));
-    }
-  }, [geoLocation]);
-
-  // フィルターの変更を追跡するためのref
-  const prevFiltersRef = useRef<SearchFilters>(filters);
-
-  useEffect(() => {
-    if (useApi) {
-      // API使用時は既にフィルタリング済み
-      setFilteredBuildings(buildings);
-    } else {
-      // モックデータ使用時はクライアントサイドフィルタリング
-      const results = searchBuildings(buildings, filters);
-      setFilteredBuildings(results);
-    }
-
-    // フィルターが実際に変更された場合のみページをリセット
-    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
-    if (filtersChanged) {
-      setCurrentPage(1);
-      prevFiltersRef.current = filters;
-    }
-    
-    // Add to search history if there's a query
-    if (filters.query.trim()) {
-      const existingIndex = searchHistory.findIndex(h => h.query === filters.query);
-      if (existingIndex >= 0) {
-        const updated = [...searchHistory];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          searchedAt: new Date().toISOString(),
-          count: updated[existingIndex].count + 1
-        };
-        setSearchHistory(updated);
-      } else {
-        setSearchHistory(prev => [
-          { query: filters.query, searchedAt: new Date().toISOString(), count: 1 },
-          ...prev.slice(0, 19) // Keep only last 20 searches
-        ]);
-      }
-    }
-  }, [useApi, buildings, filters, searchHistory]);
-
+  // Supabase建物データの取得
+  const buildingsData = effects.useSupabaseBuildingsEffect(
+    state.filters,
+    state.currentPage,
+    state.itemsPerPage,
+    effects.useApi
+  );
+  
+  // URL同期効果
+  effects.useURLSyncEffect(
+    state.location,
+    state.searchParams,
+    state.setFilters,
+    state.setCurrentPage,
+    state.isUpdatingFromURL
+  );
+  
+  // URL更新効果
+  effects.useURLUpdateEffect(
+    state.filters,
+    state.currentPage,
+    actions.updateURLWithFilters,
+    state.isUpdatingFromURL
+  );
+  
+  // 位置情報効果
+  effects.useGeolocationEffect(
+    effects.geoLocation,
+    state.setFilters
+  );
+  
+  // フィルター変更効果
+  effects.useFilterChangeEffect(
+    effects.useApi,
+    buildingsData.buildings,
+    state.filters,
+    effects.setFilteredBuildings,
+    state.setCurrentPage,
+    state.searchHistory,
+    state.setSearchHistory,
+    state.prevFiltersRef
+  );
+  
   // ページネーション計算
-  const totalPages = Math.ceil((useApi ? totalBuildings : filteredBuildings.length) / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentBuildings = useApi 
-    ? buildings // API使用時はbuildings（既にページング済み）
-    : filteredBuildings.slice(startIndex, startIndex + itemsPerPage);
+  const pagination = actions.calculatePagination(
+    effects.useApi ? buildingsData.totalBuildings : effects.filteredBuildings.length,
+    state.itemsPerPage,
+    state.currentPage
+  );
+  
+  // 現在の建物リスト
+  const currentBuildings = effects.useApi 
+    ? buildingsData.buildings // API使用時はbuildings（既にページング済み）
+    : effects.filteredBuildings.slice(pagination.startIndex, pagination.startIndex + state.itemsPerPage);
 
-  // ハンドラー関数
-  const handleBuildingSelect = (building: Building | null) => {
-    setSelectedBuilding(building);
-    setShowDetail(false);
-  };
-
-  const handleLike = (buildingId: number) => {
-    console.log('Like building:', buildingId);
-    setLikedBuildings(prev => {
-      const existing = prev.find(b => b.id === buildingId);
-      if (existing) {
-        return prev.filter(b => b.id !== buildingId);
-      } else {
-        const building = buildings.find(b => b.id === buildingId);
-        if (building) {
-          return [...prev, {
-            id: building.id,
-            title: building.title,
-            titleEn: building.titleEn,
-            likedAt: new Date().toISOString()
-          }];
-        }
-      }
-      return prev;
-    });
-  };
-
-  const handlePhotoLike = (photoId: number) => {
-    console.log('Like photo:', photoId);
-  };
-
-  const handleLogin = (email: string, password: string) => {
-    console.log('Login:', email, password);
-    setIsAuthenticated(true);
-    setCurrentUser({ id: 1, email, name: 'User', created_at: new Date().toISOString() });
-    setShowLoginModal(false);
-  };
-
-  const handleRegister = (email: string, password: string, name: string) => {
-    console.log('Register:', email, password, name);
-    setIsAuthenticated(true);
-    setCurrentUser({ id: 1, email, name, created_at: new Date().toISOString() });
-    setShowLoginModal(false);
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-  };
-
-  const handleAddBuilding = (buildingData: Partial<Building>) => {
-    console.log('Add building:', buildingData);
-  };
-
-  const handleUpdateBuilding = (id: number, buildingData: Partial<Building>) => {
-    console.log('Update building:', id, buildingData);
-  };
-
-  const handleDeleteBuilding = (id: number) => {
-    console.log('Delete building:', id);
-  };
-
-  const handleSearchFromHistory = (query: string) => {
-    setFilters(prev => ({ ...prev, query }));
-  };
-
-  const handleLikedBuildingClick = (buildingId: number) => {
-    const building = buildings.find(b => b.id === buildingId);
-    if (building) {
-      setSelectedBuilding(building);
-    }
-  };
-
-  const handleSearchAround = (lat: number, lng: number) => {
-    navigate(`/?lat=${lat}&lng=${lng}&radius=2`);
-  };
-
-  const handlePageChange = (page: number) => {
-    console.log(`ページ変更開始: ${page}/${totalPages}, 現在のページ: ${currentPage}`);
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // スマートページネーション範囲を生成
-  const getPaginationRange = () => {
-    const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
-
-    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
-      range.push(i);
-    }
-
-    if (currentPage - delta > 2) {
-      rangeWithDots.push(1, '...');
-    } else {
-      rangeWithDots.push(1);
-    }
-
-    rangeWithDots.push(...range);
-
-    if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push('...', totalPages);
-    } else if (totalPages > 1 && currentPage !== totalPages) {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots;
-  };
+  // ハンドラー関数のラッパー（useCallbackで最適化）
+  const handleBuildingSelect = useCallback((building: Building | null) => 
+    handlers.handleBuildingSelect(building, state.setSelectedBuilding, state.setShowDetail),
+    [handlers.handleBuildingSelect, state.setSelectedBuilding, state.setShowDetail]
+  );
+    
+  const handleLike = useCallback((buildingId: number) => 
+    handlers.handleLike(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings),
+    [handlers.handleLike, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings]
+  );
+    
+  const handlePhotoLike = useCallback((photoId: number) => 
+    handlers.handlePhotoLike(photoId),
+    [handlers.handlePhotoLike]
+  );
+    
+  const handleLogin = useCallback((email: string, password: string) => 
+    handlers.handleLogin(email, password, state.setIsAuthenticated, state.setCurrentUser, state.setShowLoginModal),
+    [handlers.handleLogin, state.setIsAuthenticated, state.setCurrentUser, state.setShowLoginModal]
+  );
+    
+  const handleRegister = useCallback((email: string, password: string, name: string) => 
+    handlers.handleRegister(email, password, name, state.setIsAuthenticated, state.setCurrentUser, state.setShowLoginModal),
+    [handlers.handleRegister, state.setIsAuthenticated, state.setCurrentUser, state.setShowLoginModal]
+  );
+    
+  const handleLogout = useCallback(() => 
+    handlers.handleLogout(state.setIsAuthenticated, state.setCurrentUser),
+    [handlers.handleLogout, state.setIsAuthenticated, state.setCurrentUser]
+  );
+    
+  const handleAddBuilding = useCallback((buildingData: Partial<Building>) => 
+    handlers.handleAddBuilding(buildingData),
+    [handlers.handleAddBuilding]
+  );
+    
+  const handleUpdateBuilding = useCallback((id: number, buildingData: Partial<Building>) => 
+    handlers.handleUpdateBuilding(id, buildingData),
+    [handlers.handleUpdateBuilding]
+  );
+    
+  const handleDeleteBuilding = useCallback((id: number) => 
+    handlers.handleDeleteBuilding(id),
+    [handlers.handleDeleteBuilding]
+  );
+    
+  const handleSearchFromHistory = useCallback((query: string) => 
+    handlers.handleSearchFromHistory(query, state.setFilters, state.filters),
+    [handlers.handleSearchFromHistory, state.setFilters, state.filters]
+  );
+    
+  const handleLikedBuildingClick = useCallback((buildingId: number) => 
+    handlers.handleLikedBuildingClick(buildingId, buildingsData.buildings, state.setSelectedBuilding),
+    [handlers.handleLikedBuildingClick, buildingsData.buildings, state.setSelectedBuilding]
+  );
+    
+  const handleSearchAround = useCallback((lat: number, lng: number) => 
+    handlers.handleSearchAround(lat, lng, (path: string) => {
+      // 簡易的なナビゲーション実装
+      window.history.pushState({}, '', path);
+    }),
+    [handlers.handleSearchAround]
+  );
+    
+  const handlePageChange = useCallback((page: number) => 
+    handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage),
+    [handlers.handlePageChange, pagination.totalPages, state.currentPage, state.setCurrentPage]
+  );
 
   const contextValue: AppContextType = {
     // 状態
-    selectedBuilding,
-    showDetail,
-    showAdminPanel,
-    showDataMigration,
-    isAuthenticated,
-    currentUser,
-    likedBuildings,
-    searchHistory,
-    showLoginModal,
-    currentPage,
-    filters,
+    selectedBuilding: state.selectedBuilding,
+    showDetail: state.showDetail,
+    showAdminPanel: state.showAdminPanel,
+    showDataMigration: state.showDataMigration,
+    isAuthenticated: state.isAuthenticated,
+    currentUser: state.currentUser,
+    likedBuildings: state.likedBuildings,
+    searchHistory: state.searchHistory,
+    showLoginModal: state.showLoginModal,
+    currentPage: state.currentPage,
+    filters: state.filters,
     
     // アクション
-    setSelectedBuilding,
-    setShowDetail,
-    setShowAdminPanel,
-    setShowDataMigration,
-    setIsAuthenticated,
-    setCurrentUser,
-    setLikedBuildings,
-    setSearchHistory,
-    setShowLoginModal,
-    setCurrentPage,
-    setFilters,
+    setSelectedBuilding: state.setSelectedBuilding,
+    setShowDetail: state.setShowDetail,
+    setShowAdminPanel: state.setShowAdminPanel,
+    setShowDataMigration: state.setShowDataMigration,
+    setIsAuthenticated: state.setIsAuthenticated,
+    setCurrentUser: state.setCurrentUser,
+    setLikedBuildings: state.setLikedBuildings,
+    setSearchHistory: state.setSearchHistory,
+    setShowLoginModal: state.setShowLoginModal,
+    setCurrentPage: state.setCurrentPage,
+    setFilters: state.setFilters,
     
     // ハンドラー
     handleBuildingSelect,
@@ -284,25 +188,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     handlePageChange,
     
     // その他の状態
-    language,
-    toggleLanguage,
-    getCurrentLocation,
-    locationLoading,
-    locationError,
-    buildingsLoading,
-    buildingsError,
-    buildings,
-    filteredBuildings,
+    language: effects.language,
+    toggleLanguage: effects.toggleLanguage,
+    getCurrentLocation: effects.getCurrentLocation,
+    locationLoading: effects.locationLoading,
+    locationError: effects.locationError,
+         buildingsLoading: buildingsData.buildingsLoading,
+     buildingsError: buildingsData.buildingsError,
+    buildings: buildingsData.buildings,
+    filteredBuildings: effects.filteredBuildings,
     currentBuildings,
-    totalBuildings,
-    totalPages,
-    startIndex,
-    itemsPerPage,
-    useApi,
-    apiStatus,
-    isSupabaseConnected,
-    popularSearches,
-    getPaginationRange,
+    totalBuildings: buildingsData.totalBuildings,
+    totalPages: pagination.totalPages,
+    startIndex: pagination.startIndex,
+    itemsPerPage: state.itemsPerPage,
+    useApi: effects.useApi,
+    apiStatus: effects.apiStatus,
+    isSupabaseConnected: effects.isSupabaseConnected,
+    popularSearches: state.popularSearches,
+    getPaginationRange: () => actions.getPaginationRange(state.currentPage, pagination.totalPages),
   };
 
   return (
@@ -318,43 +222,4 @@ export function useAppContext() {
     throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
-}
-
-// URLからフィルターとページ情報を解析する関数
-function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFilters; currentPage: number } {
-  const filters: SearchFilters = {
-    query: searchParams.get('q') || '',
-    radius: parseInt(searchParams.get('radius') || '5', 10),
-    architects: searchParams.get('architects')?.split(',').filter(Boolean) || [],
-    buildingTypes: searchParams.get('buildingTypes')?.split(',').filter(Boolean) || [],
-    prefectures: searchParams.get('prefectures')?.split(',').filter(Boolean) || [],
-    areas: searchParams.get('areas')?.split(',').filter(Boolean) || [],
-    hasPhotos: searchParams.get('hasPhotos') === 'true',
-    hasVideos: searchParams.get('hasVideos') === 'true',
-    currentLocation: null
-  };
-
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-
-  return { filters, currentPage };
-}
-
-// フィルターとページ情報をURLに反映する関数
-function updateURLWithFilters(navigate: any, filters: SearchFilters, currentPage: number) {
-  const searchParams = new URLSearchParams();
-  
-  if (filters.query) searchParams.set('q', filters.query);
-  if (filters.radius !== 5) searchParams.set('radius', filters.radius.toString());
-  if (filters.architects && filters.architects.length > 0) searchParams.set('architects', filters.architects.join(','));
-  if (filters.buildingTypes && filters.buildingTypes.length > 0) searchParams.set('buildingTypes', filters.buildingTypes.join(','));
-  if (filters.prefectures && filters.prefectures.length > 0) searchParams.set('prefectures', filters.prefectures.join(','));
-  if (filters.areas && filters.areas.length > 0) searchParams.set('areas', filters.areas.join(','));
-  if (filters.hasPhotos) searchParams.set('hasPhotos', 'true');
-  if (filters.hasVideos) searchParams.set('hasVideos', 'true');
-  if (currentPage > 1) searchParams.set('page', currentPage.toString());
-
-  const searchString = searchParams.toString();
-  const newPath = searchString ? `/?${searchString}` : '/';
-  
-  navigate(newPath, { replace: true });
 } 

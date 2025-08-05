@@ -89,7 +89,7 @@ export class DatabaseImporter {
   }
 
   // バッチインポート
-  async importInBatches(sqlContent: string, supabase: any): Promise<void> {
+  async importInBatches(sqlContent: string, supabase: Record<string, unknown>): Promise<void> {
     const processed = await this.preprocessSQL(sqlContent);
     const statements = this.extractInsertStatements(processed);
     
@@ -113,7 +113,7 @@ export class DatabaseImporter {
     );
   }
 
-  private async executeBatch(statements: string[], supabase: any): Promise<void> {
+  private async executeBatch(statements: string[], supabase: Record<string, unknown>): Promise<void> {
     // Supabaseでは直接SQL実行が制限されているため、
     // パースしてJavaScriptオブジェクトに変換してからinsert
     for (const statement of statements) {
@@ -124,7 +124,7 @@ export class DatabaseImporter {
     }
   }
 
-  private parseInsertStatement(statement: string): { table: string; values: any } | null {
+  private parseInsertStatement(statement: string): { table: string; values: Record<string, unknown> } | null {
     // INSERT文をパースしてオブジェクトに変換
     // 実装は複雑になるため、実際の使用時に詳細化
     const tableMatch = statement.match(/INSERT INTO (\w+)/);
@@ -138,7 +138,7 @@ export class DatabaseImporter {
 }
 
 // 使用例
-export async function importShinkenchikuDB(supabase: any) {
+export async function importShinkenchikuDB(supabase: Record<string, unknown>) {
   const importer = new DatabaseImporter({
     batchSize: 50,
     skipDuplicates: true,

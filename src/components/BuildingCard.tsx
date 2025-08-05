@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -18,7 +18,49 @@ interface BuildingCardProps {
   language: 'ja' | 'en';
 }
 
-export function BuildingCard({
+// 遅延読み込み用の画像コンポーネント
+const LazyImage = React.memo(({ src, alt, className }: { src: string; alt: string; className?: string }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+  }, []);
+
+  if (hasError) {
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+        <Camera className="h-8 w-8 text-gray-400" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+          <Camera className="h-8 w-8 text-gray-400" />
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={handleLoad}
+        onError={handleError}
+        loading="lazy"
+      />
+    </div>
+  );
+});
+
+function BuildingCardComponent({
   building,
   onSelect,
   onLike,
@@ -28,25 +70,49 @@ export function BuildingCard({
   language
 }: BuildingCardProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
-  const [natureImage] = useState(() => getRandomDefaultNatureImage());
   
-  const handleExternalImageSearch = (query: string) => {
+  // 自然画像をuseMemoで最適化
+  const natureImage = useMemo(() => getRandomDefaultNatureImage(), []);
+
+  // ハンドラー関数をuseCallbackで最適化
+  const handleExternalImageSearch = useCallback((query: string) => {
     const encodedQuery = encodeURIComponent(query);
     window.open(`https://images.google.com/images?q=${encodedQuery}`, '_blank');
-  };
+  }, []);
 
-  const getSearchQuery = () => {
+  const getSearchQuery = useCallback(() => {
     return language === 'ja' ? building.title : building.titleEn;
-  };
+  }, [language, building.title, building.titleEn]);
+
+  const handleLikeClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onLike(building.id);
+  }, [onLike, building.id]);
+
+  const handleCardClick = useCallback(() => {
+    onSelect(building);
+  }, [onSelect, building]);
+
+  const handleTogglePhotos = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowAllPhotos(prev => !prev);
+  }, []);
+
+  // 表示する写真を計算（useMemoで最適化）
+  const displayPhotos = useMemo(() => {
+    if (showAllPhotos) {
+      return building.photos;
+    }
+    return building.photos.slice(0, 3);
+  }, [building.photos, showAllPhotos]);
 
   return (
     <Card
       className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
         isSelected ? 'ring-2 ring-blue-500' : ''
       } ring-2 ring-amber-400 shadow-lg hover:shadow-xl hover:ring-amber-500 bg-gradient-to-br from-white to-amber-50`}
-      onClick={() => onSelect(building)}
+      onClick={handleCardClick}
     >
-
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -60,10 +126,7 @@ export function BuildingCard({
           <Button
             variant="ghost"
             size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onLike(building.id);
-            }}
+            onClick={handleLikeClick}
             className="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100"
           >
             <Heart className="h-4 w-4" />
@@ -104,124 +167,88 @@ export function BuildingCard({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1">
-            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).slice(0, 3).map((type, index) => (
-              <Badge
-                key={`${type}-${index}`}
-                variant="secondary"
-                className="border-amber-200 text-amber-700 text-sm"
-              >
-                {type}
-              </Badge>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-1 mb-2">
-            <Badge
-              variant="outline"
-              className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
-            >
-              <Calendar className="h-3 w-3 mr-1" />
-              {building.completionYears}{t('year', language)}
-            </Badge>
-          </div>
+          {building.completionYears && (
+            <div className="flex items-center gap-1 text-sm text-gray-600">
+              <Calendar className="h-4 w-4" />
+              <span>{building.completionYears}</span>
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {building.photos.length > 0 && (
-              <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <Camera className="h-4 w-4" />
-                <span className="text-sm font-medium">{building.photos.length}</span>
-              </div>
-            )}
-            {building.youtubeUrl && (
-              <div className="flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                <Video className="h-4 w-4" />
-                <span className="text-sm font-medium">{t('hasVideo', language)}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
+        {/* 写真ギャラリー */}
         {building.photos.length > 0 && (
-          <div className="mt-3 border-t border-amber-200 pt-3 bg-gradient-to-r from-amber-50 to-orange-50 -mx-4 px-4 rounded-b-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Camera className="h-4 w-4 text-amber-600" />
-              <span className="text-sm font-medium text-amber-800">{language === 'ja' ? '投稿写真' : 'Real Photos'}</span>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {building.photos.slice(0, showAllPhotos ? building.photos.length : 3).map(photo => (
-                <div key={photo.id} className="relative">
-                  <img
-                    src={photo.thumbnail_url}
-                    alt=""
-                    className="w-full h-16 object-cover rounded cursor-pointer hover:opacity-80 transition-all duration-200 hover:scale-105 ring-1 ring-amber-200"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(photo.url, '_blank');
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center justify-between mt-2">
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Camera className="h-4 w-4 text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {t('photos', language)} ({building.photos.length})
+                </span>
+              </div>
               {building.photos.length > 3 && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowAllPhotos(!showAllPhotos);
-                  }}
-                  className="text-amber-600 hover:text-amber-700 bg-white/50 hover:bg-white/80"
+                  onClick={handleTogglePhotos}
+                  className="text-xs"
                 >
-                  {showAllPhotos ? t('close', language) : t('viewMore', language, { count: building.photos.length - 3 })}
+                  {showAllPhotos ? t('showLess', language) : t('showMore', language)}
                 </Button>
               )}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExternalImageSearch(getSearchQuery());
-                }}
-                className="text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 ml-auto"
-              >
-                <ExternalLink className="h-4 w-4" />
-                <span className="text-sm">{t('imageSearch', language)}</span>
-              </Button>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2">
+              {displayPhotos.map((photo, photoIndex) => (
+                <div key={photoIndex} className="aspect-square overflow-hidden rounded-lg">
+                  <LazyImage
+                    src={photo.url}
+                    alt={`${building.title} - Photo ${photoIndex + 1}`}
+                    className="w-full h-full"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )}
 
-        {building.photos.length === 0 && (
-          <div className="mt-3 -mx-4 -mb-4">
-            <div 
-              className="relative h-24 bg-cover bg-center bg-no-repeat rounded-b-lg cursor-pointer hover:opacity-90 transition-opacity image-container"
-              style={{ backgroundImage: `url(${natureImage})` }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleExternalImageSearch(getSearchQuery());
-              }}
-            >
-              <div className="absolute inset-0 bg-white bg-opacity-40 rounded-b-lg z-10"></div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExternalImageSearch(getSearchQuery());
-                }}
-                className="absolute bottom-2 right-2 text-gray-700 hover:text-amber-700 bg-white bg-opacity-70 hover:bg-opacity-90 backdrop-blur-sm z-20"
-              >
-                <ExternalLink className="h-4 w-4" />
-                <span className="text-sm">{t('imageSearch', language)}</span>
-              </Button>
-            </div>
-          </div>
-        )}
+
+
+        {/* 外部画像検索 */}
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExternalImageSearch(getSearchQuery())}
+            className="text-xs"
+          >
+            <ExternalLink className="h-3 w-3 mr-1" />
+            {t('searchImages', language)}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
 }
+
+// Props比較関数
+const arePropsEqual = (prevProps: BuildingCardProps, nextProps: BuildingCardProps): boolean => {
+  return (
+    prevProps.building.id === nextProps.building.id &&
+    prevProps.building.title === nextProps.building.title &&
+    prevProps.building.titleEn === nextProps.building.titleEn &&
+    prevProps.building.location === nextProps.building.location &&
+    prevProps.building.locationEn === nextProps.building.locationEn &&
+    prevProps.building.likes === nextProps.building.likes &&
+    prevProps.building.distance === nextProps.building.distance &&
+    prevProps.building.architects.length === nextProps.building.architects.length &&
+    prevProps.building.photos.length === nextProps.building.photos.length &&
+    prevProps.isSelected === nextProps.isSelected &&
+    prevProps.index === nextProps.index &&
+    prevProps.language === nextProps.language &&
+    prevProps.onSelect === nextProps.onSelect &&
+    prevProps.onLike === nextProps.onLike &&
+    prevProps.onPhotoLike === nextProps.onPhotoLike
+  );
+};
+
+export const BuildingCard = React.memo(BuildingCardComponent, arePropsEqual);

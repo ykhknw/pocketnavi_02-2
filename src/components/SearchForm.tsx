@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Search, MapPin, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchFilters } from '../types';
 import { architectsData, prefecturesData, buildingUsageData } from '../data/searchData';
@@ -71,8 +71,12 @@ function SearchableList({
 }: SearchableListProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // フィルタリング処理をuseMemoで最適化
+  const filteredItems = useMemo(() => 
+    items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    [items, searchQuery]
   );
 
   return (
@@ -98,22 +102,16 @@ function SearchableList({
               />
               <Label 
                 htmlFor={`item-${item.id}`} 
-                className="text-sm cursor-pointer truncate flex-1"
-                title={item.name}
+                className="text-sm truncate cursor-pointer"
               >
                 {item.name}
               </Label>
             </div>
-            <span className="text-xs text-gray-500 flex-shrink-0">
-              ({item.count})
+            <span className="text-xs text-muted-foreground">
+              {item.count}
             </span>
           </div>
         ))}
-        {filteredItems.length === 0 && (
-          <div className="text-sm text-gray-500 text-center py-2">
-            該当する項目がありません
-          </div>
-        )}
       </div>
     </div>
   );
@@ -129,36 +127,48 @@ export function SearchForm({
 }: SearchFormProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const handleQueryChange = (query: string) => {
+  // 選択された項目数を計算（useMemoで最適化）
+  const selectedCounts = useMemo(() => ({
+    architects: filters.architects?.length || 0,
+    buildingTypes: filters.buildingTypes?.length || 0,
+    prefectures: filters.prefectures?.length || 0,
+    areas: filters.areas?.length || 0
+  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas]);
+
+  // ハンドラー関数をuseCallbackで最適化
+  const handleQueryChange = useCallback((query: string) => {
     onFiltersChange({ ...filters, query });
-  };
+  }, [filters, onFiltersChange]);
 
-  const handleRadiusChange = (radius: number) => {
+  const handleRadiusChange = useCallback((radius: number) => {
     onFiltersChange({ ...filters, radius });
-  };
+  }, [filters, onFiltersChange]);
 
-  const handleArchitectToggle = (architect: string) => {
-    const newArchitects = filters.architects?.includes(architect)
-      ? filters.architects.filter(a => a !== architect)
-      : [...(filters.architects || []), architect];
+  const handleArchitectToggle = useCallback((architect: string) => {
+    const currentArchitects = filters.architects || [];
+    const newArchitects = currentArchitects.includes(architect)
+      ? currentArchitects.filter(a => a !== architect)
+      : [...currentArchitects, architect];
     onFiltersChange({ ...filters, architects: newArchitects });
-  };
+  }, [filters, onFiltersChange]);
 
-  const handleBuildingTypeToggle = (type: string) => {
-    const newTypes = filters.buildingTypes.includes(type)
-      ? filters.buildingTypes.filter(t => t !== type)
-      : [...filters.buildingTypes, type];
+  const handleBuildingTypeToggle = useCallback((type: string) => {
+    const currentTypes = filters.buildingTypes || [];
+    const newTypes = currentTypes.includes(type)
+      ? currentTypes.filter(t => t !== type)
+      : [...currentTypes, type];
     onFiltersChange({ ...filters, buildingTypes: newTypes });
-  };
+  }, [filters, onFiltersChange]);
 
-  const handlePrefectureToggle = (prefecture: string) => {
-    const newPrefectures = filters.prefectures.includes(prefecture)
-      ? filters.prefectures.filter(p => p !== prefecture)
-      : [...filters.prefectures, prefecture];
+  const handlePrefectureToggle = useCallback((prefecture: string) => {
+    const currentPrefectures = filters.prefectures || [];
+    const newPrefectures = currentPrefectures.includes(prefecture)
+      ? currentPrefectures.filter(p => p !== prefecture)
+      : [...currentPrefectures, prefecture];
     onFiltersChange({ ...filters, prefectures: newPrefectures });
-  };
+  }, [filters, onFiltersChange]);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     onFiltersChange({
       query: '',
       radius: 5,
@@ -170,7 +180,7 @@ export function SearchForm({
       hasVideos: false,
       currentLocation: filters.currentLocation
     });
-  };
+  }, [onFiltersChange, filters.currentLocation]);
 
   const hasActiveFilters = 
     filters.query ||

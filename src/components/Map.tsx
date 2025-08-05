@@ -1,5 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Building } from '../types';
+
+// Leaflet型定義
+interface LeafletMap {
+  addLayer: (layer: LeafletMarker) => void;
+  removeLayer: (layer: LeafletMarker) => void;
+  setView: (latlng: [number, number], zoom: number) => void;
+}
+
+interface LeafletMarker {
+  addTo: (map: LeafletMap) => LeafletMarker;
+  bindPopup: (content: string) => LeafletMarker;
+  on: (event: string, handler: () => void) => LeafletMarker;
+}
 import { Globe, Play, MapPin } from 'lucide-react';
 import { t } from '../utils/translations';
 
@@ -13,10 +26,10 @@ interface MapProps {
   onSearchAround?: (lat: number, lng: number) => void;
 }
 
-export default function Map({ buildings, selectedBuilding, onBuildingSelect, currentLocation, language, startIndex, onSearchAround }: MapProps) {
+function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLocation, language, startIndex, onSearchAround }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const markersRef = useRef<LeafletMarker[]>([]);
   const isInitializingRef = useRef(false);
   const [isMapReady, setIsMapReady] = useState(false);
 
@@ -346,3 +359,22 @@ export default function Map({ buildings, selectedBuilding, onBuildingSelect, cur
     </div>
   );
 }
+
+// Props比較関数
+const arePropsEqual = (prevProps: MapProps, nextProps: MapProps): boolean => {
+  return (
+    prevProps.buildings.length === nextProps.buildings.length &&
+    prevProps.buildings.every((building, index) => 
+      building.id === nextProps.buildings[index]?.id
+    ) &&
+    prevProps.selectedBuilding?.id === nextProps.selectedBuilding?.id &&
+    prevProps.currentLocation?.lat === nextProps.currentLocation?.lat &&
+    prevProps.currentLocation?.lng === nextProps.currentLocation?.lng &&
+    prevProps.language === nextProps.language &&
+    prevProps.startIndex === nextProps.startIndex &&
+    prevProps.onBuildingSelect === nextProps.onBuildingSelect &&
+    prevProps.onSearchAround === nextProps.onSearchAround
+  );
+};
+
+export default React.memo(MapComponent, arePropsEqual);

@@ -7,7 +7,7 @@ import { t } from '../utils/translations';
 
 interface HeaderProps {
   isAuthenticated: boolean;
-  currentUser: any;
+  currentUser: User | null;
   onLoginClick: () => void;
   onLogout: () => void;
   onAdminClick: () => void;

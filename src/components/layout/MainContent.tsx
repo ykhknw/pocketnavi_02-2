@@ -43,7 +43,7 @@ interface MainContentProps {
   getPaginationRange: () => (number | string)[];
 }
 
-export function MainContent({
+function MainContentComponent({
   selectedBuilding,
   buildingsLoading,
   buildingsError,
@@ -222,4 +222,46 @@ export function MainContent({
       )}
     </div>
   );
-} 
+}
+
+// Props比較関数
+const arePropsEqual = (prevProps: MainContentProps, nextProps: MainContentProps): boolean => {
+  return (
+    prevProps.selectedBuilding?.id === nextProps.selectedBuilding?.id &&
+    prevProps.buildingsLoading === nextProps.buildingsLoading &&
+    prevProps.buildingsError === nextProps.buildingsError &&
+    prevProps.currentBuildings.length === nextProps.currentBuildings.length &&
+    prevProps.currentBuildings.every((building, index) => 
+      building.id === nextProps.currentBuildings[index]?.id
+    ) &&
+    prevProps.filteredBuildings.length === nextProps.filteredBuildings.length &&
+    prevProps.totalBuildings === nextProps.totalBuildings &&
+    prevProps.totalPages === nextProps.totalPages &&
+    prevProps.startIndex === nextProps.startIndex &&
+    prevProps.currentPage === nextProps.currentPage &&
+    prevProps.itemsPerPage === nextProps.itemsPerPage &&
+    prevProps.useApi === nextProps.useApi &&
+    prevProps.apiStatus === nextProps.apiStatus &&
+    prevProps.isSupabaseConnected === nextProps.isSupabaseConnected &&
+    prevProps.showDataMigration === nextProps.showDataMigration &&
+    prevProps.language === nextProps.language &&
+    prevProps.locationLoading === nextProps.locationLoading &&
+    prevProps.locationError === nextProps.locationError &&
+    prevProps.filters.search === nextProps.filters.search &&
+    prevProps.filters.category === nextProps.filters.category &&
+    prevProps.filters.yearFrom === nextProps.filters.yearFrom &&
+    prevProps.filters.yearTo === nextProps.filters.yearTo &&
+    prevProps.filters.architect === nextProps.filters.architect &&
+    prevProps.setShowDataMigration === nextProps.setShowDataMigration &&
+    prevProps.setFilters === nextProps.setFilters &&
+    prevProps.getCurrentLocation === nextProps.getCurrentLocation &&
+    prevProps.handleBuildingSelect === nextProps.handleBuildingSelect &&
+    prevProps.handleLike === nextProps.handleLike &&
+    prevProps.handlePhotoLike === nextProps.handlePhotoLike &&
+    prevProps.handleSearchAround === nextProps.handleSearchAround &&
+    prevProps.handlePageChange === nextProps.handlePageChange &&
+    prevProps.getPaginationRange === nextProps.getPaginationRange
+  );
+};
+
+export const MainContent = React.memo(MainContentComponent, arePropsEqual); 
