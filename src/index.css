@@ -57,3 +57,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Leafletポップアップの閉じるボタンを大きく */
+.leaflet-popup-close-button {
+  width: 30px !important;         /* デフォルトは18px */
+  height: 30px !important;        /* デフォルトは14px */
+  font-size: 24px !important;     /* ×マークのサイズ */
+  line-height: 30px !important;   /* 中央揃え */
+  text-align: center !important;
+  font-weight: bold !important;
+  color: #999 !important;
+  background: rgba(200,200,200,0.6) !important;  /* 背景をより薄いグレーに変更 */
+  border-radius: 50% !important;  /* 丸いボタンにする場合 */
+  right: -5px !important;         /* 位置調整 - 内側に移動 */
+  top: -5px !important;           /* 位置調整 - 内側に移動 */
+}
+
+.leaflet-popup-close-button:hover {
+  color: #333 !important;
+  background: rgba(255,255,255,1) !important;
+}

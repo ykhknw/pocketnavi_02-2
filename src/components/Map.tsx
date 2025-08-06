@@ -33,6 +33,8 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
   const isInitializingRef = useRef(false);
   const [isMapReady, setIsMapReady] = useState(false);
 
+
+
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current || isInitializingRef.current) return;
     
@@ -58,8 +60,14 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
         const map = L.map(mapRef.current, {
           center: [35.6762, 139.6503],
           zoom: 12,
-          zoomControl: true
+          zoomControl: false
         });
+        
+        // ズームコントロールを左下に配置
+        console.log('Setting zoom control to bottomleft');
+        L.control.zoom({
+          position: 'bottomleft'
+        }).addTo(map);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
@@ -134,12 +142,14 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
           
           let customIcon;
           if (isDetailView) {
-            // 建築物詳細表示時は標準的なピン型マーカーを使用
-            customIcon = L.divIcon({
-              html: `<div style="background-color: ${isSelected ? '#dc2626' : '#2563eb'}; width: 20px; height: 20px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>`,
-              className: 'custom-marker',
-              iconSize: [20, 20],
-              iconAnchor: [10, 10]
+            // 建築物詳細表示時はleaflet-color-markersの赤いマーカーを使用
+            customIcon = L.icon({
+              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
             });
           } else {
             // 建築物一覧表示時は数字付きの円形マーカーを使用
@@ -171,9 +181,6 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             closeButton: true,
             autoClose: false,
             closeOnClick: false
-          })
-          .on('click', () => {
-            onBuildingSelect(building);
           });
 
           mapInstanceRef.current.addLayer(marker);
@@ -299,7 +306,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
     } catch (error) {
       console.error('Error updating map markers:', error);
     }
-  }, [buildings, selectedBuilding, currentLocation, isMapReady, onBuildingSelect, language, startIndex]);
+  }, [buildings, selectedBuilding, currentLocation, isMapReady, language, startIndex]);
 
   const loadLeaflet = () => {
     return new Promise((resolve) => {
@@ -380,7 +387,6 @@ const arePropsEqual = (prevProps: MapProps, nextProps: MapProps): boolean => {
     prevProps.currentLocation?.lng === nextProps.currentLocation?.lng &&
     prevProps.language === nextProps.language &&
     prevProps.startIndex === nextProps.startIndex &&
-    prevProps.onBuildingSelect === nextProps.onBuildingSelect &&
     prevProps.onSearchAround === nextProps.onSearchAround
   );
 };
