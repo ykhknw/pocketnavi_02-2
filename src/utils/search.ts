@@ -3,8 +3,22 @@ import { calculateDistance } from './distance';
 
 export function searchBuildings(
   buildings: Building[],
-  filters: SearchFilters
+  filters: SearchFilters,
+  language: 'ja' | 'en' = 'ja'
 ): Building[] {
+  console.log('🔍 Search Debug:', {
+    totalBuildings: buildings.length,
+    filters,
+    language,
+    sampleBuilding: buildings[0] ? {
+      id: buildings[0].id,
+      title: buildings[0].title,
+      architects: buildings[0].architects,
+      buildingTypes: buildings[0].buildingTypes,
+      buildingTypesEn: buildings[0].buildingTypesEn
+    } : null
+  });
+
   let results = [...buildings];
 
   // Text search
@@ -24,24 +38,38 @@ export function searchBuildings(
 
   // Architect filter
   if (filters.architects && filters.architects.length > 0) {
+    console.log('🏗️ Architect filter applied:', filters.architects);
     results = results.filter(building =>
-      building.architects.some(arch =>
-        filters.architects!.some(filterArch =>
-          arch.architectJa.includes(filterArch) ||
-          arch.architectEn.includes(filterArch)
-        )
-      )
+      building.architects.some(arch => {
+        const architectName = language === 'ja' ? arch.architectJa : arch.architectEn;
+        const matches = filters.architects!.some(filterArch =>
+          architectName.toLowerCase().includes(filterArch.toLowerCase())
+        );
+        if (matches) {
+          console.log('✅ Architect match:', { building: building.title, architect: architectName, filter: filters.architects });
+        }
+        return matches;
+      })
     );
+    console.log('🏗️ After architect filter:', results.length, 'buildings');
   }
 
   // Building type filter
   if (filters.buildingTypes.length > 0) {
-    results = results.filter(building =>
-      filters.buildingTypes.some(type =>
-        building.buildingTypes.includes(type) ||
-        building.parentBuildingTypes.includes(type)
-      )
-    );
+    console.log('🏢 Building type filter applied:', filters.buildingTypes);
+    results = results.filter(building => {
+      const buildingTypes = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
+      const matches = filters.buildingTypes.some(type =>
+        buildingTypes.some(buildingType => 
+          buildingType.toLowerCase().includes(type.toLowerCase())
+        )
+      );
+      if (matches) {
+        console.log('✅ Building type match:', { building: building.title, types: buildingTypes, filter: filters.buildingTypes });
+      }
+      return matches;
+    });
+    console.log('🏢 After building type filter:', results.length, 'buildings');
   }
 
   // Prefecture filter
@@ -96,10 +124,8 @@ export function searchBuildings(
         )
       }))
       .sort((a, b) => (a.distance || 0) - (b.distance || 0));
-  } else {
-    // Sort by building_id in descending order
-    results.sort((a, b) => b.id - a.id);
   }
 
+  console.log('🔍 Final results:', results.length, 'buildings');
   return results;
 }

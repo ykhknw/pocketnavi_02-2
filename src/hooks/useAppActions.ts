@@ -57,9 +57,22 @@ export function useAppActions() {
 
     if (currentPage + delta < totalPages - 1) {
       rangeWithDots.push('...', totalPages);
-    } else if (totalPages > 1 && currentPage !== totalPages) {
-      rangeWithDots.push(totalPages);
+    } else if (totalPages > 1) {
+      // 最後のページがまだ含まれていない場合のみ追加
+      if (!rangeWithDots.includes(totalPages)) {
+        rangeWithDots.push(totalPages);
+      }
     }
+
+    // デバッグ用ログ
+    console.log('useAppActions getPaginationRange:', {
+      currentPage,
+      totalPages,
+      delta,
+      range,
+      rangeWithDots,
+      includesTotalPages: rangeWithDots.includes(totalPages)
+    });
 
     return rangeWithDots;
   };

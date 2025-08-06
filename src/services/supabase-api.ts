@@ -80,6 +80,13 @@ class SupabaseApiClient {
   }
 
   async searchBuildings(filters: SearchFilters, page: number = 1, limit: number = 10): Promise<{ buildings: Building[], total: number }> {
+    console.log('🔍 Search mode:', {
+      hasArchitectFilter: !!(filters.architects && filters.architects.length > 0),
+      hasBuildingTypeFilter: !!(filters.buildingTypes && filters.buildingTypes.length > 0),
+      page,
+      limit
+    });
+
     let query = supabase
       .from('buildings_table_2')
       .select(`
@@ -94,6 +101,95 @@ class SupabaseApiClient {
     // テキスト検索
     if (filters.query.trim()) {
       query = query.or(`title.ilike.%${filters.query}%,titleEn.ilike.%${filters.query}%,location.ilike.%${filters.query}%`);
+    }
+
+    // 建築家フィルター
+    if (filters.architects && filters.architects.length > 0) {
+      console.log('🏗️ Applying architect filter:', filters.architects);
+      
+      // 一時的にクライアントサイドフィルタリングに戻す
+      // 全データを取得して、クライアントサイドでフィルタリング
+      const { data: allBuildings, error } = await supabase
+        .from('buildings_table_2')
+        .select(`
+          *,
+          building_architects!inner(
+            architects_table(*)
+          )
+        `, { count: 'exact' })
+        .not('lat', 'is', null)
+        .not('lng', 'is', null)
+        .order('building_id', { ascending: false });
+      
+      if (error) {
+        console.error('Architect filter error:', error);
+        throw new SupabaseApiError(500, error.message);
+      }
+      
+      console.log('🏗️ Fetched all buildings for client-side filtering:', allBuildings?.length || 0);
+      
+      // 結果を変換
+      const transformedBuildings: Building[] = [];
+      for (const building of allBuildings || []) {
+        try {
+          const transformed = await this.transformBuilding(building);
+          
+          // 建築家フィルター（クライアントサイドで処理）
+          const hasMatchingArchitect = transformed.architects.some(arch => {
+            const architectName = arch.architectJa || arch.architectEn || '';
+            return filters.architects!.some(filterArch => 
+              architectName.toLowerCase().includes(filterArch.toLowerCase())
+            );
+          });
+          
+          if (hasMatchingArchitect) {
+            transformedBuildings.push(transformed);
+          }
+        } catch (error) {
+          console.warn('Building transformation failed:', error);
+          continue;
+        }
+      }
+      
+      console.log('🏗️ Architect filter results:', transformedBuildings.length, 'buildings');
+      
+      // クライアントサイドでページネーション
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedBuildings = transformedBuildings.slice(startIndex, endIndex);
+      
+      console.log('📄 Architect filter pagination:', {
+        total: transformedBuildings.length,
+        page,
+        limit,
+        startIndex,
+        endIndex,
+        returned: paginatedBuildings.length
+      });
+      
+      return {
+        buildings: paginatedBuildings,
+        total: transformedBuildings.length
+      };
+    }
+
+    // 建物用途フィルター
+    if (filters.buildingTypes && filters.buildingTypes.length > 0) {
+      console.log('🏢 Applying building type filter:', filters.buildingTypes);
+      
+      // 建物用途フィルターを適用
+      const buildingTypeConditions = filters.buildingTypes.map(type => 
+        `buildingTypes.ilike.%${type}%`
+      );
+      
+      // 単一条件の場合は直接適用
+      if (buildingTypeConditions.length === 1) {
+        query = query.or(buildingTypeConditions[0]);
+      } else {
+        // 複数条件の場合は、カンマ区切りで結合
+        const combinedCondition = buildingTypeConditions.join(',');
+        query = query.or(combinedCondition);
+      }
     }
 
     // 都道府県フィルター
@@ -118,6 +214,7 @@ class SupabaseApiClient {
                .lte('lng', lng + radius * 0.011);
     }
 
+    // ページネーションの適用
     const start = (page - 1) * limit;
     const end = start + limit - 1;
 
@@ -129,25 +226,27 @@ class SupabaseApiClient {
       throw new SupabaseApiError(500, error.message);
     }
 
+    console.log('📊 Fetched buildings:', buildings?.length || 0, 'from total:', count || 0);
+
     // データ変換と写真フィルター
     const transformedBuildings: Building[] = [];
-    if (buildings) {
-      for (const building of buildings) {
-        try {
-          const transformed = await this.transformBuilding(building);
-          
-          // 写真フィルター（変換後に適用）
-          if (filters.hasPhotos && transformed.photos.length === 0) {
-            continue; // 写真がない場合はスキップ
-          }
-          
-          transformedBuildings.push(transformed);
-        } catch (error) {
-          console.warn('Skipping building due to invalid data:', error);
-          // 無効なデータの建築物はスキップ
+    for (const building of buildings || []) {
+      try {
+        const transformed = await this.transformBuilding(building);
+        
+        // 写真フィルター（クライアントサイドで処理）
+        if (filters.hasPhotos && transformed.photos.length === 0 && !transformed.thumbnailUrl) {
+          continue;
         }
+        
+        transformedBuildings.push(transformed);
+      } catch (error) {
+        console.warn('Building transformation failed:', error);
+        continue;
       }
     }
+
+    console.log('✅ Final filtered results:', transformedBuildings.length, 'buildings');
 
     return {
       buildings: transformedBuildings,
@@ -282,8 +381,6 @@ class SupabaseApiClient {
   }
 
   private async transformBuilding(data: Record<string, unknown>): Promise<Building> {
-    console.log('Transforming building data:', data);
-    
     // 型ガードでデータの妥当性をチェック
     if (!isSupabaseBuildingData(data)) {
       throw ErrorHandler.createValidationError(
@@ -352,6 +449,11 @@ class SupabaseApiClient {
     const generatePhotosFromUid = async (uid: string): Promise<Photo[]> => {
       if (!uid) return [];
       
+      // 画像の存在確認を一時的に無効化（後で実装予定）
+      console.log('📸 Photo checking temporarily disabled for performance');
+      return [];
+      
+      /*
       // 実際に存在する写真のみを取得
       const existingPhotos = await PhotoChecker.getExistingPhotos(uid);
       
@@ -363,6 +465,7 @@ class SupabaseApiClient {
         likes: 0,
         created_at: new Date().toISOString()
       }));
+      */
     };
 
     // 写真データを非同期で取得

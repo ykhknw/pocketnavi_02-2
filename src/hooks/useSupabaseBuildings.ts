@@ -23,7 +23,8 @@ export function useSupabaseBuildings(
   filters: SearchFilters,
   page: number = 1,
   limit: number = 10,
-  useApi: boolean = false
+  useApi: boolean = false,
+  language: 'ja' | 'en' = 'ja'
 ): UseBuildingsResult {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ export function useSupabaseBuildings(
   const fetchBuildings = async () => {
     if (!useApi) {
       // モックデータを使用（現状維持）
-      const filtered = searchBuildings(mockBuildings, filters);
+      const filtered = searchBuildings(mockBuildings, filters, language);
       const startIndex = (page - 1) * limit;
       const paginatedResults = filtered.slice(startIndex, startIndex + limit);
       
@@ -56,13 +57,21 @@ export function useSupabaseBuildings(
     try {
       let result;
       
-      if (filters.query || filters.buildingTypes.length > 0 || filters.prefectures.length > 0) {
+      if (filters.query || (filters.architects && filters.architects.length > 0) || filters.buildingTypes.length > 0 || filters.prefectures.length > 0) {
         // 検索API使用
-        console.log('Using search API with pagination:', { page, limit });
+        console.log('🔍 Using search API with pagination:', { 
+          page, 
+          limit, 
+          hasQuery: !!filters.query,
+          hasArchitects: !!(filters.architects && filters.architects.length > 0),
+          hasBuildingTypes: filters.buildingTypes.length > 0,
+          hasPrefectures: filters.prefectures.length > 0,
+          architects: filters.architects
+        });
         result = await supabaseApiClient.searchBuildings(filters, page, limit);
       } else {
         // 一覧取得API使用
-        console.log('Using getBuildings API');
+        console.log('📋 Using getBuildings API');
         result = await supabaseApiClient.getBuildings(page, limit);
       }
 
@@ -75,7 +84,7 @@ export function useSupabaseBuildings(
         console.error('Supabase API Error:', err);
         
         // フォールバック: モックデータを使用
-        const filtered = searchBuildings(mockBuildings, filters);
+        const filtered = searchBuildings(mockBuildings, filters, language);
         const startIndex = (page - 1) * limit;
         const paginatedResults = filtered.slice(startIndex, startIndex + limit);
         
@@ -93,7 +102,7 @@ export function useSupabaseBuildings(
 
   useEffect(() => {
     fetchBuildings();
-  }, [filters.query, filters.radius, filters.buildingTypes, filters.prefectures, filters.areas, filters.hasPhotos, filters.hasVideos, filters.currentLocation, page, limit, useApi]);
+  }, [filters.query, filters.architects, filters.radius, filters.buildingTypes, filters.prefectures, filters.areas, filters.hasPhotos, filters.hasVideos, filters.currentLocation, page, limit, useApi]);
 
   return {
     buildings,

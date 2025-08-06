@@ -47,7 +47,7 @@ export function useAppEffects() {
         return;
       }
       updateURLWithFilters(filters, currentPage);
-    }, [filters, currentPage, updateURLWithFilters]);
+    }, [filters, currentPage]); // updateURLWithFiltersを依存配列から削除
   };
 
   // 位置情報の更新効果
@@ -71,21 +71,34 @@ export function useAppEffects() {
     setCurrentPage: (page: number) => void,
     searchHistory: SearchHistory[],
     setSearchHistory: (history: SearchHistory[]) => void,
-    prevFiltersRef: React.MutableRefObject<SearchFilters>
+    prevFiltersRef: React.MutableRefObject<SearchFilters>,
+    language: 'ja' | 'en' = 'ja'
   ) => {
     useEffect(() => {
+      console.log('🔄 Filter change effect:', {
+        useApi,
+        totalBuildings: buildings.length,
+        filters,
+        language,
+        hasArchitectFilter: filters.architects && filters.architects.length > 0,
+        hasBuildingTypeFilter: filters.buildingTypes && filters.buildingTypes.length > 0
+      });
+
       if (useApi) {
         // API使用時は既にフィルタリング済み
+        console.log('📡 Using API filtering');
         setFilteredBuildings(buildings);
       } else {
         // モックデータ使用時はクライアントサイドフィルタリング
-        const results = searchBuildings(buildings, filters);
+        console.log('🔍 Using client-side filtering');
+        const results = searchBuildings(buildings, filters, language);
         setFilteredBuildings(results);
       }
 
       // フィルターが実際に変更された場合のみページをリセット
       const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
       if (filtersChanged) {
+        console.log('📄 Resetting page due to filter change');
         setCurrentPage(1);
         prevFiltersRef.current = filters;
       }
@@ -108,7 +121,7 @@ export function useAppEffects() {
           ]);
         }
       }
-    }, [useApi, buildings, filters, searchHistory]);
+    }, [useApi, buildings, filters, searchHistory, language]);
   };
 
   // Supabase建物データの取得効果
@@ -116,7 +129,8 @@ export function useAppEffects() {
     filters: SearchFilters,
     currentPage: number,
     itemsPerPage: number,
-    useApi: boolean
+    useApi: boolean,
+    language: 'ja' | 'en' = 'ja'
   ) => {
     const { 
       buildings, 
@@ -124,7 +138,7 @@ export function useAppEffects() {
       error: buildingsError, 
       total: totalBuildings,
       refetch 
-    } = useSupabaseBuildings(filters, currentPage, itemsPerPage, useApi);
+    } = useSupabaseBuildings(filters, currentPage, itemsPerPage, useApi, language);
 
     return {
       buildings,

@@ -149,6 +149,7 @@ export function SearchForm({
     const newArchitects = currentArchitects.includes(architect)
       ? currentArchitects.filter(a => a !== architect)
       : [...currentArchitects, architect];
+    console.log('🏗️ Architect toggle:', { architect, newArchitects });
     onFiltersChange({ ...filters, architects: newArchitects });
   }, [filters, onFiltersChange]);
 
@@ -157,6 +158,7 @@ export function SearchForm({
     const newTypes = currentTypes.includes(type)
       ? currentTypes.filter(t => t !== type)
       : [...currentTypes, type];
+    console.log('🏢 Building type toggle:', { type, newTypes });
     onFiltersChange({ ...filters, buildingTypes: newTypes });
   }, [filters, onFiltersChange]);
 
@@ -224,9 +226,15 @@ export function SearchForm({
             <Button
               variant="outline"
               onClick={() => setShowAdvanced(!showAdvanced)}
+              className="relative"
             >
               <Filter className="h-4 w-4" />
               {t('detailedSearch', language)}
+              {hasActiveFilters && (
+                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {Object.values(selectedCounts).reduce((sum, count) => sum + count, 0)}
+                </span>
+              )}
             </Button>
           </div>
         </div>
@@ -272,6 +280,68 @@ export function SearchForm({
                 </Button>
               )}
             </div>
+
+            {/* 選択状態のサマリー表示 */}
+            {hasActiveFilters && (
+              <div className="mb-4 p-3 bg-muted/50 rounded-lg">
+                <h4 className="text-sm font-medium mb-2">{language === 'ja' ? '選択中の項目:' : 'Selected items:'}</h4>
+                <div className="space-y-1 text-sm">
+                  {filters.architects && filters.architects.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{language === 'ja' ? '建築家:' : 'Architects:'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {filters.architects.map(arch => (
+                          <span key={arch} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            {arch}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {filters.buildingTypes && filters.buildingTypes.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{language === 'ja' ? '建物用途:' : 'Building types:'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {filters.buildingTypes.map(type => (
+                          <span key={type} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            {type}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {filters.prefectures && filters.prefectures.length > 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{language === 'ja' ? '都道府県:' : 'Prefectures:'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {filters.prefectures.map(pref => (
+                          <span key={pref} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            {pref}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {(filters.hasPhotos || filters.hasVideos) && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{language === 'ja' ? 'メディア:' : 'Media:'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {filters.hasPhotos && (
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            {t('withPhotos', language)}
+                          </span>
+                        )}
+                        {filters.hasVideos && (
+                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                            {t('withVideos', language)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-2 border rounded-lg">
               <CollapsibleSection

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
-import { getRandomDefaultNatureImage } from '../utils/unsplash';
+import { getStableNatureImage } from '../utils/unsplash';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -71,8 +71,8 @@ function BuildingCardComponent({
 }: BuildingCardProps) {
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   
-  // 自然画像をuseMemoで最適化
-  const natureImage = useMemo(() => getRandomDefaultNatureImage(), []);
+  // 建築物IDに基づいて安定した自然画像を取得
+  const natureImage = useMemo(() => getStableNatureImage(building.id), [building.id]);
 
   // ハンドラー関数をuseCallbackで最適化
   const handleExternalImageSearch = useCallback((query: string) => {
@@ -222,7 +222,7 @@ function BuildingCardComponent({
             className="text-xs"
           >
             <ExternalLink className="h-3 w-3 mr-1" />
-            {t('searchImages', language)}
+            Google Images
           </Button>
         </div>
       </CardContent>

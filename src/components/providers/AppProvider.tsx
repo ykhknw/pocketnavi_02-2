@@ -26,7 +26,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     state.filters,
     state.currentPage,
     state.itemsPerPage,
-    effects.useApi
+    effects.useApi,
+    effects.language
   );
   
   // URL同期効果
@@ -61,7 +62,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     state.setCurrentPage,
     state.searchHistory,
     state.setSearchHistory,
-    state.prevFiltersRef
+    state.prevFiltersRef,
+    effects.language
   );
   
   // ページネーション計算
@@ -70,6 +72,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     state.itemsPerPage,
     state.currentPage
   );
+
+  // デバッグログ
+  console.log('ページネーション計算:', {
+    useApi: effects.useApi,
+    totalBuildings: buildingsData.totalBuildings,
+    filteredBuildingsLength: effects.filteredBuildings.length,
+    itemsPerPage: state.itemsPerPage,
+    currentPage: state.currentPage,
+    totalPages: pagination.totalPages,
+    startIndex: pagination.startIndex,
+    hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
+    architects: state.filters.architects
+  });
   
   // 現在の建物リスト
   const currentBuildings = effects.useApi 
@@ -193,8 +208,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     getCurrentLocation: effects.getCurrentLocation,
     locationLoading: effects.locationLoading,
     locationError: effects.locationError,
-         buildingsLoading: buildingsData.buildingsLoading,
-     buildingsError: buildingsData.buildingsError,
+    buildingsLoading: buildingsData.buildingsLoading,
+    buildingsError: buildingsData.buildingsError,
     buildings: buildingsData.buildings,
     filteredBuildings: effects.filteredBuildings,
     currentBuildings,

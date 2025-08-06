@@ -89,9 +89,26 @@ export function usePagination(config: PaginationConfig): PaginationState & Pagin
     // 最後のページ
     if (currentPage + delta < totalPages - 1) {
       rangeWithDots.push('...', totalPages);
-    } else if (totalPages > 1 && currentPage !== totalPages) {
-      rangeWithDots.push(totalPages);
+    } else if (totalPages > 1) {
+      // 最後のページがまだ含まれていない場合のみ追加
+      if (!rangeWithDots.includes(totalPages)) {
+        rangeWithDots.push(totalPages);
+      }
     }
+
+    // デバッグ用ログ
+    console.log('ページネーション範囲計算:', {
+      currentPage,
+      totalPages,
+      delta,
+      range,
+      rangeWithDots,
+      condition1: currentPage - delta > 2,
+      condition2: currentPage + delta < totalPages - 1,
+      condition3: totalPages > 1 && currentPage !== totalPages,
+      includesTotalPages: rangeWithDots.includes(totalPages),
+      finalRange: rangeWithDots
+    });
 
     return rangeWithDots;
   }, [currentPage, totalPages]);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { X, Heart, MapPin, Calendar, Camera, Video, ExternalLink, Globe, Play, ArrowLeft } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -6,7 +6,7 @@ import { DetailMap } from './DetailMap';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { t } from '../utils/translations';
-import { getRandomDefaultNatureImage } from '../utils/unsplash';
+import { getStableNatureImage } from '../utils/unsplash';
 
 interface BuildingDetailProps {
   building: Building;
@@ -18,6 +18,49 @@ interface BuildingDetailProps {
   displayIndex?: number;
   isInline?: boolean;
 }
+
+// 遅延読み込み用の画像コンポーネント
+const LazyImage = React.memo(({ src, alt, className, onClick }: { src: string; alt: string; className?: string; onClick?: () => void }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+  }, []);
+
+  if (hasError) {
+    return (
+      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
+        <Camera className="h-8 w-8 text-gray-400" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+          <Camera className="h-8 w-8 text-gray-400" />
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={handleLoad}
+        onError={handleError}
+        onClick={onClick}
+        loading="lazy"
+      />
+    </div>
+  );
+});
 
 export function BuildingDetail({ 
   building, 
@@ -33,6 +76,16 @@ export function BuildingDetail({
   const hasRealPhotos = building.photos.length > 0;
   const isRealThumbnail = !building.thumbnailUrl.includes('pexels.com');
   const isRealBuilding = hasRealPhotos || isRealThumbnail;
+
+  // 画像の安定性を確保するため、building.idをキーとして使用
+  const stableImageKey = useMemo(() => {
+    return `building-${building.id}`;
+  }, [building.id]);
+
+  // 安定した自然画像URLをメモ化
+  const stableNatureImageUrl = useMemo(() => {
+    return getStableNatureImage(building.id);
+  }, [building.id]);
 
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -184,7 +237,7 @@ export function BuildingDetail({
             <div className="mt-3 -mx-4 -mb-4">
               <div 
                 className="relative h-24 bg-cover bg-center bg-no-repeat rounded-b-lg cursor-pointer hover:opacity-90 transition-opacity image-container"
-                style={{ backgroundImage: `url(${getRandomDefaultNatureImage()})` }}
+                style={{ backgroundImage: `url(${stableNatureImageUrl})` }}
                 onClick={() => handleExternalImageSearch(language === 'ja' ? building.title : building.titleEn)}
               >
                 <div className="absolute inset-0 bg-white bg-opacity-40 rounded-b-lg z-10"></div>
@@ -360,7 +413,7 @@ export function BuildingDetail({
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {building.photos.map(photo => (
                     <div key={photo.id} className="relative group">
-                      <img
+                      <LazyImage
                         src={photo.url}
                         alt=""
                         className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-105 ring-2 ring-amber-300 shadow-lg filter brightness-110 contrast-110"
