@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useCallback } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppContextType } from '../../types/app';
 import { Building } from '../../types';
 import { useAppState } from '../../hooks/useAppState';
@@ -6,9 +7,21 @@ import { useAppActions } from '../../hooks/useAppActions';
 import { useAppHandlers } from '../../hooks/useAppHandlers';
 import { useAppEffects } from '../../hooks/useAppEffects';
 
+// React Queryクライアントの設定
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5分間は新鮮とみなす
+      gcTime: 10 * 60 * 1000, // 10分間キャッシュを保持
+      retry: 1, // リトライ回数を1回に制限
+      refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
+    },
+  },
+});
+
 const AppContext = createContext<AppContextType | null>(null);
 
-export function AppProvider({ children }: { children: React.ReactNode }) {
+function AppProviderContent({ children }: { children: React.ReactNode }) {
   // 状態管理
   const state = useAppState();
   
@@ -36,7 +49,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     state.searchParams,
     state.setFilters,
     state.setCurrentPage,
-    state.isUpdatingFromURL
+    state.isUpdatingFromURL.current
   );
   
   // URL更新効果
@@ -44,7 +57,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     state.filters,
     state.currentPage,
     actions.updateURLWithFilters,
-    state.isUpdatingFromURL
+    state.isUpdatingFromURL.current
   );
   
   // 位置情報効果
@@ -155,10 +168,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [handlers.handleSearchAround]
   );
     
-  const handlePageChange = useCallback((page: number) => 
-    handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage),
-    [handlers.handlePageChange, pagination.totalPages, state.currentPage, state.setCurrentPage]
-  );
+  const handlePageChange = useCallback((page: number) => {
+    console.log('🔄 handlePageChange called:', { page, totalPages: pagination.totalPages, currentPage: state.currentPage });
+    handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
+  }, [handlers.handlePageChange, state.setCurrentPage]);
 
   const contextValue: AppContextType = {
     // 状態
@@ -228,6 +241,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     <AppContext.Provider value={contextValue}>
       {children}
     </AppContext.Provider>
+  );
+}
+
+export function AppProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppProviderContent>
+        {children}
+      </AppProviderContent>
+    </QueryClientProvider>
   );
 }
 

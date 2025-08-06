@@ -15,6 +15,7 @@ export function isSupabaseBuildingData(obj: unknown): obj is Record<string, unkn
     typeof data.location === 'string' &&
     (typeof data.lat === 'number' || typeof data.lat === 'string') &&
     (typeof data.lng === 'number' || typeof data.lng === 'string')
+    // building_architectsフィールドはオプション（JOINの結果）
   );
 }
 

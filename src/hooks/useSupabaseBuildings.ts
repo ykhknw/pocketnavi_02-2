@@ -1,115 +1,174 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabaseApiClient } from '../services/supabase-api';
 import { Building, SearchFilters } from '../types';
-import { supabaseApiClient, SupabaseApiError } from '../services/supabase-api';
-import { mockBuildings } from '../data/mockData'; // フォールバック用
-import { searchBuildings } from '../utils/search'; // クライアントサイド検索
-
-interface UseBuildingsResult {
-  buildings: Building[];
-  loading: boolean;
-  error: string | null;
-  total: number;
-  refetch: () => void;
-}
-
-interface UseBuildingByIdResult {
-  building: Building | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
+import { mockBuildings } from '../data/mockData';
 
 export function useSupabaseBuildings(
   filters: SearchFilters,
-  page: number = 1,
-  limit: number = 10,
-  useApi: boolean = false,
+  currentPage: number,
+  itemsPerPage: number,
+  useApi: boolean,
   language: 'ja' | 'en' = 'ja'
-): UseBuildingsResult {
+) {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
+  
+  const queryClient = useQueryClient();
 
-  const fetchBuildings = async () => {
-    if (!useApi) {
-      // モックデータを使用（現状維持）
-      const filtered = searchBuildings(mockBuildings, filters, language);
-      const startIndex = (page - 1) * limit;
-      const paginatedResults = filtered.slice(startIndex, startIndex + limit);
+  // React Queryを使用したキャッシュ機能（ページ番号を確実に含める）
+  const queryKey = [
+    'buildings',
+    filters,
+    currentPage,
+    itemsPerPage,
+    useApi,
+    language
+  ];
+
+  const { data, isLoading, error: queryError, refetch } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      console.log('🔍 React Query fetching:', { 
+        useApi, 
+        currentPage, 
+        itemsPerPage,
+        queryKey: JSON.stringify(queryKey)
+      });
       
-      setBuildings(paginatedResults);
-      setTotal(filtered.length);
-      console.log('Using mock data:', paginatedResults.length, 'buildings');
-      return;
-    }
+      if (!useApi) {
+        // モックデータ使用時
+        console.log('📦 Using mock data');
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = currentPage * itemsPerPage;
+        return {
+          buildings: mockBuildings.slice(startIndex, endIndex),
+          total: mockBuildings.length
+        };
+      }
 
-    console.log('Supabase環境変数:', {
-      url: import.meta.env.VITE_SUPABASE_URL,
-      hasKey: !!import.meta.env.VITE_SUPABASE_ANON_KEY,
-      useApi
-    });
-
-    console.log('Fetching from Supabase...', { filters, page, limit, useApi });
-    setLoading(true);
-    setError(null);
-
-    try {
-      let result;
-      
-      if (filters.query || (filters.architects && filters.architects.length > 0) || filters.buildingTypes.length > 0 || filters.prefectures.length > 0) {
-        // 検索API使用
-        console.log('🔍 Using search API with pagination:', { 
-          page, 
-          limit, 
-          hasQuery: !!filters.query,
-          hasArchitects: !!(filters.architects && filters.architects.length > 0),
-          hasBuildingTypes: filters.buildingTypes.length > 0,
-          hasPrefectures: filters.prefectures.length > 0,
-          architects: filters.architects
+      try {
+        // Supabase API使用時
+        console.log('📡 Using Supabase API');
+        const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage);
+        console.log('📊 API result:', { 
+          buildingsCount: result.buildings.length, 
+          total: result.total,
+          currentPage 
         });
-        result = await supabaseApiClient.searchBuildings(filters, page, limit);
-      } else {
-        // 一覧取得API使用
-        console.log('📋 Using getBuildings API');
-        result = await supabaseApiClient.getBuildings(page, limit);
+        return result;
+      } catch (err) {
+        console.error('API Error:', err);
+        throw err;
       }
+    },
+    staleTime: 0, // キャッシュを無効化して常に新しいデータを取得
+    gcTime: 0, // キャッシュを完全に無効化
+    retry: 1, // リトライ回数を1回に制限
+    refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
+    enabled: true, // 常に有効
+  });
 
-      console.log('Supabase result:', result);
-      setBuildings(result.buildings);
-      setTotal(result.total);
+  // データの更新
+  useEffect(() => {
+    if (data) {
+      setBuildings(data.buildings);
+      setTotal(data.total);
+      setLoading(false);
+      setError(null);
+    }
+  }, [data]);
+
+  // エラーの処理
+  useEffect(() => {
+    if (queryError) {
+      setError(queryError.message);
+      setLoading(false);
+    }
+  }, [queryError]);
+
+  // ローディング状態の更新
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
+
+  // 手動リフェッチ機能
+  const refetchData = useCallback(async () => {
+    console.log('🔄 Manual refetch triggered');
+    try {
+      setLoading(true);
+      setError(null);
+      await refetch();
     } catch (err) {
-      if (err instanceof SupabaseApiError) {
-        setError(`Supabase API Error: ${err.message}`);
-        console.error('Supabase API Error:', err);
-        
-        // フォールバック: モックデータを使用
-        const filtered = searchBuildings(mockBuildings, filters, language);
-        const startIndex = (page - 1) * limit;
-        const paginatedResults = filtered.slice(startIndex, startIndex + limit);
-        
-        setBuildings(paginatedResults);
-        setTotal(filtered.length);
-        console.log('Fallback to mock data due to error');
-      } else {
-        setError('Unknown error occurred');
-        console.error('Unknown error:', err);
-      }
+      console.error('Refetch error:', err);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [refetch]);
 
-  useEffect(() => {
-    fetchBuildings();
-  }, [filters.query, filters.architects, filters.radius, filters.buildingTypes, filters.prefectures, filters.areas, filters.hasPhotos, filters.hasVideos, filters.currentLocation, page, limit, useApi]);
+  // ページ変更時のキャッシュ無効化
+  const invalidatePageCache = useCallback(() => {
+    console.log('🗑️ Invalidating page cache');
+    queryClient.invalidateQueries({ 
+      queryKey: ['buildings'],
+      exact: false 
+    });
+  }, [queryClient]);
+
+  // ページ変更時の強制リフェッチ
+  const forceRefetch = useCallback(() => {
+    console.log('🔄 Force refetch triggered');
+    queryClient.removeQueries({ queryKey: ['buildings'], exact: false });
+    refetch();
+  }, [queryClient, refetch]);
+
+  // キャッシュの無効化
+  const invalidateCache = useCallback(() => {
+    console.log('🗑️ Invalidating cache');
+    queryClient.invalidateQueries({ queryKey: ['buildings'] });
+  }, [queryClient]);
+
+  // プリフェッチ機能（次のページを事前に読み込み）
+  const prefetchNextPage = useCallback(() => {
+    if (currentPage * itemsPerPage < total) {
+      const nextPage = currentPage + 1;
+      const nextQueryKey = [
+        'buildings',
+        filters,
+        nextPage,
+        itemsPerPage,
+        useApi,
+        language
+      ];
+      
+      queryClient.prefetchQuery({
+        queryKey: nextQueryKey,
+        queryFn: async () => {
+          if (!useApi) {
+                      return {
+            buildings: mockBuildings.slice((nextPage - 1) * itemsPerPage, nextPage * itemsPerPage),
+            total: mockBuildings.length
+          };
+          }
+          return await supabaseApiClient.searchBuildings(filters, nextPage, itemsPerPage);
+        },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+      });
+    }
+  }, [queryClient, filters, currentPage, itemsPerPage, total, useApi, language]);
 
   return {
     buildings,
-    loading,
-    error,
-    total,
-    refetch: fetchBuildings,
+    buildingsLoading: loading,
+    buildingsError: error,
+    totalBuildings: total,
+    refetch: refetchData,
+    invalidateCache,
+    prefetchNextPage
   };
 }
 
@@ -117,7 +176,7 @@ export function useSupabaseBuildings(
 export function useBuildingById(
   buildingId: number | null,
   useApi: boolean = false
-): UseBuildingByIdResult {
+) {
   const [building, setBuilding] = useState<Building | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -144,18 +203,14 @@ export function useBuildingById(
       setBuilding(result);
       console.log('Building found:', result);
     } catch (err) {
-      if (err instanceof SupabaseApiError) {
-        setError(`Supabase API Error: ${err.message}`);
-        console.error('Supabase API Error:', err);
-        
-        // フォールバック: モックデータを使用
-        const foundBuilding = mockBuildings.find(b => b.id === buildingId);
-        setBuilding(foundBuilding || null);
-        console.log('Fallback to mock data due to error');
-      } else {
-        setError('Unknown error occurred');
-        console.error('Unknown error:', err);
-      }
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(`API Error: ${errorMessage}`);
+      console.error('API Error:', err);
+      
+      // フォールバック: モックデータを使用
+      const foundBuilding = mockBuildings.find((b: any) => b.id === buildingId);
+      setBuilding(foundBuilding || null);
+      console.log('Fallback to mock data due to error');
     } finally {
       setLoading(false);
     }

@@ -1,110 +1,164 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Building, SearchFilters, SearchHistory } from '../types';
-import { searchBuildings } from '../utils/search';
-import { useGeolocation } from './useGeolocation';
-import { useLanguage } from './useLanguage';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useSupabaseBuildings } from './useSupabaseBuildings';
 import { useSupabaseToggle } from './useSupabaseToggle';
+import { useGeolocation } from './useGeolocation';
+import { useLanguage } from './useLanguage';
+import { SearchFilters, Building } from '../types';
+import { searchBuildings } from '../utils/search';
 
 export function useAppEffects() {
-  const navigate = useNavigate();
+  // Supabase接続状態
+  const { useApi, apiStatus, isSupabaseConnected } = useSupabaseToggle();
   
-  // フックの使用
-  const { location: geoLocation, error: locationError, loading: locationLoading, getCurrentLocation } = useGeolocation();
+  // 位置情報
+  const { location: geoLocation, getCurrentLocation, loading: locationLoading, error: locationError } = useGeolocation();
+  
+  // 言語設定
   const { language, toggleLanguage } = useLanguage();
-  const { useApi, apiStatus, isApiAvailable, isSupabaseConnected } = useSupabaseToggle();
   
-  // 検索結果のフィルタリング（モックデータ使用時）
+  // フィルタリングされた建物リスト
   const [filteredBuildings, setFilteredBuildings] = useState<Building[]>([]);
+  
+  // デバウンス時間を500msに延長
+  const DEBOUNCE_DELAY = 500;
+  
+  // 検索のデバウンス処理
+  const debouncedSearch = useRef(
+    debounce((buildings: Building[], filters: SearchFilters, language: 'ja' | 'en') => {
+      console.log('🔍 デバウンス検索実行:', { 
+        buildingsCount: buildings.length, 
+        filters, 
+        language
+      });
+      
+      const results = searchBuildings(buildings, filters, language);
+      setFilteredBuildings(results);
+    }, DEBOUNCE_DELAY)
+  ).current;
 
-  // URLが変更されたときに状態を更新する効果
-  const useURLSyncEffect = (
-    location: { search: string },
+  // デバウンス関数
+  function debounce<T extends (...args: any[]) => any>(
+    func: T,
+    delay: number
+  ): (...args: Parameters<T>) => void {
+    let timeoutId: NodeJS.Timeout;
+    
+    return (...args: Parameters<T>) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  }
+
+  // Supabase建物データ取得効果
+  const useSupabaseBuildingsEffect = useCallback((
+    filters: SearchFilters,
+    currentPage: number,
+    itemsPerPage: number,
+    useApi: boolean,
+    language: 'ja' | 'en'
+  ) => {
+    return useSupabaseBuildings(filters, currentPage, itemsPerPage, useApi, language);
+  }, []);
+
+  // URL同期効果
+  const useURLSyncEffect = useCallback((
+    location: any,
     searchParams: URLSearchParams,
     setFilters: (filters: SearchFilters) => void,
     setCurrentPage: (page: number) => void,
-    isUpdatingFromURL: React.MutableRefObject<boolean>
+    isUpdatingFromURL: boolean
   ) => {
     useEffect(() => {
-      isUpdatingFromURL.current = true;
-      const { filters: urlFilters, currentPage: urlPage } = parseFiltersFromURL(searchParams);
-      setFilters(urlFilters);
-      setCurrentPage(urlPage);
-    }, [location.search]);
-  };
+      if (isUpdatingFromURL) return;
+      
+      const query = searchParams.get('q') || '';
+      const architects = searchParams.get('architects')?.split(',') || [];
+      const buildingTypes = searchParams.get('buildingTypes')?.split(',') || [];
+      const prefectures = searchParams.get('prefectures')?.split(',') || [];
+      const areas = searchParams.get('areas')?.split(',') || [];
+      const hasPhotos = searchParams.get('hasPhotos') === 'true';
+      const hasVideos = searchParams.get('hasVideos') === 'true';
+      const radius = parseInt(searchParams.get('radius') || '5', 10);
+      const page = parseInt(searchParams.get('page') || '1', 10);
+      
+      setFilters({
+        query,
+        architects,
+        buildingTypes,
+        prefectures,
+        areas,
+        hasPhotos,
+        hasVideos,
+        radius,
+        currentLocation: null
+      });
+      
+      setCurrentPage(page);
+    }, [location.search, isUpdatingFromURL, setFilters, setCurrentPage]);
+  }, []);
 
-  // フィルターまたはページが変更されたときにURLを更新する効果
-  const useURLUpdateEffect = (
+  // URL更新効果
+  const useURLUpdateEffect = useCallback((
     filters: SearchFilters,
     currentPage: number,
     updateURLWithFilters: (filters: SearchFilters, currentPage: number) => void,
-    isUpdatingFromURL: React.MutableRefObject<boolean>
+    isUpdatingFromURL: boolean
   ) => {
     useEffect(() => {
-      if (isUpdatingFromURL.current) {
-        isUpdatingFromURL.current = false;
-        return;
-      }
-      updateURLWithFilters(filters, currentPage);
-    }, [filters, currentPage]); // updateURLWithFiltersを依存配列から削除
-  };
+      if (isUpdatingFromURL) return;
+      
+      // デバウンス処理でURL更新を最適化
+      const timeoutId = setTimeout(() => {
+        updateURLWithFilters(filters, currentPage);
+      }, 300);
+      
+      return () => clearTimeout(timeoutId);
+    }, [filters, currentPage, updateURLWithFilters, isUpdatingFromURL]);
+  }, []);
 
-  // 位置情報の更新効果
-  const useGeolocationEffect = (
-    geoLocation: { lat: number; lng: number } | null,
-    setFilters: (filters: SearchFilters) => void
-  ) => {
-    useEffect(() => {
-      if (geoLocation) {
-        setFilters(prev => ({ ...prev, currentLocation: geoLocation }));
-      }
-    }, [geoLocation]);
-  };
+        // 位置情報効果
+      const useGeolocationEffect = useCallback((
+        geoLocation: { lat: number; lng: number } | null,
+        setFilters: (filters: SearchFilters) => void
+      ) => {
+        useEffect(() => {
+          if (geoLocation) {
+            setFilters((prev: SearchFilters) => ({
+              ...prev,
+              currentLocation: geoLocation
+            }));
+          }
+        }, [geoLocation, setFilters]);
+      }, []);
 
-  // フィルター変更時の効果
-  const useFilterChangeEffect = (
+  // フィルター変更効果（最適化版）
+  const useFilterChangeEffect = useCallback((
     useApi: boolean,
     buildings: Building[],
     filters: SearchFilters,
     setFilteredBuildings: (buildings: Building[]) => void,
     setCurrentPage: (page: number) => void,
-    searchHistory: SearchHistory[],
-    setSearchHistory: (history: SearchHistory[]) => void,
-    prevFiltersRef: React.MutableRefObject<SearchFilters>,
-    language: 'ja' | 'en' = 'ja'
+    searchHistory: any[],
+    setSearchHistory: (history: any[]) => void,
+    prevFiltersRef: React.MutableRefObject<SearchFilters | null>,
+    language: 'ja' | 'en'
   ) => {
     useEffect(() => {
-      console.log('🔄 Filter change effect:', {
-        useApi,
-        totalBuildings: buildings.length,
-        filters,
-        language,
-        hasArchitectFilter: filters.architects && filters.architects.length > 0,
-        hasBuildingTypeFilter: filters.buildingTypes && filters.buildingTypes.length > 0
-      });
-
-      if (useApi) {
-        // API使用時は既にフィルタリング済み
-        console.log('📡 Using API filtering');
-        setFilteredBuildings(buildings);
-      } else {
-        // モックデータ使用時はクライアントサイドフィルタリング
-        console.log('🔍 Using client-side filtering');
-        const results = searchBuildings(buildings, filters, language);
-        setFilteredBuildings(results);
-      }
-
-      // フィルターが実際に変更された場合のみページをリセット
-      const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
-      if (filtersChanged) {
-        console.log('📄 Resetting page due to filter change');
-        setCurrentPage(1);
-        prevFiltersRef.current = filters;
+      // フィルターが変更された場合のみ実行
+      const prevFilters = prevFiltersRef.current;
+      if (JSON.stringify(prevFilters) === JSON.stringify(filters)) {
+        return;
       }
       
-      // Add to search history if there's a query
-      if (filters.query.trim()) {
+      console.log('🔄 フィルター変更検出:', { 
+        prevFilters, 
+        currentFilters: filters,
+        buildingsCount: buildings.length 
+      });
+      
+      // 検索履歴を更新
+      if (filters.query && filters.query.trim()) {
         const existingIndex = searchHistory.findIndex(h => h.query === filters.query);
         if (existingIndex >= 0) {
           const updated = [...searchHistory];
@@ -115,79 +169,44 @@ export function useAppEffects() {
           };
           setSearchHistory(updated);
         } else {
-          setSearchHistory(prev => [
+          (setSearchHistory as any)((prev: any[]) => [
             { query: filters.query, searchedAt: new Date().toISOString(), count: 1 },
-            ...prev.slice(0, 19) // Keep only last 20 searches
+            ...prev.slice(0, 19)
           ]);
         }
       }
-    }, [useApi, buildings, filters, searchHistory, language]);
-  };
-
-  // Supabase建物データの取得効果
-  const useSupabaseBuildingsEffect = (
-    filters: SearchFilters,
-    currentPage: number,
-    itemsPerPage: number,
-    useApi: boolean,
-    language: 'ja' | 'en' = 'ja'
-  ) => {
-    const { 
-      buildings, 
-      loading: buildingsLoading, 
-      error: buildingsError, 
-      total: totalBuildings,
-      refetch 
-    } = useSupabaseBuildings(filters, currentPage, itemsPerPage, useApi, language);
-
-    return {
-      buildings,
-      buildingsLoading,
-      buildingsError,
-      totalBuildings,
-      refetch
-    };
-  };
+      
+      // API使用時はサーバーサイドフィルタリング
+      if (useApi) {
+        console.log('📡 API使用時のフィルタリング');
+        setFilteredBuildings(buildings);
+        return;
+      }
+      
+      // クライアントサイドフィルタリング（デバウンス処理）
+      debouncedSearch(buildings, filters, language);
+      
+      // 前のフィルターを更新
+      prevFiltersRef.current = { ...filters };
+    }, [filters, buildings, useApi, language, setFilteredBuildings, setCurrentPage, searchHistory, setSearchHistory, debouncedSearch, prevFiltersRef]);
+  }, []);
 
   return {
-    // フック状態
-    geoLocation,
-    locationError,
-    locationLoading,
-    getCurrentLocation,
-    language,
-    toggleLanguage,
     useApi,
     apiStatus,
-    isApiAvailable,
     isSupabaseConnected,
+    geoLocation,
+    getCurrentLocation,
+    locationLoading,
+    locationError,
+    language,
+    toggleLanguage,
     filteredBuildings,
     setFilteredBuildings,
-    
-    // 効果関数
+    useSupabaseBuildingsEffect,
     useURLSyncEffect,
     useURLUpdateEffect,
     useGeolocationEffect,
-    useFilterChangeEffect,
-    useSupabaseBuildingsEffect
+    useFilterChangeEffect
   };
-}
-
-// URLからフィルターとページ情報を解析する関数
-function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFilters; currentPage: number } {
-  const filters: SearchFilters = {
-    query: searchParams.get('q') || '',
-    radius: parseInt(searchParams.get('radius') || '5', 10),
-    architects: searchParams.get('architects')?.split(',').filter(Boolean) || [],
-    buildingTypes: searchParams.get('buildingTypes')?.split(',').filter(Boolean) || [],
-    prefectures: searchParams.get('prefectures')?.split(',').filter(Boolean) || [],
-    areas: searchParams.get('areas')?.split(',').filter(Boolean) || [],
-    hasPhotos: searchParams.get('hasPhotos') === 'true',
-    hasVideos: searchParams.get('hasVideos') === 'true',
-    currentLocation: null
-  };
-
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-
-  return { filters, currentPage };
 } 

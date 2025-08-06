@@ -134,8 +134,18 @@ export function useAppHandlers() {
     setCurrentPage: (page: number) => void
   ) => {
     console.log(`ページ変更開始: ${page}/${totalPages}, 現在のページ: ${currentPage}`);
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // ページが実際に変更される場合のみ処理
+    if (page !== currentPage && page >= 1 && page <= totalPages) {
+      console.log(`ページ変更実行: ${currentPage} → ${page}`);
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // ページ変更後の処理
+      console.log('✅ Page change completed');
+    } else {
+      console.log(`ページ変更スキップ: ${page} (現在: ${currentPage}, 総ページ: ${totalPages})`);
+    }
   };
 
   return {
