@@ -49,9 +49,10 @@ export function HomePage() {
         onLanguageToggle={toggleLanguage}
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <MainContent
+              <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <MainContent
             selectedBuilding={context.selectedBuilding}
             buildingsLoading={context.buildingsLoading}
             buildingsError={context.buildingsError}
@@ -78,10 +79,13 @@ export function HomePage() {
             handlePhotoLike={context.handlePhotoLike}
             handleSearchAround={context.handleSearchAround}
             handlePageChange={context.handlePageChange}
-            getPaginationRange={context.getPaginationRange}
-          />
-          
-          <Sidebar
+            handleSearchStart={context.handleSearchStart}
+                          getPaginationRange={context.getPaginationRange}
+            />
+            </div>
+            
+            <div className="lg:col-span-1">
+              <Sidebar
             buildings={context.currentBuildings}
             selectedBuilding={context.selectedBuilding}
             onBuildingSelect={context.handleBuildingSelect}
@@ -92,10 +96,11 @@ export function HomePage() {
             likedBuildings={context.likedBuildings}
             onLikedBuildingClick={context.handleLikedBuildingClick}
             recentSearches={context.searchHistory}
-            popularSearches={context.popularSearches}
-            onSearchClick={context.handleSearchFromHistory}
-          />
-        </div>
+                          popularSearches={context.popularSearches}
+              onSearchClick={context.handleSearchFromHistory}
+            />
+            </div>
+          </div>
       </div>
 
       {/* モーダルコンポーネント */}

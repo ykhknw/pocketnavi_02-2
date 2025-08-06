@@ -42,6 +42,7 @@ export interface AppHandlers {
   handleLikedBuildingClick: (buildingId: number) => void;
   handleSearchAround: (lat: number, lng: number) => void;
   handlePageChange: (page: number) => void;
+  handleSearchStart: () => void;
 }
 
 export interface AppContextType extends AppState, AppActions, AppHandlers {

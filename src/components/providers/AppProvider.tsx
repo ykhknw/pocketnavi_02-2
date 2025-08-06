@@ -173,6 +173,13 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
   }, [handlers.handlePageChange, state.setCurrentPage]);
 
+  // 検索開始時のコールバック（建築物詳細をクリア）
+  const handleSearchStart = useCallback(() => {
+    console.log('🔍 検索開始: 建築物詳細をクリア');
+    state.setSelectedBuilding(null);
+    state.setShowDetail(false);
+  }, [state.setSelectedBuilding, state.setShowDetail]);
+
   const contextValue: AppContextType = {
     // 状態
     selectedBuilding: state.selectedBuilding,
@@ -214,6 +221,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     handleLikedBuildingClick,
     handleSearchAround,
     handlePageChange,
+    handleSearchStart,
     
     // その他の状態
     language: effects.language,

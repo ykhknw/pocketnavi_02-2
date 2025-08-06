@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from '../ui/button';
+import React, { memo } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { Building, SearchFilters } from '../../types';
 import { SearchForm } from '../SearchForm';
 import { BuildingCard } from '../BuildingCard';
 import { BuildingDetail } from '../BuildingDetail';
-import { Building, SearchFilters } from '../../types';
+import { Button } from '../ui/button';
 
 interface MainContentProps {
   // 状態
@@ -40,6 +40,7 @@ interface MainContentProps {
   handlePhotoLike: (photoId: number) => void;
   handleSearchAround: (lat: number, lng: number) => void;
   handlePageChange: (page: number) => void;
+  handleSearchStart: () => void;
   getPaginationRange: () => (number | string)[];
 }
 
@@ -70,32 +71,25 @@ function MainContentComponent({
   handlePhotoLike,
   handleSearchAround,
   handlePageChange,
+  handleSearchStart,
   getPaginationRange
 }: MainContentProps) {
-  return (
-    <div className="lg:col-span-2 space-y-6">
-      {/* API状態表示（開発用） */}
-      {import.meta.env.DEV && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-blue-700 text-sm">
-              データソース: {useApi ? 'Supabase API' : 'モックデータ'} | 状態: {apiStatus}
-              {isSupabaseConnected && ' ✅'}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowDataMigration(true)}
-            >
-              データ移行
-            </Button>
-            {buildingsError && (
-              <span className="text-red-600 text-sm">Error: {buildingsError}</span>
-            )}
-          </div>
-        </div>
-      )}
+  if (buildingsError) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-destructive text-lg mb-4">
+          {language === 'ja' ? 'エラーが発生しました' : 'An error occurred'}
+        </p>
+        <p className="text-muted-foreground">
+          {buildingsError}
+        </p>
+      </div>
+    );
+  }
 
+  return (
+    <div className="flex-1 p-6 space-y-6">
+      {/* 検索フォーム */}
       <SearchForm
         filters={filters}
         onFiltersChange={setFilters}
@@ -103,6 +97,7 @@ function MainContentComponent({
         locationLoading={locationLoading}
         locationError={locationError}
         language={language}
+        onSearchStart={handleSearchStart}
       />
 
       {buildingsLoading && (
@@ -197,10 +192,10 @@ function MainContentComponent({
                       disabled={typeof page !== 'number'}
                       className={`px-3 py-2 rounded-md text-sm font-medium ${
                         typeof page === 'number'
-                          ? currentPage === page
-                            ? 'bg-primary text-primary-foreground shadow-sm'
-                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 shadow-sm'
-                          : 'bg-transparent border-none text-gray-400 cursor-default'
+                          ? page === currentPage
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                          : 'text-gray-400 cursor-default'
                       }`}
                     >
                       {page}
@@ -224,17 +219,14 @@ function MainContentComponent({
   );
 }
 
-// Props比較関数
+// メモ化してパフォーマンスを最適化
 const arePropsEqual = (prevProps: MainContentProps, nextProps: MainContentProps): boolean => {
   return (
     prevProps.selectedBuilding?.id === nextProps.selectedBuilding?.id &&
     prevProps.buildingsLoading === nextProps.buildingsLoading &&
     prevProps.buildingsError === nextProps.buildingsError &&
     prevProps.currentBuildings.length === nextProps.currentBuildings.length &&
-    prevProps.currentBuildings.every((building, index) => 
-      building.id === nextProps.currentBuildings[index]?.id
-    ) &&
-    prevProps.filteredBuildings.length === nextProps.filteredBuildings.length &&
+    prevProps.currentBuildings.every((building, index) => building.id === nextProps.currentBuildings[index]?.id) &&
     prevProps.totalBuildings === nextProps.totalBuildings &&
     prevProps.totalPages === nextProps.totalPages &&
     prevProps.startIndex === nextProps.startIndex &&
@@ -244,24 +236,11 @@ const arePropsEqual = (prevProps: MainContentProps, nextProps: MainContentProps)
     prevProps.apiStatus === nextProps.apiStatus &&
     prevProps.isSupabaseConnected === nextProps.isSupabaseConnected &&
     prevProps.showDataMigration === nextProps.showDataMigration &&
-    prevProps.language === nextProps.language &&
+    JSON.stringify(prevProps.filters) === JSON.stringify(nextProps.filters) &&
     prevProps.locationLoading === nextProps.locationLoading &&
     prevProps.locationError === nextProps.locationError &&
-    prevProps.filters.search === nextProps.filters.search &&
-    prevProps.filters.category === nextProps.filters.category &&
-    prevProps.filters.yearFrom === nextProps.filters.yearFrom &&
-    prevProps.filters.yearTo === nextProps.filters.yearTo &&
-    prevProps.filters.architect === nextProps.filters.architect &&
-    prevProps.setShowDataMigration === nextProps.setShowDataMigration &&
-    prevProps.setFilters === nextProps.setFilters &&
-    prevProps.getCurrentLocation === nextProps.getCurrentLocation &&
-    prevProps.handleBuildingSelect === nextProps.handleBuildingSelect &&
-    prevProps.handleLike === nextProps.handleLike &&
-    prevProps.handlePhotoLike === nextProps.handlePhotoLike &&
-    prevProps.handleSearchAround === nextProps.handleSearchAround &&
-    prevProps.handlePageChange === nextProps.handlePageChange &&
-    prevProps.getPaginationRange === nextProps.getPaginationRange
+    prevProps.language === nextProps.language
   );
 };
 
-export const MainContent = React.memo(MainContentComponent, arePropsEqual); 
+export const MainContent = memo(MainContentComponent, arePropsEqual); 

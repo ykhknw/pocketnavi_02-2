@@ -17,6 +17,7 @@ interface SearchFormProps {
   locationLoading: boolean;
   locationError: string | null;
   language: 'ja' | 'en';
+  onSearchStart?: () => void; // 検索開始時のコールバック
 }
 
 interface CollapsibleSectionProps {
@@ -123,7 +124,8 @@ export function SearchForm({
   onGetLocation,
   locationLoading,
   locationError,
-  language
+  language,
+  onSearchStart
 }: SearchFormProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -137,8 +139,12 @@ export function SearchForm({
 
   // ハンドラー関数をuseCallbackで最適化
   const handleQueryChange = useCallback((query: string) => {
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart && query.trim() !== filters.query.trim()) {
+      onSearchStart();
+    }
     onFiltersChange({ ...filters, query });
-  }, [filters, onFiltersChange]);
+  }, [filters, onFiltersChange, onSearchStart]);
 
   const handleRadiusChange = useCallback((radius: number) => {
     onFiltersChange({ ...filters, radius });
@@ -150,8 +156,14 @@ export function SearchForm({
       ? currentArchitects.filter(a => a !== architect)
       : [...currentArchitects, architect];
     console.log('🏗️ Architect toggle:', { architect, newArchitects });
+    
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    
     onFiltersChange({ ...filters, architects: newArchitects });
-  }, [filters, onFiltersChange]);
+  }, [filters, onFiltersChange, onSearchStart]);
 
   const handleBuildingTypeToggle = useCallback((type: string) => {
     const currentTypes = filters.buildingTypes || [];
@@ -159,16 +171,28 @@ export function SearchForm({
       ? currentTypes.filter(t => t !== type)
       : [...currentTypes, type];
     console.log('🏢 Building type toggle:', { type, newTypes });
+    
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    
     onFiltersChange({ ...filters, buildingTypes: newTypes });
-  }, [filters, onFiltersChange]);
+  }, [filters, onFiltersChange, onSearchStart]);
 
   const handlePrefectureToggle = useCallback((prefecture: string) => {
     const currentPrefectures = filters.prefectures || [];
     const newPrefectures = currentPrefectures.includes(prefecture)
       ? currentPrefectures.filter(p => p !== prefecture)
       : [...currentPrefectures, prefecture];
+    
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    
     onFiltersChange({ ...filters, prefectures: newPrefectures });
-  }, [filters, onFiltersChange]);
+  }, [filters, onFiltersChange, onSearchStart]);
 
   const clearFilters = useCallback(() => {
     onFiltersChange({
