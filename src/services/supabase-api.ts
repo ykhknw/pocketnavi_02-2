@@ -105,12 +105,7 @@ class SupabaseApiClient {
   }
 
   async searchBuildings(filters: SearchFilters, page: number = 1, limit: number = 10): Promise<{ buildings: Building[], total: number }> {
-    console.log('🔍 Search mode:', {
-      hasArchitectFilter: !!(filters.architects && filters.architects.length > 0),
-      hasBuildingTypeFilter: !!(filters.buildingTypes && filters.buildingTypes.length > 0),
-      page,
-      limit
-    });
+
 
     // 建築家フィルターがある場合は専用の最適化クエリを使用
     if (filters.architects && filters.architects.length > 0) {
@@ -206,7 +201,7 @@ class SupabaseApiClient {
       throw new SupabaseApiError(500, error.message);
     }
 
-    console.log('📊 Fetched buildings:', buildings?.length || 0, 'from total:', count || 0);
+
 
     // データ変換と写真フィルター
     const transformedBuildings: Building[] = [];
@@ -226,7 +221,7 @@ class SupabaseApiClient {
       }
     }
 
-    console.log('✅ Final filtered results:', transformedBuildings.length, 'buildings');
+
 
     return {
       buildings: transformedBuildings,
@@ -587,7 +582,7 @@ class SupabaseApiClient {
       if (!uid) return [];
       
       // 画像の存在確認を一時的に無効化（後で実装予定）
-      console.log('📸 Photo checking temporarily disabled for performance');
+
       return [];
     };
 

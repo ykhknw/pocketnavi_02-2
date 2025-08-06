@@ -65,14 +65,7 @@ export function useAppActions() {
     }
 
     // デバッグ用ログ
-    console.log('useAppActions getPaginationRange:', {
-      currentPage,
-      totalPages,
-      delta,
-      range,
-      rangeWithDots,
-      includesTotalPages: rangeWithDots.includes(totalPages)
-    });
+    
 
     return rangeWithDots;
   };

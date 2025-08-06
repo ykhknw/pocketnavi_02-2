@@ -123,10 +123,10 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
       // Add building marker
       try {
         const customIcon = L.divIcon({
-          html: `<div style="background-color: #ef4444; color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; border: 3px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.3);"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>`,
+          html: `<div style="background-color: #ef4444; color: white; border-radius: 50%; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; border: 6px solid white; box-shadow: 0 6px 12px rgba(0,0,0,0.3);"><svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>`,
           className: 'custom-marker',
-          iconSize: [36, 36],
-          iconAnchor: [18, 18]
+          iconSize: [72, 72],
+          iconAnchor: [36, 36]
         });
 
         const marker = L.marker([building.lat, building.lng], { 
@@ -139,7 +139,11 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
             <p style="font-size: 12px; color: #666; margin-bottom: 4px;">${building.architects.map(a => language === 'ja' ? a.architectJa : a.architectEn).join(', ')}</p>
             <p style="font-size: 10px; color: #999;">${building.location}</p>
           </div>
-        `)
+        `, {
+          closeButton: true,
+          autoClose: false,
+          closeOnClick: false
+        })
         .addTo(mapInstanceRef.current);
 
         markerRef.current = marker;

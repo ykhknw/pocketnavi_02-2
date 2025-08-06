@@ -167,7 +167,11 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
                 ).join('')}
               </div>
             </div>
-          `)
+          `, {
+            closeButton: true,
+            autoClose: false,
+            closeOnClick: false
+          })
           .on('click', () => {
             onBuildingSelect(building);
           });
@@ -198,7 +202,11 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             icon: locationIcon,
             isLocationMarker: true
           })
-          .bindPopup(`<div style="padding: 8px;"><strong>${language === 'ja' ? '現在地' : 'Current Location'}</strong></div>`);
+          .bindPopup(`<div style="padding: 8px;"><strong>${language === 'ja' ? '現在地' : 'Current Location'}</strong></div>`, {
+            closeButton: true,
+            autoClose: false,
+            closeOnClick: false
+          });
 
           mapInstanceRef.current.addLayer(locationMarker);
           markersRef.current.push(locationMarker);

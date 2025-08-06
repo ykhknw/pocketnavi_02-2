@@ -26,11 +26,7 @@ export function useAppEffects() {
   // 検索のデバウンス処理
   const debouncedSearch = useRef(
     debounce((buildings: Building[], filters: SearchFilters, language: 'ja' | 'en') => {
-      console.log('🔍 デバウンス検索実行:', { 
-        buildingsCount: buildings.length, 
-        filters, 
-        language
-      });
+      
       
       const results = searchBuildings(buildings, filters, language);
       setFilteredBuildings(results);
@@ -124,7 +120,7 @@ export function useAppEffects() {
       ) => {
         useEffect(() => {
           if (geoLocation) {
-            setFilters((prev: SearchFilters) => ({
+            (setFilters as any)((prev: SearchFilters) => ({
               ...prev,
               currentLocation: geoLocation
             }));
@@ -151,11 +147,7 @@ export function useAppEffects() {
         return;
       }
       
-      console.log('🔄 フィルター変更検出:', { 
-        prevFilters, 
-        currentFilters: filters,
-        buildingsCount: buildings.length 
-      });
+
       
       // 検索履歴を更新
       if (filters.query && filters.query.trim()) {
@@ -178,7 +170,6 @@ export function useAppEffects() {
       
       // API使用時はサーバーサイドフィルタリング
       if (useApi) {
-        console.log('📡 API使用時のフィルタリング');
         setFilteredBuildings(buildings);
         return;
       }

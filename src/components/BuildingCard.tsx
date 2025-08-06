@@ -155,22 +155,33 @@ function BuildingCardComponent({
 
           <div>
             <div className="flex flex-wrap gap-1">
-              {building.architects.map(architect => (
-                <Badge
-                  key={architect.architect_id}
-                  variant="default"
-                  className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
-                >
-                  {language === 'ja' ? architect.architectJa : architect.architectEn}
-                </Badge>
-              ))}
+              {building.architects.map(architect => {
+                const architectName = language === 'ja' ? architect.architectJa : architect.architectEn;
+                // 全角スペースで分割
+                const architectNames = architectName.split('　').filter(name => name.trim());
+                
+                return architectNames.map((name, index) => (
+                  <Badge
+                    key={`${architect.architect_id}-${index}`}
+                    variant="default"
+                    className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
+                  >
+                    {name.trim()}
+                  </Badge>
+                ));
+              })}
             </div>
           </div>
 
           {building.completionYears && (
-            <div className="flex items-center gap-1 text-sm text-gray-600">
-              <Calendar className="h-4 w-4" />
-              <span>{building.completionYears}</span>
+            <div className="flex items-center gap-1">
+              <Badge
+                variant="outline"
+                className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
+              >
+                <Calendar className="h-3 w-3 mr-1" />
+                {building.completionYears}
+              </Badge>
             </div>
           )}
         </div>

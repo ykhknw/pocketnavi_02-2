@@ -315,8 +315,14 @@ export function SearchForm({
                       <span className="text-muted-foreground">{language === 'ja' ? '建築家:' : 'Architects:'}</span>
                       <div className="flex flex-wrap gap-1">
                         {filters.architects.map(arch => (
-                          <span key={arch} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                          <span key={arch} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
                             {arch}
+                            <button
+                              onClick={() => handleArchitectToggle(arch)}
+                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
                           </span>
                         ))}
                       </div>
@@ -327,8 +333,14 @@ export function SearchForm({
                       <span className="text-muted-foreground">{language === 'ja' ? '建物用途:' : 'Building types:'}</span>
                       <div className="flex flex-wrap gap-1">
                         {filters.buildingTypes.map(type => (
-                          <span key={type} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                          <span key={type} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
                             {type}
+                            <button
+                              onClick={() => handleBuildingTypeToggle(type)}
+                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
                           </span>
                         ))}
                       </div>
@@ -339,8 +351,14 @@ export function SearchForm({
                       <span className="text-muted-foreground">{language === 'ja' ? '都道府県:' : 'Prefectures:'}</span>
                       <div className="flex flex-wrap gap-1">
                         {filters.prefectures.map(pref => (
-                          <span key={pref} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                          <span key={pref} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
                             {pref}
+                            <button
+                              onClick={() => handlePrefectureToggle(pref)}
+                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
                           </span>
                         ))}
                       </div>

@@ -181,15 +181,21 @@ export function BuildingDetail({
 
             <div>
               <div className="flex flex-wrap gap-1">
-                {building.architects.map(architect => (
-                  <Badge
-                    key={architect.architect_id}
-                    variant="default"
-                    className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
-                  >
-                    {language === 'ja' ? architect.architectJa : architect.architectEn}
-                  </Badge>
-                ))}
+                {building.architects.map(architect => {
+                  const architectName = language === 'ja' ? architect.architectJa : architect.architectEn;
+                  // 全角スペースで分割
+                  const architectNames = architectName.split('　').filter(name => name.trim());
+                  
+                  return architectNames.map((name, index) => (
+                    <Badge
+                      key={`${architect.architect_id}-${index}`}
+                      variant="default"
+                      className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
+                    >
+                      {name.trim()}
+                    </Badge>
+                  ));
+                })}
               </div>
             </div>
 

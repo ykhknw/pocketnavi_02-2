@@ -3,6 +3,7 @@ import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
 import { Sidebar } from '../layout/Sidebar';
+import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
 
 // 重いコンポーネントを動的インポート
@@ -37,8 +38,8 @@ export function HomePage() {
     toggleLanguage
   } = context;
 
-  return (
-    <div className="min-h-screen bg-background">
+    return (
+    <div className="min-h-screen bg-background flex flex-col">
       <AppHeader
         isAuthenticated={isAuthenticated}
         currentUser={currentUser}
@@ -49,59 +50,61 @@ export function HomePage() {
         onLanguageToggle={toggleLanguage}
       />
       
-              <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <MainContent
-            selectedBuilding={context.selectedBuilding}
-            buildingsLoading={context.buildingsLoading}
-            buildingsError={context.buildingsError}
-            currentBuildings={context.currentBuildings}
-            filteredBuildings={context.filteredBuildings}
-            totalBuildings={context.totalBuildings}
-            totalPages={context.totalPages}
-            startIndex={context.startIndex}
-            currentPage={context.currentPage}
-            itemsPerPage={context.itemsPerPage}
-            useApi={context.useApi}
-            apiStatus={context.apiStatus}
-            isSupabaseConnected={context.isSupabaseConnected}
-            showDataMigration={showDataMigration}
-            setShowDataMigration={setShowDataMigration}
-            filters={context.filters}
-            setFilters={context.setFilters}
-            locationLoading={context.locationLoading}
-            locationError={context.locationError}
-            getCurrentLocation={context.getCurrentLocation}
-            language={language}
-            handleBuildingSelect={context.handleBuildingSelect}
-            handleLike={context.handleLike}
-            handlePhotoLike={context.handlePhotoLike}
-            handleSearchAround={context.handleSearchAround}
-            handlePageChange={context.handlePageChange}
-            handleSearchStart={context.handleSearchStart}
-                          getPaginationRange={context.getPaginationRange}
+      <div className="flex-1 container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <MainContent
+              selectedBuilding={context.selectedBuilding}
+              buildingsLoading={context.buildingsLoading}
+              buildingsError={context.buildingsError}
+              currentBuildings={context.currentBuildings}
+              filteredBuildings={context.filteredBuildings}
+              totalBuildings={context.totalBuildings}
+              totalPages={context.totalPages}
+              startIndex={context.startIndex}
+              currentPage={context.currentPage}
+              itemsPerPage={context.itemsPerPage}
+              useApi={context.useApi}
+              apiStatus={context.apiStatus}
+              isSupabaseConnected={context.isSupabaseConnected}
+              showDataMigration={showDataMigration}
+              setShowDataMigration={setShowDataMigration}
+              filters={context.filters}
+              setFilters={context.setFilters}
+              locationLoading={context.locationLoading}
+              locationError={context.locationError}
+              getCurrentLocation={context.getCurrentLocation}
+              language={language}
+              handleBuildingSelect={context.handleBuildingSelect}
+              handleLike={context.handleLike}
+              handlePhotoLike={context.handlePhotoLike}
+              handleSearchAround={context.handleSearchAround}
+              handlePageChange={context.handlePageChange}
+              handleSearchStart={context.handleSearchStart}
+              getPaginationRange={context.getPaginationRange}
             />
-            </div>
-            
-            <div className="lg:col-span-1">
-              <Sidebar
-            buildings={context.currentBuildings}
-            selectedBuilding={context.selectedBuilding}
-            onBuildingSelect={context.handleBuildingSelect}
-            currentLocation={context.filters.currentLocation}
-            language={language}
-            startIndex={context.startIndex}
-            onSearchAround={context.handleSearchAround}
-            likedBuildings={context.likedBuildings}
-            onLikedBuildingClick={context.handleLikedBuildingClick}
-            recentSearches={context.searchHistory}
-                          popularSearches={context.popularSearches}
+          </div>
+          
+          <div className="lg:col-span-1">
+            <Sidebar
+              buildings={context.currentBuildings}
+              selectedBuilding={context.selectedBuilding}
+              onBuildingSelect={context.handleBuildingSelect}
+              currentLocation={context.filters.currentLocation}
+              language={language}
+              startIndex={context.startIndex}
+              onSearchAround={context.handleSearchAround}
+              likedBuildings={context.likedBuildings}
+              onLikedBuildingClick={context.handleLikedBuildingClick}
+              recentSearches={context.searchHistory}
+              popularSearches={context.popularSearches}
               onSearchClick={context.handleSearchFromHistory}
             />
-            </div>
           </div>
+        </div>
       </div>
+      
+      <Footer language={language} />
 
       {/* モーダルコンポーネント */}
       {showLoginModal && (

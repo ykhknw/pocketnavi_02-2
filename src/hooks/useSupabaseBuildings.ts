@@ -31,12 +31,7 @@ export function useSupabaseBuildings(
   const { data, isLoading, error: queryError, refetch } = useQuery({
     queryKey,
     queryFn: async () => {
-      console.log('🔍 React Query fetching:', { 
-        useApi, 
-        currentPage, 
-        itemsPerPage,
-        queryKey: JSON.stringify(queryKey)
-      });
+      
       
       if (!useApi) {
         // モックデータ使用時
@@ -51,13 +46,9 @@ export function useSupabaseBuildings(
 
       try {
         // Supabase API使用時
-        console.log('📡 Using Supabase API');
+
         const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage);
-        console.log('📊 API result:', { 
-          buildingsCount: result.buildings.length, 
-          total: result.total,
-          currentPage 
-        });
+        
         return result;
       } catch (err) {
         console.error('API Error:', err);

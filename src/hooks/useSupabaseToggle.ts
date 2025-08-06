@@ -5,7 +5,7 @@ export function useSupabaseToggle() {
   const [useApi, setUseApi] = useState(() => {
     // 環境変数でAPI使用を制御、デフォルトでtrueに設定
     const useSupabase = import.meta.env.VITE_USE_SUPABASE !== 'false';
-    console.log('Supabase設定:', { useSupabase, url: import.meta.env.VITE_SUPABASE_URL });
+
     return useSupabase;
   });
 
@@ -35,7 +35,7 @@ export function useSupabaseToggle() {
         const { supabaseApiClient } = await import('../services/supabase-api');
         await supabaseApiClient.healthCheck();
         setApiStatus('available');
-        console.log('Supabase接続成功');
+
       } catch (error) {
         console.warn('Supabase API not available, using mock data:', error);
         setApiStatus('unavailable');
