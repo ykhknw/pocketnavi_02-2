@@ -168,13 +168,14 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
           .bindPopup(`
             <div style="padding: 8px; min-width: 200px;">
               <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">${language === 'ja' ? building.title : building.titleEn}</h3>
-              <p style="font-size: 12px; color: #666; margin-bottom: 8px;">${building.architects.map(a => language === 'ja' ? a.architectJa : a.architectEn).join(', ')}</p>
-              <p style="font-size: 10px; color: #999; margin-bottom: 8px;">${language === 'ja' ? building.location : (building.locationEn || building.location)}</p>
-              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                <span style="background-color: #dbeafe; color: #1e40af; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${building.completionYears}${language === 'ja' ? '年' : ''}</span>
-                ${(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).slice(0, 2).map(type => 
-                  `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${type}</span>`
-                ).join('')}
+              <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
+                ${building.architects.map(a => {
+                  const architectName = language === 'ja' ? a.architectJa : a.architectEn;
+                  const architectNames = architectName.split('　').filter(name => name.trim());
+                  return architectNames.map(name => 
+                    `<span style="background-color: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${name.trim()}</span>`
+                  ).join('');
+                }).join('')}
               </div>
             </div>
           `, {
