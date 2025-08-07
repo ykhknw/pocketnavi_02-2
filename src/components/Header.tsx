@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Building, User, LogIn, LogOut, Menu, X } from 'lucide-react';
+import { Landmark, LogIn, LogOut, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { LanguageSwitch } from './LanguageSwitch';
 import { t } from '../utils/translations';
+import { User } from '../types';
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -32,7 +33,7 @@ export function Header({
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <Building className="h-8 w-8 mr-3 text-primary" />
+              <Landmark className="h-8 w-8 mr-3 text-primary" />
               <h1 className="text-2xl font-bold text-foreground">{t('siteTitle', language)}</h1>
             </Link>
           </div>

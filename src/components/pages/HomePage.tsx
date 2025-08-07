@@ -96,6 +96,7 @@ export function HomePage() {
               onSearchAround={context.handleSearchAround}
               likedBuildings={context.likedBuildings}
               onLikedBuildingClick={context.handleLikedBuildingClick}
+              onRemoveLikedBuilding={context.handleRemoveLikedBuilding}
               recentSearches={context.searchHistory}
               popularSearches={context.popularSearches}
               onSearchClick={context.handleSearchFromHistory}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Building } from 'lucide-react';
+import { Heart, Building, X } from 'lucide-react';
 import { LikedBuilding } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -9,9 +9,10 @@ interface LikedBuildingsProps {
   likedBuildings: LikedBuilding[];
   language: 'ja' | 'en';
   onBuildingClick: (buildingId: number) => void;
+  onRemoveBuilding?: (buildingId: number) => void;
 }
 
-export function LikedBuildings({ likedBuildings, language, onBuildingClick }: LikedBuildingsProps) {
+export function LikedBuildings({ likedBuildings, language, onBuildingClick, onRemoveBuilding }: LikedBuildingsProps) {
   if (likedBuildings.length === 0) {
     return (
       <Card>
@@ -42,21 +43,35 @@ export function LikedBuildings({ likedBuildings, language, onBuildingClick }: Li
       <CardContent>
         <div className="space-y-2">
           {likedBuildings.map((building) => (
-            <Button
-              key={building.id}
-              variant="ghost"
-              className="w-full justify-start text-left h-auto p-3"
-              onClick={() => onBuildingClick(building.id)}
-            >
-              <div>
-                <div className="font-medium">
-                  {language === 'ja' ? building.title : building.titleEn}
+            <div key={building.id} className="flex items-center gap-2 group">
+              <Button
+                variant="ghost"
+                className="flex-1 justify-start text-left h-auto p-3"
+                onClick={() => onBuildingClick(building.id)}
+              >
+                <div>
+                  <div className="font-medium">
+                    {language === 'ja' ? building.title : building.titleEn}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {new Date(building.likedAt).toLocaleDateString(language === 'ja' ? 'ja-JP' : 'en-US')}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500">
-                  {new Date(building.likedAt).toLocaleDateString(language === 'ja' ? 'ja-JP' : 'en-US')}
-                </div>
-              </div>
-            </Button>
+              </Button>
+              {onRemoveBuilding && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-700 hover:bg-red-50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemoveBuilding(building.id);
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
           ))}
         </div>
       </CardContent>

@@ -40,6 +40,7 @@ export interface AppHandlers {
   handleDeleteBuilding: (id: number) => void;
   handleSearchFromHistory: (query: string) => void;
   handleLikedBuildingClick: (buildingId: number) => void;
+  handleRemoveLikedBuilding: (buildingId: number) => void;
   handleSearchAround: (lat: number, lng: number) => void;
   handlePageChange: (page: number) => void;
   handleSearchStart: () => void;

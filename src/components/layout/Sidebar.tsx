@@ -14,6 +14,7 @@ interface SidebarProps {
   onSearchAround: (lat: number, lng: number) => void;
   likedBuildings: LikedBuilding[];
   onLikedBuildingClick: (buildingId: number) => void;
+  onRemoveLikedBuilding?: (buildingId: number) => void;
   recentSearches: SearchHistory[];
   popularSearches: SearchHistory[];
   onSearchClick: (query: string) => void;
@@ -29,6 +30,7 @@ function SidebarComponent({
   onSearchAround,
   likedBuildings,
   onLikedBuildingClick,
+  onRemoveLikedBuilding,
   recentSearches,
   popularSearches,
   onSearchClick
@@ -49,6 +51,7 @@ function SidebarComponent({
         likedBuildings={likedBuildings}
         language={language}
         onBuildingClick={onLikedBuildingClick}
+        onRemoveBuilding={onRemoveLikedBuilding}
       />
       
       <SearchHistoryComponent
@@ -79,6 +82,7 @@ const arePropsEqual = (prevProps: SidebarProps, nextProps: SidebarProps): boolea
     prevProps.onBuildingSelect === nextProps.onBuildingSelect &&
     prevProps.onSearchAround === nextProps.onSearchAround &&
     prevProps.onLikedBuildingClick === nextProps.onLikedBuildingClick &&
+    prevProps.onRemoveLikedBuilding === nextProps.onRemoveLikedBuilding &&
     prevProps.onSearchClick === nextProps.onSearchClick
   );
 };

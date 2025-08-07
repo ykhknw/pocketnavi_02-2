@@ -217,7 +217,7 @@ export function BuildingDetail({
                 className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
               >
                 <Calendar className="h-3 w-3 mr-1" />
-                {building.completionYears}{t('year', language)}
+                {building.completionYears}
               </Badge>
             </div>
           </div>
@@ -360,7 +360,7 @@ export function BuildingDetail({
               <div className="flex flex-wrap gap-1 mb-2">
                 <div className="border-amber-300 text-amber-800 bg-amber-50 text-sm px-3 py-1 rounded-full border flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  {building.completionYears}{t('year', language)}
+                  {building.completionYears}
                 </div>
               </div>
 

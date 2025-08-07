@@ -27,7 +27,7 @@ export const translations = {
     noResults: '検索条件に合う建築物が見つかりませんでした',
     architect: '建築家',
     like: 'いいね',
-    imageSearch: '画像検索',
+    imageSearch: 'Google Images',
     viewMore: '他{count}枚を見る',
     close: '閉じる',
     hasVideo: '動画あり',
