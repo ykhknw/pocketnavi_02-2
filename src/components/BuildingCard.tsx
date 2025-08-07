@@ -110,10 +110,10 @@ function BuildingCardComponent({
     <Card
       className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
         isSelected ? 'ring-2 ring-blue-500' : ''
-      } ring-2 ring-amber-400 shadow-lg hover:shadow-xl hover:ring-amber-500 bg-gradient-to-br from-white to-amber-50`}
+      }`}
       onClick={handleCardClick}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-sm font-medium">
@@ -127,7 +127,7 @@ function BuildingCardComponent({
             variant="ghost"
             size="sm"
             onClick={handleLikeClick}
-            className="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             <Heart className="h-4 w-4" />
             <span className="text-sm">{building.likes}</span>
@@ -138,7 +138,7 @@ function BuildingCardComponent({
           <div className="flex flex-wrap gap-1">
             <Badge
               variant="outline"
-              className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
+              className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
             >
               <MapPin className="h-3 w-3 mr-1" />
               {language === 'ja' ? building.location : (building.locationEn || building.location)}
@@ -146,7 +146,7 @@ function BuildingCardComponent({
             {building.distance && (
               <Badge
                 variant="outline"
-                className="border-green-300 text-green-800 bg-green-50 text-sm"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
               >
                 {formatDistance(building.distance)}
               </Badge>
@@ -164,7 +164,7 @@ function BuildingCardComponent({
                   <Badge
                     key={`${architect.architect_id}-${index}`}
                     variant="default"
-                    className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
+                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm"
                   >
                     {name.trim()}
                   </Badge>
@@ -177,7 +177,7 @@ function BuildingCardComponent({
             <div className="flex items-center gap-1">
               <Badge
                 variant="outline"
-                className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
               >
                 <Calendar className="h-3 w-3 mr-1" />
                 {building.completionYears}

@@ -138,8 +138,8 @@ export function BuildingDetail({
   // インライン表示の場合
   if (isInline) {
     return (
-      <div className="ring-2 ring-amber-400 shadow-lg bg-gradient-to-br from-white to-amber-50 rounded-lg">
-        <div className="p-4">
+      <div className="shadow-lg bg-white rounded-lg">
+        <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-sm font-medium">
@@ -153,7 +153,7 @@ export function BuildingDetail({
               variant="ghost"
               size="sm"
               onClick={() => onLike(building.id)}
-              className="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100"
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
             >
               <Heart className="h-4 w-4" />
               <span className="text-sm">{building.likes}</span>
@@ -164,7 +164,7 @@ export function BuildingDetail({
             <div className="flex flex-wrap gap-1">
               <Badge
                 variant="outline"
-                className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
               >
                 <MapPin className="h-3 w-3 mr-1" />
                 {language === 'ja' ? building.location : (building.locationEn || building.location)}
@@ -172,7 +172,7 @@ export function BuildingDetail({
               {building.distance && (
                 <Badge
                   variant="outline"
-                  className="border-green-300 text-green-800 bg-green-50 text-sm"
+                  className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
                 >
                   {formatDistance(building.distance)}
                 </Badge>
@@ -190,7 +190,7 @@ export function BuildingDetail({
                     <Badge
                       key={`${architect.architect_id}-${index}`}
                       variant="default"
-                      className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm"
+                      className="bg-primary/10 text-primary hover:bg-primary/20 text-sm"
                     >
                       {name.trim()}
                     </Badge>
@@ -204,7 +204,7 @@ export function BuildingDetail({
                 <Badge
                   key={`${type}-${index}`}
                   variant="secondary"
-                  className="border-amber-200 text-amber-700 text-sm"
+                  className="border-gray-300 text-gray-700 text-sm"
                 >
                   {type}
                 </Badge>
@@ -214,7 +214,7 @@ export function BuildingDetail({
             <div className="flex flex-wrap gap-1 mb-2">
               <Badge
                 variant="outline"
-                className="border-amber-300 text-amber-800 bg-amber-50 text-sm"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
               >
                 <Calendar className="h-3 w-3 mr-1" />
                 {building.completionYears}
@@ -225,13 +225,13 @@ export function BuildingDetail({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {building.photos.length > 0 && (
-                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2 py-1 rounded-full">
                   <Camera className="h-4 w-4" />
                   <span className="text-sm font-medium">{building.photos.length}</span>
                 </div>
               )}
               {building.youtubeUrl && (
-                <div className="flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-full">
+                <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2 py-1 rounded-full">
                   <Video className="h-4 w-4" />
                   <span className="text-sm font-medium">{t('hasVideo', language)}</span>
                 </div>
@@ -240,7 +240,7 @@ export function BuildingDetail({
           </div>
 
           {building.photos.length === 0 && (
-            <div className="mt-3 -mx-4 -mb-4">
+            <div className="mt-3 -mx-6 -mb-6">
               <div 
                 className="relative h-24 bg-cover bg-center bg-no-repeat rounded-b-lg cursor-pointer hover:opacity-90 transition-opacity image-container"
                 style={{ backgroundImage: `url(${stableNatureImageUrl})` }}
@@ -254,7 +254,7 @@ export function BuildingDetail({
                     e.stopPropagation();
                     handleExternalImageSearch(language === 'ja' ? building.title : building.titleEn);
                   }}
-                  className="absolute bottom-2 right-2 text-gray-700 hover:text-amber-700 bg-white bg-opacity-70 hover:bg-opacity-90 backdrop-blur-sm z-20"
+                  className="absolute bottom-2 right-2 text-gray-700 hover:text-gray-900 bg-white bg-opacity-70 hover:bg-opacity-90 backdrop-blur-sm z-20"
                 >
                   <ExternalLink className="h-4 w-4" />
                   <span className="text-sm">{t('imageSearch', language)}</span>
@@ -273,23 +273,13 @@ export function BuildingDetail({
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[9999]"
       onClick={handleBackgroundClick}
     >
-      <div className={`rounded-lg max-w-4xl max-h-[90vh] w-full overflow-y-auto ${
-        isRealBuilding 
-          ? 'bg-gradient-to-br from-white to-amber-50 ring-2 ring-amber-300 shadow-2xl' 
-          : 'bg-white shadow-xl'
-      }`} onClick={(e) => e.stopPropagation()}>
-        <div className={`sticky top-0 border-b px-6 py-4 flex items-center justify-between z-10 ${
-          isRealBuilding 
-            ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200' 
-            : 'bg-white'
-        } z-[9999]`}>
+      <div className="rounded-lg max-w-4xl max-h-[90vh] w-full overflow-y-auto bg-white shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 border-b px-6 py-4 flex items-center justify-between z-10 bg-white z-[9999]">
           <div className="flex items-center gap-3">
             <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-sm font-medium">
               {displayIndex || building.id}
             </div>
-            <h2 className={`text-xl font-bold ${
-              isRealBuilding ? 'text-amber-900' : 'text-gray-900'
-            }`} style={{ fontSize: '1.5rem' }}>
+            <h2 className="text-xl font-bold text-gray-900" style={{ fontSize: '1.5rem' }}>
             {language === 'ja' ? building.title : building.titleEn}
             </h2>
           </div>
@@ -303,11 +293,7 @@ export function BuildingDetail({
             </button>
             <button
               onClick={handleClose}
-              className={`p-4 rounded-full transition-colors ${
-                isRealBuilding 
-                  ? 'hover:bg-amber-100 text-amber-700' 
-                  : 'hover:bg-gray-100'
-              }`}
+              className="p-4 rounded-full transition-colors hover:bg-gray-100"
               style={{ zIndex: 10000 }}
             >
               <X className="h-8 w-8" />
@@ -321,12 +307,12 @@ export function BuildingDetail({
             <div className="space-y-3 lg:pr-4">
               {/* Address Badge */}
               <div className="flex flex-wrap gap-1">
-                <div className="flex items-center gap-1 border-amber-300 text-amber-800 bg-amber-50 text-sm px-3 py-1 rounded-full border">
+                <div className="flex items-center gap-1 border-gray-300 text-gray-700 bg-gray-50 text-sm px-3 py-1 rounded-full border">
                   <MapPin className="h-3 w-3" />
                   {language === 'ja' ? building.location : (building.locationEn || building.location)}
                 </div>
                 {building.distance && (
-                  <div className="border-green-300 text-green-800 bg-green-50 text-sm px-3 py-1 rounded-full border">
+                  <div className="border-gray-300 text-gray-700 bg-gray-50 text-sm px-3 py-1 rounded-full border">
                     {formatDistance(building.distance)}
                   </div>
                 )}
@@ -337,7 +323,7 @@ export function BuildingDetail({
                 {building.architects.map(architect => (
                   <div
                     key={architect.architect_id}
-                    className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-sm px-3 py-1 rounded-full"
+                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm px-3 py-1 rounded-full"
                   >
                     {language === 'ja' ? architect.architectJa : architect.architectEn}
                   </div>
@@ -349,7 +335,7 @@ export function BuildingDetail({
                 {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).slice(0, 3).map((type, index) => (
                   <div
                     key={`${type}-${index}`}
-                    className="border-amber-200 text-amber-700 text-sm px-3 py-1 rounded-full bg-secondary"
+                    className="border-gray-300 text-gray-700 text-sm px-3 py-1 rounded-full bg-secondary"
                   >
                     {type}
                   </div>
@@ -358,7 +344,7 @@ export function BuildingDetail({
 
               {/* Year Badge */}
               <div className="flex flex-wrap gap-1 mb-2">
-                <div className="border-amber-300 text-amber-800 bg-amber-50 text-sm px-3 py-1 rounded-full border flex items-center gap-1">
+                <div className="border-gray-300 text-gray-700 bg-gray-50 text-sm px-3 py-1 rounded-full border flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {building.completionYears}
                 </div>
@@ -367,13 +353,13 @@ export function BuildingDetail({
               {/* Media Badges */}
               <div className="flex items-center gap-3">
                 {building.photos.length > 0 && (
-                  <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                  <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2 py-1 rounded-full">
                     <Camera className="h-4 w-4" />
                     <span className="text-sm font-medium">{building.photos.length}</span>
                   </div>
                 )}
                 {building.youtubeUrl && (
-                  <div className="flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-full">
+                  <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2 py-1 rounded-full">
                     <Video className="h-4 w-4" />
                     <span className="text-sm font-medium">{t('hasVideo', language)}</span>
                   </div>
@@ -422,13 +408,13 @@ export function BuildingDetail({
                       <LazyImage
                         src={photo.url}
                         alt=""
-                        className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-105 ring-2 ring-amber-300 shadow-lg filter brightness-110 contrast-110"
+                        className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg"
                         onClick={() => window.open(photo.url, '_blank')}
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-colors rounded-lg flex items-center justify-center">
                         <button
                           onClick={() => onPhotoLike(photo.id)}
-                          className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:from-amber-600 hover:to-orange-600 shadow-lg"
+                          className="flex items-center gap-2 px-3 py-1 bg-primary text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary/90 shadow-lg"
                         >
                           <Heart className="h-4 w-4" />
                           <span className="text-sm font-medium">{photo.likes}</span>

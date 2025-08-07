@@ -173,7 +173,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
                   const architectName = language === 'ja' ? a.architectJa : a.architectEn;
                   const architectNames = architectName.split('　').filter(name => name.trim());
                   return architectNames.map(name => 
-                    `<span style="background-color: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${name.trim()}</span>`
+                    `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${name.trim()}</span>`
                   ).join('');
                 }).join('')}
               </div>
