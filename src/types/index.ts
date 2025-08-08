@@ -1,6 +1,7 @@
 export interface Building {
   id: number;
   uid: string;
+  slug?: string;
   title: string;
   titleEn: string;
   thumbnailUrl: string;

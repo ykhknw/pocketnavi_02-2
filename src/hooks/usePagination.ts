@@ -96,19 +96,7 @@ export function usePagination(config: PaginationConfig): PaginationState & Pagin
       }
     }
 
-    // デバッグ用ログ
-    console.log('ページネーション範囲計算:', {
-      currentPage,
-      totalPages,
-      delta,
-      range,
-      rangeWithDots,
-      condition1: currentPage - delta > 2,
-      condition2: currentPage + delta < totalPages - 1,
-      condition3: totalPages > 1 && currentPage !== totalPages,
-      includesTotalPages: rangeWithDots.includes(totalPages),
-      finalRange: rangeWithDots
-    });
+
 
     return rangeWithDots;
   }, [currentPage, totalPages]);

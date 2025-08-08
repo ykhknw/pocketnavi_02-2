@@ -4,7 +4,6 @@ import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
 import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
-
 import { Button } from '../ui/button';
 
 // 重いコンポーネントを動的インポート
@@ -39,7 +38,7 @@ export function HomePage() {
     toggleLanguage
   } = context;
 
-    return (
+  return (
     <div className="min-h-screen bg-background flex flex-col">
       <AppHeader
         isAuthenticated={isAuthenticated}
@@ -157,4 +156,4 @@ export function HomePage() {
       )}
     </div>
   );
-} 
+}

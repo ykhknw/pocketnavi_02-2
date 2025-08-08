@@ -18,7 +18,6 @@ export function useAppHandlers() {
     setLikedBuildings: (buildings: LikedBuilding[]) => void,
     buildings: Building[]
   ) => {
-    console.log('Like building:', buildingId);
     setLikedBuildings(prev => {
       const existing = prev.find(b => b.id === buildingId);
       if (existing) {
@@ -40,7 +39,7 @@ export function useAppHandlers() {
 
   // 写真お気に入りハンドラー
   const handlePhotoLike = (photoId: number) => {
-    console.log('Like photo:', photoId);
+    // Photo like functionality
   };
 
   // ログインハンドラー
@@ -51,7 +50,6 @@ export function useAppHandlers() {
     setCurrentUser: (user: User | null) => void,
     setShowLoginModal: (show: boolean) => void
   ) => {
-    console.log('Login:', email, password);
     setIsAuthenticated(true);
     setCurrentUser({ id: 1, email, name: 'User', created_at: new Date().toISOString() });
     setShowLoginModal(false);
@@ -66,7 +64,6 @@ export function useAppHandlers() {
     setCurrentUser: (user: User | null) => void,
     setShowLoginModal: (show: boolean) => void
   ) => {
-    console.log('Register:', email, password, name);
     setIsAuthenticated(true);
     setCurrentUser({ id: 1, email, name, created_at: new Date().toISOString() });
     setShowLoginModal(false);
@@ -83,17 +80,17 @@ export function useAppHandlers() {
 
   // 建物追加ハンドラー
   const handleAddBuilding = (buildingData: Partial<Building>) => {
-    console.log('Add building:', buildingData);
+    // Add building functionality
   };
 
   // 建物更新ハンドラー
   const handleUpdateBuilding = (id: number, buildingData: Partial<Building>) => {
-    console.log('Update building:', id, buildingData);
+    // Update building functionality
   };
 
   // 建物削除ハンドラー
   const handleDeleteBuilding = (id: number) => {
-    console.log('Delete building:', id);
+    // Delete building functionality
   };
 
   // 検索履歴からの検索ハンドラー

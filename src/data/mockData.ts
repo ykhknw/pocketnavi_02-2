@@ -4,6 +4,7 @@ export const mockBuildings: Building[] = [
   {
     id: 1,
     uid: 'building_001',
+    slug: '1',
     title: '21_21 DESIGN SIGHT',
     titleEn: '21_21 DESIGN SIGHT',
     thumbnailUrl: 'https://images.pexels.com/photos/208736/pexels-photo-208736.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -70,6 +71,7 @@ export const mockBuildings: Building[] = [
     id: 2,
     uid: 'building_002',
     title: '国立新美術館',
+    slug: '2',
     titleEn: 'The National Art Center Tokyo',
     thumbnailUrl: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=800',
     youtubeUrl: 'https://www.youtube.com/watch?v=example2',
@@ -118,6 +120,7 @@ export const mockBuildings: Building[] = [
   {
     id: 3,
     uid: 'building_003',
+    slug: '3',
     title: '東京駅',
     titleEn: 'Tokyo Station',
     thumbnailUrl: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -158,6 +161,7 @@ export const mockBuildings: Building[] = [
   {
     id: 4,
     uid: 'building_004',
+    slug: '4',
     title: '代官山 蔦屋書店',
     titleEn: 'Daikanyama T-Site',
     thumbnailUrl: 'https://images.pexels.com/photos/1370296/pexels-photo-1370296.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -207,6 +211,7 @@ export const mockBuildings: Building[] = [
   {
     id: 5,
     uid: 'building_005',
+    slug: '5',
     title: '表参道ヒルズ',
     titleEn: 'Omotesando Hills',
     thumbnailUrl: 'https://images.pexels.com/photos/1131458/pexels-photo-1131458.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -256,6 +261,7 @@ export const mockBuildings: Building[] = [
   {
     id: 6,
     uid: 'building_006',
+    slug: '6',
     title: '森美術館',
     titleEn: 'Mori Art Museum',
     thumbnailUrl: 'https://images.pexels.com/photos/1831234/pexels-photo-1831234.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -296,6 +302,7 @@ export const mockBuildings: Building[] = [
   {
     id: 7,
     uid: 'building_007',
+    slug: '7',
     title: '金沢21世紀美術館',
     titleEn: '21st Century Museum of Contemporary Art, Kanazawa',
     thumbnailUrl: 'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -336,6 +343,7 @@ export const mockBuildings: Building[] = [
   {
     id: 8,
     uid: 'building_008',
+    slug: '8',
     title: '東京国際フォーラム',
     titleEn: 'Tokyo International Forum',
     thumbnailUrl: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -367,6 +375,7 @@ export const mockBuildings: Building[] = [
   {
     id: 9,
     uid: 'building_009',
+    slug: '9',
     title: 'すみだ北斎美術館',
     titleEn: 'Sumida Hokusai Museum',
     thumbnailUrl: 'https://images.pexels.com/photos/2098427/pexels-photo-2098427.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -407,6 +416,7 @@ export const mockBuildings: Building[] = [
   {
     id: 10,
     uid: 'building_010',
+    slug: '10',
     title: '豊田市美術館',
     titleEn: 'Toyota Municipal Museum of Art',
     thumbnailUrl: 'https://images.pexels.com/photos/1370296/pexels-photo-1370296.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -438,6 +448,7 @@ export const mockBuildings: Building[] = [
   {
     id: 11,
     uid: 'building_011',
+    slug: '11',
     title: '直島地中美術館',
     titleEn: 'Chichu Art Museum',
     thumbnailUrl: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -487,6 +498,7 @@ export const mockBuildings: Building[] = [
   {
     id: 12,
     uid: 'building_012',
+    slug: '12',
     title: '京都国立博物館',
     titleEn: 'Kyoto National Museum',
     thumbnailUrl: 'https://images.pexels.com/photos/1831234/pexels-photo-1831234.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -518,6 +530,7 @@ export const mockBuildings: Building[] = [
   {
     id: 13,
     uid: 'building_013',
+    slug: '13',
     title: '水戸芸術館',
     titleEn: 'Art Tower Mito',
     thumbnailUrl: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -558,6 +571,7 @@ export const mockBuildings: Building[] = [
   {
     id: 14,
     uid: 'building_014',
+    slug: '14',
     title: '札幌ドーム',
     titleEn: 'Sapporo Dome',
     thumbnailUrl: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -589,6 +603,7 @@ export const mockBuildings: Building[] = [
   {
     id: 15,
     uid: 'building_015',
+    slug: '15',
     title: 'せんだいメディアテーク',
     titleEn: 'Sendai Mediatheque',
     thumbnailUrl: 'https://images.pexels.com/photos/1131458/pexels-photo-1131458.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -629,6 +644,7 @@ export const mockBuildings: Building[] = [
   {
     id: 16,
     uid: 'building_016',
+    slug: '16',
     title: '三重県立美術館',
     titleEn: 'Mie Prefectural Art Museum',
     thumbnailUrl: 'https://images.pexels.com/photos/208736/pexels-photo-208736.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -669,6 +685,7 @@ export const mockBuildings: Building[] = [
   {
     id: 17,
     uid: 'building_017',
+    slug: '17',
     title: '伊勢神宮',
     titleEn: 'Ise Grand Shrine',
     thumbnailUrl: 'https://images.pexels.com/photos/1309766/pexels-photo-1309766.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -709,6 +726,7 @@ export const mockBuildings: Building[] = [
   {
     id: 18,
     uid: 'building_018',
+    slug: '18',
     title: '鈴鹿サーキット',
     titleEn: 'Suzuka Circuit',
     thumbnailUrl: 'https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg?auto=compress&cs=tinysrgb&w=800',

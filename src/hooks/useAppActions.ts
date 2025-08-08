@@ -1,11 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useCallback } from 'react';
 import { Building, SearchFilters, SearchHistory, LikedBuilding } from '../types';
 
 export function useAppActions() {
   const navigate = useNavigate();
+  const location = useLocation();
   
-  // フィルターとページ情報をURLに反映する関数
-  const updateURLWithFilters = (filters: SearchFilters, currentPage: number) => {
+  // フィルターとページ情報をURLに反映する関数（メモ化）
+  const updateURLWithFilters = useCallback((filters: SearchFilters, currentPage: number) => {
     const searchParams = new URLSearchParams();
     
     if (filters.query) searchParams.set('q', filters.query);
@@ -19,13 +21,20 @@ export function useAppActions() {
     if (currentPage > 1) searchParams.set('page', currentPage.toString());
 
     const searchString = searchParams.toString();
-    const newPath = searchString ? `/?${searchString}` : '/';
-    
-    navigate(newPath, { replace: true });
-  };
+    const basePath = location.pathname || '/';
 
-  // ページネーション計算
-  const calculatePagination = (totalItems: number, itemsPerPage: number, currentPage: number) => {
+    // 変更がない場合は遷移しない
+    const currentSearch = new URLSearchParams(location.search).toString();
+    if (currentSearch === searchString) {
+      return;
+    }
+
+    const newPath = searchString ? `${basePath}?${searchString}` : basePath;
+    navigate(newPath, { replace: true });
+  }, [navigate, location.pathname, location.search]);
+
+  // ページネーション計算（メモ化）
+  const calculatePagination = useCallback((totalItems: number, itemsPerPage: number, currentPage: number) => {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     
@@ -35,10 +44,10 @@ export function useAppActions() {
       currentPage,
       itemsPerPage
     };
-  };
+  }, []);
 
-  // スマートページネーション範囲を生成
-  const getPaginationRange = (currentPage: number, totalPages: number) => {
+  // スマートページネーション範囲を生成（メモ化）
+  const getPaginationRange = useCallback((currentPage: number, totalPages: number) => {
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
@@ -64,16 +73,13 @@ export function useAppActions() {
       }
     }
 
-    // デバッグ用ログ
-    
-
     return rangeWithDots;
-  };
+  }, []);
 
-  // 検索履歴の更新
-  const updateSearchHistory = (
+  // 検索履歴の更新（メモ化）
+  const updateSearchHistory = useCallback((
     searchHistory: SearchHistory[],
-    setSearchHistory: (history: SearchHistory[]) => void,
+    setSearchHistory: (updater: SearchHistory[] | ((prev: SearchHistory[]) => SearchHistory[])) => void,
     query: string
   ) => {
     if (query.trim()) {
@@ -87,27 +93,26 @@ export function useAppActions() {
         };
         setSearchHistory(updated);
       } else {
-        setSearchHistory(prev => [
+        setSearchHistory((prev: SearchHistory[]) => [
           { query, searchedAt: new Date().toISOString(), count: 1 },
           ...prev.slice(0, 19) // Keep only last 20 searches
         ]);
       }
     }
-  };
+  }, []);
 
-  // お気に入り建物の更新
-  const updateLikedBuildings = (
-    likedBuildings: LikedBuilding[],
-    setLikedBuildings: (buildings: LikedBuilding[]) => void,
+  // お気に入り建物の更新（メモ化）
+  const updateLikedBuildings = useCallback((
+    setLikedBuildings: (updater: LikedBuilding[] | ((prev: LikedBuilding[]) => LikedBuilding[])) => void,
     buildingId: number,
     buildings: Building[]
   ) => {
-    setLikedBuildings(prev => {
-      const existing = prev.find(b => b.id === buildingId);
+    setLikedBuildings((prev: LikedBuilding[]) => {
+      const existing = prev.find((b: LikedBuilding) => b.id === buildingId);
       if (existing) {
-        return prev.filter(b => b.id !== buildingId);
+        return prev.filter((b: LikedBuilding) => b.id !== buildingId);
       } else {
-        const building = buildings.find(b => b.id === buildingId);
+        const building = buildings.find((b: Building) => b.id === buildingId);
         if (building) {
           return [...prev, {
             id: building.id,
@@ -119,7 +124,7 @@ export function useAppActions() {
       }
       return prev;
     });
-  };
+  }, []);
 
   return {
     updateURLWithFilters,

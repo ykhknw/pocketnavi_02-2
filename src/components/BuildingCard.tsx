@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -89,7 +89,9 @@ function BuildingCardComponent({
     onLike(building.id);
   }, [onLike, building.id]);
 
-  const handleCardClick = useCallback(() => {
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onSelect(building);
   }, [onSelect, building]);
 
@@ -241,25 +243,29 @@ function BuildingCardComponent({
   );
 }
 
-// Props比較関数
+// Props比較関数（最適化）
 const arePropsEqual = (prevProps: BuildingCardProps, nextProps: BuildingCardProps): boolean => {
-  return (
-    prevProps.building.id === nextProps.building.id &&
-    prevProps.building.title === nextProps.building.title &&
-    prevProps.building.titleEn === nextProps.building.titleEn &&
-    prevProps.building.location === nextProps.building.location &&
-    prevProps.building.locationEn === nextProps.building.locationEn &&
-    prevProps.building.likes === nextProps.building.likes &&
-    prevProps.building.distance === nextProps.building.distance &&
-    prevProps.building.architects.length === nextProps.building.architects.length &&
-    prevProps.building.photos.length === nextProps.building.photos.length &&
-    prevProps.isSelected === nextProps.isSelected &&
-    prevProps.index === nextProps.index &&
-    prevProps.language === nextProps.language &&
-    prevProps.onSelect === nextProps.onSelect &&
-    prevProps.onLike === nextProps.onLike &&
-    prevProps.onPhotoLike === nextProps.onPhotoLike
-  );
+  // 基本的なプロパティの比較
+  if (
+    prevProps.building.id !== nextProps.building.id ||
+    prevProps.building.likes !== nextProps.building.likes ||
+    prevProps.isSelected !== nextProps.isSelected ||
+    prevProps.index !== nextProps.index ||
+    prevProps.language !== nextProps.language
+  ) {
+    return false;
+  }
+
+  // 関数プロパティの比較（参照が同じかどうか）
+  if (
+    prevProps.onSelect !== nextProps.onSelect ||
+    prevProps.onLike !== nextProps.onLike ||
+    prevProps.onPhotoLike !== nextProps.onPhotoLike
+  ) {
+    return false;
+  }
+
+  return true;
 };
 
-export const BuildingCard = React.memo(BuildingCardComponent, arePropsEqual);
+export const BuildingCard = memo(BuildingCardComponent, arePropsEqual);

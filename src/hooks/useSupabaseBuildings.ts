@@ -31,15 +31,10 @@ export function useSupabaseBuildings(
   const { data, isLoading, error: queryError, refetch } = useQuery({
     queryKey,
     queryFn: async () => {
-      
-      
       if (!useApi) {
-        // モックデータ使用時
-        console.log('📦 Using mock data');
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = currentPage * itemsPerPage;
+        // モックデータ使用時は全件返す
         return {
-          buildings: mockBuildings.slice(startIndex, endIndex),
+          buildings: mockBuildings,
           total: mockBuildings.length
         };
       }
@@ -59,7 +54,7 @@ export function useSupabaseBuildings(
     gcTime: 0, // キャッシュを完全に無効化
     retry: 1, // リトライ回数を1回に制限
     refetchOnWindowFocus: false, // ウィンドウフォーカス時の再取得を無効化
-    enabled: true, // 常に有効
+    enabled: true,
   });
 
   // データの更新
@@ -87,13 +82,11 @@ export function useSupabaseBuildings(
 
   // 手動リフェッチ機能
   const refetchData = useCallback(async () => {
-    console.log('🔄 Manual refetch triggered');
     try {
       setLoading(true);
       setError(null);
       await refetch();
     } catch (err) {
-      console.error('Refetch error:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
@@ -102,7 +95,6 @@ export function useSupabaseBuildings(
 
   // ページ変更時のキャッシュ無効化
   const invalidatePageCache = useCallback(() => {
-    console.log('🗑️ Invalidating page cache');
     queryClient.invalidateQueries({ 
       queryKey: ['buildings'],
       exact: false 
@@ -139,10 +131,11 @@ export function useSupabaseBuildings(
         queryKey: nextQueryKey,
         queryFn: async () => {
           if (!useApi) {
-                      return {
-            buildings: mockBuildings.slice((nextPage - 1) * itemsPerPage, nextPage * itemsPerPage),
-            total: mockBuildings.length
-          };
+            // モックデータ時も全件返す（クライアント側でページング）
+            return {
+              buildings: mockBuildings,
+              total: mockBuildings.length
+            };
           }
           return await supabaseApiClient.searchBuildings(filters, nextPage, itemsPerPage);
         },
@@ -185,23 +178,19 @@ export function useBuildingById(
       return;
     }
 
-    console.log('Fetching building by ID:', buildingId);
+
     setLoading(true);
     setError(null);
 
     try {
       const result = await supabaseApiClient.getBuildingById(buildingId);
       setBuilding(result);
-      console.log('Building found:', result);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(`API Error: ${errorMessage}`);
-      console.error('API Error:', err);
-      
       // フォールバック: モックデータを使用
       const foundBuilding = mockBuildings.find((b: any) => b.id === buildingId);
       setBuilding(foundBuilding || null);
-      console.log('Fallback to mock data due to error');
     } finally {
       setLoading(false);
     }
@@ -217,4 +206,62 @@ export function useBuildingById(
     error,
     refetch: fetchBuilding,
   };
+}
+
+// Building を slug で取得するフック（mock優先、API時は後方互換でID検索にフォールバック）
+export function useBuildingBySlug(
+  slug: string | null,
+  useApi: boolean = false
+) {
+  const [building, setBuilding] = useState<Building | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchBuilding = async () => {
+    if (!slug) {
+      setBuilding(null);
+      return;
+    }
+
+    // モックデータ: slug一致で検索（数値slugの場合はidでもフォールバック）
+    if (!useApi) {
+      const foundBySlug = mockBuildings.find((b: any) => b.slug === slug);
+      if (foundBySlug) {
+        setBuilding(foundBySlug);
+        return;
+      }
+      const numericId = parseInt(slug, 10);
+      const foundById = Number.isNaN(numericId) ? null : mockBuildings.find(b => b.id === numericId);
+      setBuilding(foundById || null);
+      return;
+    }
+
+    // API使用時: 現状はID検索にフォールバック（必要ならサーバ側のslug検索に対応）
+    setLoading(true);
+    setError(null);
+    try {
+      const numericId = parseInt(slug, 10);
+      if (!Number.isNaN(numericId)) {
+        const result = await supabaseApiClient.getBuildingById(numericId);
+        setBuilding(result);
+      } else {
+        // TODO: supabaseApiClient.getBuildingBySlug があればこちらを使用
+        setError('Slug lookup not supported on API yet');
+        setBuilding(null);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(`API Error: ${errorMessage}`);
+      setBuilding(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBuilding();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug, useApi]);
+
+  return { building, loading, error, refetch: fetchBuilding };
 }

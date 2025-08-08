@@ -4,6 +4,7 @@ import { AppProvider } from './components/providers/AppProvider';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { HomePage } from './components/pages/HomePage';
 import { BuildingDetailPage } from './components/pages/BuildingDetailPage';
+
 import { Routes, Route } from 'react-router-dom';
 import { useLanguage } from './hooks/useLanguage';
 

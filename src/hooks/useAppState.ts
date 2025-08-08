@@ -38,8 +38,8 @@ export function useAppState() {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [filters, setFilters] = useState<SearchFilters>(initialFilters);
   
-  // フィルターの変更を追跡するためのref
-  const prevFiltersRef = useRef<SearchFilters>(filters);
+  // フィルターの変更を追跡するためのref（初回はnullにして初回比較をスキップ）
+  const prevFiltersRef = useRef<SearchFilters | null>(null);
   
   // URLが変更されたときに状態を更新
   const isUpdatingFromURL = useRef(false);

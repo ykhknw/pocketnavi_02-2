@@ -26,7 +26,11 @@ export function useAppEffects() {
   // 検索のデバウンス処理
   const debouncedSearch = useRef(
     debounce((buildings: Building[], filters: SearchFilters, language: 'ja' | 'en') => {
-      
+      console.log('🔍 デバウンス検索実行:', { 
+        buildingsCount: buildings.length, 
+        filters, 
+        language
+      });
       
       const results = searchBuildings(buildings, filters, language);
       setFilteredBuildings(results);
@@ -65,7 +69,8 @@ export function useAppEffects() {
     setCurrentPage: (page: number) => void,
     isUpdatingFromURL: boolean
   ) => {
-    useEffect(() => {
+    // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
+    const syncURLToState = () => {
       if (isUpdatingFromURL) return;
       
       const query = searchParams.get('q') || '';
@@ -91,7 +96,9 @@ export function useAppEffects() {
       });
       
       setCurrentPage(page);
-    }, [location.search, isUpdatingFromURL, setFilters, setCurrentPage]);
+    };
+    
+    return syncURLToState;
   }, []);
 
   // URL更新効果
@@ -101,7 +108,8 @@ export function useAppEffects() {
     updateURLWithFilters: (filters: SearchFilters, currentPage: number) => void,
     isUpdatingFromURL: boolean
   ) => {
-    useEffect(() => {
+    // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
+    const updateURL = () => {
       if (isUpdatingFromURL) return;
       
       // デバウンス処理でURL更新を最適化
@@ -110,7 +118,9 @@ export function useAppEffects() {
       }, 300);
       
       return () => clearTimeout(timeoutId);
-    }, [filters, currentPage, updateURLWithFilters, isUpdatingFromURL]);
+    };
+    
+    return updateURL;
   }, []);
 
         // 位置情報効果
@@ -118,14 +128,17 @@ export function useAppEffects() {
         geoLocation: { lat: number; lng: number } | null,
         setFilters: (filters: SearchFilters) => void
       ) => {
-        useEffect(() => {
+        // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
+        const updateLocation = () => {
           if (geoLocation) {
-            (setFilters as any)((prev: SearchFilters) => ({
+            setFilters((prev: SearchFilters) => ({
               ...prev,
               currentLocation: geoLocation
             }));
           }
-        }, [geoLocation, setFilters]);
+        };
+        
+        return updateLocation;
       }, []);
 
   // フィルター変更効果（最適化版）
@@ -140,14 +153,19 @@ export function useAppEffects() {
     prevFiltersRef: React.MutableRefObject<SearchFilters | null>,
     language: 'ja' | 'en'
   ) => {
-    useEffect(() => {
+    // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
+    const handleFilterChange = () => {
       // フィルターが変更された場合のみ実行
       const prevFilters = prevFiltersRef.current;
       if (JSON.stringify(prevFilters) === JSON.stringify(filters)) {
         return;
       }
       
-
+      console.log('🔄 フィルター変更検出:', { 
+        prevFilters, 
+        currentFilters: filters,
+        buildingsCount: buildings.length 
+      });
       
       // 検索履歴を更新
       if (filters.query && filters.query.trim()) {
@@ -170,6 +188,7 @@ export function useAppEffects() {
       
       // API使用時はサーバーサイドフィルタリング
       if (useApi) {
+        console.log('📡 API使用時のフィルタリング');
         setFilteredBuildings(buildings);
         return;
       }
@@ -179,7 +198,9 @@ export function useAppEffects() {
       
       // 前のフィルターを更新
       prevFiltersRef.current = { ...filters };
-    }, [filters, buildings, useApi, language, setFilteredBuildings, setCurrentPage, searchHistory, setSearchHistory, debouncedSearch, prevFiltersRef]);
+    };
+    
+    return handleFilterChange;
   }, []);
 
   return {

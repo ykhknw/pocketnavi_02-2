@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, memo } from 'react';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -59,7 +59,7 @@ const LazyImage = React.memo(({ src, alt, className, onClick }: { src: string; a
   );
 });
 
-export function BuildingDetail({ 
+function BuildingDetailComponent({ 
   building, 
   onLike, 
   onPhotoLike, 
@@ -268,3 +268,17 @@ export function BuildingDetail({
     </div>
   );
 }
+
+// Props比較関数
+const arePropsEqual = (prevProps: BuildingDetailProps, nextProps: BuildingDetailProps): boolean => {
+  return (
+    prevProps.building.id === nextProps.building.id &&
+    prevProps.building.likes === nextProps.building.likes &&
+    prevProps.language === nextProps.language &&
+    prevProps.displayIndex === nextProps.displayIndex &&
+    prevProps.onLike === nextProps.onLike &&
+    prevProps.onPhotoLike === nextProps.onPhotoLike
+  );
+};
+
+export const BuildingDetail = memo(BuildingDetailComponent, arePropsEqual);
