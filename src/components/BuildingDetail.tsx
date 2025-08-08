@@ -100,7 +100,7 @@ function BuildingDetailComponent({
 
   // 単一ページ表示（モーダルを削除し、インライン表示のみに）
   return (
-    <div className="shadow-lg bg-white rounded-lg">
+    <div className="shadow-lg bg-white rounded-lg w-full">
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">

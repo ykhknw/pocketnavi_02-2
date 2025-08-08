@@ -1,10 +1,12 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
 import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
+import { Building } from '../../types';
 
 // 重いコンポーネントを動的インポート
 const LoginModal = lazy(() => import('../LoginModal').then(module => ({ default: module.LoginModal })));
@@ -20,10 +22,21 @@ const LoadingSpinner = () => (
 
 export function HomePage() {
   const context = useAppContext();
+  const navigate = useNavigate();
   
   if (!context) {
     return <div>Loading...</div>;
   }
+
+  // 建築物選択時のURL遷移処理
+  const handleBuildingSelect = useCallback((building: Building | null) => {
+    if (building) {
+      const slug = building.slug || building.id.toString();
+      navigate(`/building/${slug}`, {
+        state: { building }
+      });
+    }
+  }, [navigate]);
 
   const {
     isAuthenticated,
@@ -75,7 +88,7 @@ export function HomePage() {
               locationError={context.locationError}
               getCurrentLocation={context.getCurrentLocation}
               language={language}
-              handleBuildingSelect={context.handleBuildingSelect}
+              handleBuildingSelect={handleBuildingSelect}
               handleLike={context.handleLike}
               handlePhotoLike={context.handlePhotoLike}
               handleSearchAround={context.handleSearchAround}
