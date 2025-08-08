@@ -86,18 +86,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.currentPage
   );
 
-  // デバッグログ
-  console.log('ページネーション計算:', {
-    useApi: effects.useApi,
-    totalBuildings: buildingsData.totalBuildings,
-    filteredBuildingsLength: effects.filteredBuildings.length,
-    itemsPerPage: state.itemsPerPage,
-    currentPage: state.currentPage,
-    totalPages: pagination.totalPages,
-    startIndex: pagination.startIndex,
-    hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
-    architects: state.filters.architects
-  });
+
   
   // 現在の建物リスト
   const currentBuildings = effects.useApi 
@@ -105,23 +94,10 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     : effects.filteredBuildings.slice(pagination.startIndex, pagination.startIndex + state.itemsPerPage);
 
   // ハンドラー関数のラッパー（useCallbackで最適化）
-  const handleBuildingSelect = useCallback((building: Building | null) => {
-    // デバッグ: 建築物データの確認
-    if (building) {
-      console.log('Building data:', building);
-      console.log('Building slug:', building.slug);
-      console.log('Building id:', building.id);
-      
-      // 建築物詳細ページへの遷移
-      const slug = building.slug || building.id.toString();
-      console.log('Generated slug for URL:', slug);
-      
-      // ブラウザの履歴を使用してページ遷移
-      window.history.pushState({}, '', `/building/${slug}`);
-    }
-    
-    handlers.handleBuildingSelect(building, state.setSelectedBuilding, state.setShowDetail);
-  }, [handlers.handleBuildingSelect, state.setSelectedBuilding, state.setShowDetail]);
+  const handleBuildingSelect = useCallback((building: Building | null) => 
+    handlers.handleBuildingSelect(building, state.setSelectedBuilding, state.setShowDetail),
+    [handlers.handleBuildingSelect, state.setSelectedBuilding, state.setShowDetail]
+  );
     
   const handleLike = useCallback((buildingId: number) => 
     handlers.handleLike(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings),
@@ -187,13 +163,11 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   );
     
   const handlePageChange = useCallback((page: number) => {
-    console.log('🔄 handlePageChange called:', { page, totalPages: pagination.totalPages, currentPage: state.currentPage });
     handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
   }, [handlers.handlePageChange, state.setCurrentPage]);
 
   // 検索開始時のコールバック（建築物詳細をクリア）
   const handleSearchStart = useCallback(() => {
-    console.log('🔍 検索開始: 建築物詳細をクリア');
     state.setSelectedBuilding(null);
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);

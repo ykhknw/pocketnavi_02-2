@@ -128,8 +128,6 @@ ${batch}
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       
-      console.log(`分割版SQLファイルをダウンロードしました (${batches.length}バッチ)`);
-      
     } catch (error) {
       console.error('分割版SQL作成エラー:', error);
       alert('分割版SQLの作成に失敗しました。コンソールを確認してください。');

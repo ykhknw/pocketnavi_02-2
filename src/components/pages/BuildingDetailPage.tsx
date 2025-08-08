@@ -34,12 +34,10 @@ export function BuildingDetailPage() {
 
   const handleLike = (buildingId: number) => {
     // Like処理（実装は省略）
-    console.log('Like building:', buildingId);
   };
 
   const handlePhotoLike = (photoId: number) => {
     // Photo like処理（実装は省略）
-    console.log('Like photo:', photoId);
   };
 
   const handleSearchAround = (lat: number, lng: number) => {

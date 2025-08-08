@@ -64,7 +64,6 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
         });
         
         // ズームコントロールを左下に配置
-        console.log('Setting zoom control to bottomleft');
         L.control.zoom({
           position: 'bottomleft'
         }).addTo(map);

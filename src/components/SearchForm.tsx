@@ -155,7 +155,6 @@ export function SearchForm({
     const newArchitects = currentArchitects.includes(architect)
       ? currentArchitects.filter(a => a !== architect)
       : [...currentArchitects, architect];
-    console.log('🏗️ Architect toggle:', { architect, newArchitects });
     
     // 検索開始時のコールバックを呼び出し
     if (onSearchStart) {
@@ -170,7 +169,6 @@ export function SearchForm({
     const newTypes = currentTypes.includes(type)
       ? currentTypes.filter(t => t !== type)
       : [...currentTypes, type];
-    console.log('🏢 Building type toggle:', { type, newTypes });
     
     // 検索開始時のコールバックを呼び出し
     if (onSearchStart) {

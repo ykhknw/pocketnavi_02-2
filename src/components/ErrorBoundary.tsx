@@ -70,9 +70,6 @@ export class ErrorBoundary extends Component<Props, State> {
         }
       };
 
-      // エラーレポートをコンソールに出力（実際の実装ではAPIに送信）
-      console.log('Error Report:', errorReport);
-      
       // 実際の実装では以下のようなAPI呼び出しを行う
       // fetch('/api/error-report', {
       //   method: 'POST',
@@ -113,7 +110,7 @@ Component Stack: ${this.state.errorInfo?.componentStack}
     navigator.clipboard.writeText(errorDetails).then(() => {
       alert(this.props.language === 'ja' ? 'エラー詳細をコピーしました' : 'Error details copied to clipboard');
     }).catch(() => {
-      console.log('Error details:', errorDetails);
+      // コピーに失敗した場合の処理
     });
   };
 
