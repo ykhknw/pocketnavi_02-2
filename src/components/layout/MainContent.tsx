@@ -126,13 +126,10 @@ function MainContentComponent({
           </div>
           <BuildingDetail
             building={selectedBuilding}
-            onClose={() => handleBuildingSelect(null)}
             onLike={handleLike}
             onPhotoLike={handlePhotoLike}
             language={language}
-            onSearchAround={handleSearchAround}
             displayIndex={currentBuildings.findIndex(b => b.id === selectedBuilding.id) + startIndex + 1}
-            isInline={true}
           />
         </div>
       ) : (

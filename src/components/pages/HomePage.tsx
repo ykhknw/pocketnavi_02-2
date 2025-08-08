@@ -4,6 +4,7 @@ import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
 import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
+
 import { Button } from '../ui/button';
 
 // 重いコンポーネントを動的インポート

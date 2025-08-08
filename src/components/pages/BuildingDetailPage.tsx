@@ -108,11 +108,9 @@ export function BuildingDetailPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <BuildingDetail
           building={finalBuilding}
-          onClose={handleClose}
           onLike={handleLike}
           onPhotoLike={handlePhotoLike}
           language={language}
-          onSearchAround={handleSearchAround}
           displayIndex={displayIndex}
         />
       </main>
