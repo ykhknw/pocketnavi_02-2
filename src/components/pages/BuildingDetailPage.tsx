@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../hooks/useLanguage';
 import { useSupabaseToggle } from '../../hooks/useSupabaseToggle';
-import { useBuildingById } from '../../hooks/useSupabaseBuildings';
+import { useBuildingBySlug } from '../../hooks/useSupabaseBuildings';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { BuildingDetail } from '../BuildingDetail';
@@ -12,11 +12,7 @@ import { SearchForm } from '../SearchForm';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 
-// slugから建築物IDを抽出する関数
-function extractIdFromSlug(slug: string): number {
-  const id = slug.split('-')[0];
-  return parseInt(id, 10);
-}
+// この関数は不要になったため削除
 
 export function BuildingDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -26,11 +22,8 @@ export function BuildingDetailPage() {
   const { useApi } = useSupabaseToggle();
   const context = useAppContext();
   
-  // slugから建築物IDを抽出
-  const buildingId = slug ? extractIdFromSlug(slug) : null;
-  
-  // 特定の建築物IDを取得
-  const { building, loading, error } = useBuildingById(buildingId, useApi);
+  // 特定の建築物をslugで取得（slugフィールドを優先）
+  const { building, loading, error } = useBuildingBySlug(slug, useApi);
 
   // URLのstateから建築物データを取得（優先）
   const buildingFromState = location.state?.building;

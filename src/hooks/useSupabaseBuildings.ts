@@ -228,31 +228,40 @@ export function useBuildingBySlug(
       const foundBySlug = mockBuildings.find((b: any) => b.slug === slug);
       if (foundBySlug) {
         setBuilding(foundBySlug);
+        setLoading(false);
         return;
       }
       const numericId = parseInt(slug, 10);
       const foundById = Number.isNaN(numericId) ? null : mockBuildings.find(b => b.id === numericId);
       setBuilding(foundById || null);
+      setLoading(false);
       return;
     }
 
-    // API使用時: 現状はID検索にフォールバック（必要ならサーバ側のslug検索に対応）
+    // API使用時: slug検索を優先、ID検索にフォールバック
     setLoading(true);
     setError(null);
     try {
+      // まずslugで検索を試行
+      const result = await supabaseApiClient.getBuildingBySlug(slug);
+      setBuilding(result);
+    } catch (err) {
+      // slug検索が失敗した場合、ID検索にフォールバック
       const numericId = parseInt(slug, 10);
       if (!Number.isNaN(numericId)) {
-        const result = await supabaseApiClient.getBuildingById(numericId);
-        setBuilding(result);
+        try {
+          const result = await supabaseApiClient.getBuildingById(numericId);
+          setBuilding(result);
+        } catch (fallbackErr) {
+          const errorMessage = fallbackErr instanceof Error ? fallbackErr.message : 'Unknown error';
+          setError(`API Error: ${errorMessage}`);
+          setBuilding(null);
+        }
       } else {
-        // TODO: supabaseApiClient.getBuildingBySlug があればこちらを使用
-        setError('Slug lookup not supported on API yet');
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(`API Error: ${errorMessage}`);
         setBuilding(null);
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(`API Error: ${errorMessage}`);
-      setBuilding(null);
     } finally {
       setLoading(false);
     }

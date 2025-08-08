@@ -104,6 +104,25 @@ class SupabaseApiClient {
     return await this.transformBuilding(building);
   }
 
+  async getBuildingBySlug(slug: string): Promise<Building> {
+    const { data: building, error } = await supabase
+      .from('buildings_table_2')
+      .select(`
+        *,
+        building_architects!inner(
+          architects_table(*)
+        )
+      `)
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      throw new SupabaseApiError(404, error.message);
+    }
+
+    return await this.transformBuilding(building);
+  }
+
   async searchBuildings(filters: SearchFilters, page: number = 1, limit: number = 10): Promise<{ buildings: Building[], total: number }> {
 
 
