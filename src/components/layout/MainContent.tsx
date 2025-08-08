@@ -36,7 +36,6 @@ interface MainContentProps {
   
   // ハンドラー
   handleBuildingSelect: (building: Building | null) => void;
-  handleBackToList?: () => void;
   handleLike: (buildingId: number) => void;
   handlePhotoLike: (photoId: number) => void;
   handleSearchAround: (lat: number, lng: number) => void;
@@ -68,7 +67,6 @@ function MainContentComponent({
   getCurrentLocation,
   language,
   handleBuildingSelect,
-  handleBackToList,
   handleLike,
   handlePhotoLike,
   handleSearchAround,
@@ -76,6 +74,16 @@ function MainContentComponent({
   handleSearchStart,
   getPaginationRange
 }: MainContentProps) {
+  // すべてのuseCallbackを条件分岐の外に移動
+  const handlePreviousPage = useCallback(() => handlePageChange(currentPage - 1), [handlePageChange, currentPage]);
+  const handleNextPage = useCallback(() => handlePageChange(currentPage + 1), [handlePageChange, currentPage]);
+  
+  const handlePageClick = useCallback((page: number | string) => {
+    if (typeof page === 'number') {
+      handlePageChange(page);
+    }
+  }, [handlePageChange]);
+
   if (buildingsError) {
     return (
       <div className="text-center py-8">
@@ -116,7 +124,7 @@ function MainContentComponent({
           <div className="flex items-center gap-4 mb-4">
             <Button
               variant="outline"
-              onClick={handleBackToList || (() => handleBuildingSelect(null))}
+              onClick={() => handleBuildingSelect(null)}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -177,7 +185,7 @@ function MainContentComponent({
               {(useApi ? totalBuildings : filteredBuildings.length) >= 10 && totalPages > 1 && (
                 <div className="flex justify-center items-center space-x-2 mt-8 w-full">
                   <button
-                    onClick={useCallback(() => handlePageChange(currentPage - 1), [handlePageChange, currentPage])}
+                    onClick={handlePreviousPage}
                     disabled={currentPage === 1}
                     className="px-4 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >
@@ -187,7 +195,7 @@ function MainContentComponent({
                   {getPaginationRange().map((page, index) => (
                     <button
                       key={index}
-                      onClick={useCallback(() => typeof page === 'number' ? handlePageChange(page) : null, [handlePageChange, page])}
+                      onClick={() => handlePageClick(page)}
                       disabled={typeof page !== 'number'}
                       className={`px-3 py-2 rounded-md text-sm font-medium ${
                         typeof page === 'number'
@@ -202,7 +210,7 @@ function MainContentComponent({
                   ))}
                   
                   <button
-                    onClick={useCallback(() => handlePageChange(currentPage + 1), [handlePageChange, currentPage])}
+                    onClick={handleNextPage}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >

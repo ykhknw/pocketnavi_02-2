@@ -12,8 +12,6 @@ import { SearchForm } from '../SearchForm';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 
-// この関数は不要になったため削除
-
 export function BuildingDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -22,8 +20,8 @@ export function BuildingDetailPage() {
   const { useApi } = useSupabaseToggle();
   const context = useAppContext();
   
-  // 特定の建築物をslugで取得（slugフィールドを優先）
-  const { building, loading, error } = useBuildingBySlug(slug, useApi);
+  // slugを直接使用して建築物を取得
+  const { building, loading, error } = useBuildingBySlug(slug || null, useApi);
 
   // URLのstateから建築物データを取得（優先）
   const buildingFromState = location.state?.building;

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppContextType } from '../../types/app';
 import { Building } from '../../types';
@@ -6,7 +6,6 @@ import { useAppState } from '../../hooks/useAppState';
 import { useAppActions } from '../../hooks/useAppActions';
 import { useAppHandlers } from '../../hooks/useAppHandlers';
 import { useAppEffects } from '../../hooks/useAppEffects';
-import { searchBuildings } from '../../utils/search';
 
 // React Queryクライアントの設定
 const queryClient = new QueryClient({
@@ -44,126 +43,61 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     effects.language
   );
   
-  // URL同期効果（location.search 変更時のみ発火）
-  useEffect(() => {
-    if (state.isUpdatingFromURL.current) return;
-    
-    const searchParams = new URLSearchParams(state.location.search);
-    const query = searchParams.get('q') || '';
-    const architects = searchParams.get('architects')?.split(',').filter(Boolean) || [];
-    const buildingTypes = searchParams.get('buildingTypes')?.split(',').filter(Boolean) || [];
-    const prefectures = searchParams.get('prefectures')?.split(',').filter(Boolean) || [];
-    const areas = searchParams.get('areas')?.split(',').filter(Boolean) || [];
-    const hasPhotos = searchParams.get('hasPhotos') === 'true';
-    const hasVideos = searchParams.get('hasVideos') === 'true';
-    const radius = parseInt(searchParams.get('radius') || '5', 10);
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    
-    const nextFilters = {
-      query,
-      architects,
-      buildingTypes,
-      prefectures,
-      areas,
-      hasPhotos,
-      hasVideos,
-      radius,
-      currentLocation: null
-    } as const;
-
-    // 変更がない場合は何もしない
-    if (
-      JSON.stringify(state.filters) === JSON.stringify(nextFilters) &&
-      state.currentPage === page
-    ) {
-      return;
-    }
-
-    // URL由来の更新であることを示すフラグを一時的にON
-    state.isUpdatingFromURL.current = true;
-    
-    state.setFilters(nextFilters as any);
-    state.setCurrentPage(page);
-    
-    // 次のパッシブ効果実行タイミングまで維持
-    setTimeout(() => {
-      state.isUpdatingFromURL.current = false;
-    }, 0);
-  }, [state.location.search, state.setFilters, state.setCurrentPage]);
+  // URL同期効果
+  effects.useURLSyncEffect(
+    state.location,
+    state.searchParams,
+    state.setFilters,
+    state.setCurrentPage,
+    state.isUpdatingFromURL.current
+  );
   
   // URL更新効果
-  useEffect(() => {
-    if (state.isUpdatingFromURL.current) return;
-    
-    const timeoutId = setTimeout(() => {
-      actions.updateURLWithFilters(state.filters, state.currentPage);
-    }, 300);
-    
-    return () => clearTimeout(timeoutId);
-  }, [state.filters, state.currentPage, actions.updateURLWithFilters]);
+  effects.useURLUpdateEffect(
+    state.filters,
+    state.currentPage,
+    actions.updateURLWithFilters,
+    state.isUpdatingFromURL.current
+  );
   
   // 位置情報効果
-  useEffect(() => {
-    if (effects.geoLocation) {
-      state.setFilters((prev: any) => ({
-        ...prev,
-        currentLocation: effects.geoLocation
-      }));
-    }
-  }, [effects.geoLocation, state.setFilters]);
+  effects.useGeolocationEffect(
+    effects.geoLocation,
+    state.setFilters
+  );
   
   // フィルター変更効果
-  useEffect(() => {
-    // フィルターが変更された場合のみ実行
-    const prevFilters = state.prevFiltersRef.current;
-    if (prevFilters && JSON.stringify(prevFilters) === JSON.stringify(state.filters)) {
-      return;
-    }
-    
-    // console.debug('🔄 フィルター変更検出:', { prevFilters, currentFilters: state.filters, buildingsCount: buildingsData.buildings.length });
-    
-    // 検索履歴を更新
-    if (state.filters.query && state.filters.query.trim()) {
-      const existingIndex = state.searchHistory.findIndex(h => h.query === state.filters.query);
-      if (existingIndex >= 0) {
-        const updated = [...state.searchHistory];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          searchedAt: new Date().toISOString(),
-          count: updated[existingIndex].count + 1
-        };
-        state.setSearchHistory(updated);
-      } else {
-        state.setSearchHistory((prev: any[]) => [
-          { query: state.filters.query, searchedAt: new Date().toISOString(), count: 1 },
-          ...prev.slice(0, 19)
-        ]);
-      }
-    }
-    
-    // API使用時はサーバーサイドフィルタリング
-    if (effects.useApi) {
-      // console.debug('📡 API使用時のフィルタリング');
-      effects.setFilteredBuildings(buildingsData.buildings);
-      return;
-    }
-    
-    // クライアントサイドフィルタリング（全件→フィルタ→ページング）
-    const results = searchBuildings(buildingsData.buildings, state.filters, effects.language);
-    effects.setFilteredBuildings(results);
-    
-    // 前のフィルターを更新
-    state.prevFiltersRef.current = { ...state.filters };
-  }, [state.filters, buildingsData.buildings, effects.useApi, effects.language, effects.setFilteredBuildings, state.setCurrentPage, state.searchHistory, state.setSearchHistory, state.prevFiltersRef]);
+  effects.useFilterChangeEffect(
+    effects.useApi,
+    buildingsData.buildings,
+    state.filters,
+    effects.setFilteredBuildings,
+    state.setCurrentPage,
+    state.searchHistory,
+    state.setSearchHistory,
+    state.prevFiltersRef,
+    effects.language
+  );
   
-  // ページネーション計算（モック時はフィルタ済み全件に対して計算）
+  // ページネーション計算
   const pagination = actions.calculatePagination(
     effects.useApi ? buildingsData.totalBuildings : effects.filteredBuildings.length,
     state.itemsPerPage,
     state.currentPage
   );
 
-
+  // デバッグログ
+  console.log('ページネーション計算:', {
+    useApi: effects.useApi,
+    totalBuildings: buildingsData.totalBuildings,
+    filteredBuildingsLength: effects.filteredBuildings.length,
+    itemsPerPage: state.itemsPerPage,
+    currentPage: state.currentPage,
+    totalPages: pagination.totalPages,
+    startIndex: pagination.startIndex,
+    hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
+    architects: state.filters.architects
+  });
   
   // 現在の建物リスト
   const currentBuildings = effects.useApi 
@@ -171,14 +105,27 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     : effects.filteredBuildings.slice(pagination.startIndex, pagination.startIndex + state.itemsPerPage);
 
   // ハンドラー関数のラッパー（useCallbackで最適化）
-  const handleBuildingSelect = useCallback((building: Building | null) => 
-    handlers.handleBuildingSelect(building, state.setSelectedBuilding, state.setShowDetail),
-    [handlers.handleBuildingSelect, state.setSelectedBuilding, state.setShowDetail]
-  );
+  const handleBuildingSelect = useCallback((building: Building | null) => {
+    // デバッグ: 建築物データの確認
+    if (building) {
+      console.log('Building data:', building);
+      console.log('Building slug:', building.slug);
+      console.log('Building id:', building.id);
+      
+      // 建築物詳細ページへの遷移
+      const slug = building.slug || building.id.toString();
+      console.log('Generated slug for URL:', slug);
+      
+      // ブラウザの履歴を使用してページ遷移
+      window.history.pushState({}, '', `/building/${slug}`);
+    }
+    
+    handlers.handleBuildingSelect(building, state.setSelectedBuilding, state.setShowDetail);
+  }, [handlers.handleBuildingSelect, state.setSelectedBuilding, state.setShowDetail]);
     
   const handleLike = useCallback((buildingId: number) => 
-    actions.updateLikedBuildings(state.setLikedBuildings, buildingId, buildingsData.buildings),
-    [actions.updateLikedBuildings, state.setLikedBuildings, buildingsData.buildings]
+    handlers.handleLike(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings),
+    [handlers.handleLike, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings]
   );
     
   const handlePhotoLike = useCallback((photoId: number) => 
@@ -217,8 +164,8 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   );
     
   const handleSearchFromHistory = useCallback((query: string) => 
-    actions.updateSearchHistory(state.searchHistory, state.setSearchHistory, query),
-    [actions.updateSearchHistory, state.searchHistory, state.setSearchHistory]
+    handlers.handleSearchFromHistory(query, state.setFilters, state.filters),
+    [handlers.handleSearchFromHistory, state.setFilters, state.filters]
   );
     
   const handleLikedBuildingClick = useCallback((buildingId: number) => 
@@ -240,11 +187,13 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   );
     
   const handlePageChange = useCallback((page: number) => {
+    console.log('🔄 handlePageChange called:', { page, totalPages: pagination.totalPages, currentPage: state.currentPage });
     handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
-  }, [handlers.handlePageChange, pagination.totalPages, state.currentPage, state.setCurrentPage]);
+  }, [handlers.handlePageChange, state.setCurrentPage]);
 
   // 検索開始時のコールバック（建築物詳細をクリア）
   const handleSearchStart = useCallback(() => {
+    console.log('🔍 検索開始: 建築物詳細をクリア');
     state.setSelectedBuilding(null);
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);
@@ -334,6 +283,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
 export function useAppContext() {
   const context = useContext(AppContext);
-  // 常に同じ構造を返す（Hooks違反を防ぐ）
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
   return context;
 } 
