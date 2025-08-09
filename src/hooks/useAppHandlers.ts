@@ -120,6 +120,7 @@ export function useAppHandlers() {
     lng: number,
     navigate: (path: string) => void
   ) => {
+    // デフォルト半径は2km、URLにlat/lngを必ず含める
     navigate(`/?lat=${lat}&lng=${lng}&radius=2`);
   };
 

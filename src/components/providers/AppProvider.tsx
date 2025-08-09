@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback } from 'react';
+import React, { createContext, useContext, useCallback, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppContextType } from '../../types/app';
 import { Building } from '../../types';
@@ -43,31 +43,44 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     effects.language
   );
   
-  // URL同期効果
-  effects.useURLSyncEffect(
+  // URL同期効果（location.search の変化に反応して実行）
+  const syncURLToState = effects.useURLSyncEffect(
     state.location,
-    state.searchParams,
+    new URLSearchParams(state.location.search),
     state.setFilters,
     state.setCurrentPage,
     state.isUpdatingFromURL.current
   );
+  useEffect(() => {
+    syncURLToState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.location.search]);
   
-  // URL更新効果
-  effects.useURLUpdateEffect(
+  // URL更新効果（filters/page の変化に反応して実行）
+  const updateURL = effects.useURLUpdateEffect(
     state.filters,
     state.currentPage,
     actions.updateURLWithFilters,
     state.isUpdatingFromURL.current
   );
+  useEffect(() => {
+    const cleanup = updateURL();
+    return cleanup;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.filters, state.currentPage]);
   
-  // 位置情報効果
-  effects.useGeolocationEffect(
+  // 位置情報効果（現在地が更新されたら反映）
+  const updateLocation = effects.useGeolocationEffect(
     effects.geoLocation,
     state.setFilters
   );
+  useEffect(() => {
+    updateLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effects.geoLocation]);
   
-  // フィルター変更効果
-  effects.useFilterChangeEffect(
+  // フィルター変更効果（依存の変化で実行）
+  const handleFilterChange = effects.useFilterChangeEffect(
     effects.useApi,
     buildingsData.buildings,
     state.filters,
@@ -78,6 +91,10 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.prevFiltersRef,
     effects.language
   );
+  useEffect(() => {
+    handleFilterChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effects.useApi, buildingsData.buildings, state.filters, effects.language]);
   
   // ページネーション計算
   const pagination = actions.calculatePagination(
@@ -86,7 +103,18 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.currentPage
   );
 
-
+  // デバッグログ
+  console.log('ページネーション計算:', {
+    useApi: effects.useApi,
+    totalBuildings: buildingsData.totalBuildings,
+    filteredBuildingsLength: effects.filteredBuildings.length,
+    itemsPerPage: state.itemsPerPage,
+    currentPage: state.currentPage,
+    totalPages: pagination.totalPages,
+    startIndex: pagination.startIndex,
+    hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
+    architects: state.filters.architects
+  });
   
   // 現在の建物リスト
   const currentBuildings = effects.useApi 
@@ -156,40 +184,25 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     
   const handleSearchAround = useCallback((lat: number, lng: number) => 
     handlers.handleSearchAround(lat, lng, (path: string) => {
-      // 簡易的なナビゲーション実装
+      // React Routerのnavigate相当：URLを変更し、popstateでAppStateが拾う
       window.history.pushState({}, '', path);
+      // 変更通知（popstateを発火させない環境向けに手動でイベントを送る）
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }),
     [handlers.handleSearchAround]
   );
     
   const handlePageChange = useCallback((page: number) => {
+    console.log('🔄 handlePageChange called:', { page, totalPages: pagination.totalPages, currentPage: state.currentPage });
     handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
   }, [handlers.handlePageChange, state.setCurrentPage]);
 
   // 検索開始時のコールバック（建築物詳細をクリア）
   const handleSearchStart = useCallback(() => {
+    console.log('🔍 検索開始: 建築物詳細をクリア');
     state.setSelectedBuilding(null);
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);
-
-  // 言語切替時にフィルタをリセットするラッパー
-  const handleToggleLanguage = useCallback(() => {
-    effects.toggleLanguage();
-    state.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-    });
-    state.setCurrentPage(1);
-    state.setSelectedBuilding(null);
-    state.setShowDetail(false);
-  }, [effects.toggleLanguage, state.setFilters, state.setCurrentPage, state.setSelectedBuilding, state.setShowDetail]);
 
   const contextValue: AppContextType = {
     // 状態
@@ -237,7 +250,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     
     // その他の状態
     language: effects.language,
-    toggleLanguage: handleToggleLanguage,
+    toggleLanguage: effects.toggleLanguage,
     getCurrentLocation: effects.getCurrentLocation,
     locationLoading: effects.locationLoading,
     locationError: effects.locationError,

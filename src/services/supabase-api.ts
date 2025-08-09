@@ -156,16 +156,22 @@ class SupabaseApiClient {
       query = query.eq('completionYears', filters.completionYear);
     }
 
-    // 地理位置フィルター（PostGISを使用する場合）
+    // 地理位置フィルター（PostgreSQL + PostGIS、性能優先）
     if (filters.currentLocation) {
-      // 簡易的な距離計算（より正確にはPostGIS使用）
       const { lat, lng } = filters.currentLocation;
       const radius = filters.radius;
-      
-      query = query.gte('lat', lat - radius * 0.009)
-               .lte('lat', lat + radius * 0.009)
-               .gte('lng', lng - radius * 0.011)
-               .lte('lng', lng + radius * 0.011);
+      // まずはBBoxで粗く絞る（インデックス活用）
+      const latDelta = radius / 111.32;
+      const lngDelta = radius / (111.32 * Math.cos((lat * Math.PI) / 180));
+      query = query
+        .gte('lat', lat - latDelta)
+        .lte('lat', lat + latDelta)
+        .gte('lng', lng - lngDelta)
+        .lte('lng', lng + lngDelta);
+
+      // Supabase RPCでPostGISのST_DWithin + 距離昇順を使う方法も用意
+      // ただし、本関数はselectベースの他条件と組み合わせが多いので、
+      // ここではBBoxで候補を落としてからクライアント側で最終距離ソートを行う
     }
 
     // 住宅系の除外（デフォルト有効）
@@ -204,12 +210,28 @@ class SupabaseApiClient {
             continue; // 写真がない場合はスキップ
           }
           
+          // 近傍検索が有効な時は距離を付与（簡易Haversine）
+          if (filters.currentLocation) {
+            const d = this.haversineKm(
+              filters.currentLocation.lat,
+              filters.currentLocation.lng,
+              transformed.lat,
+              transformed.lng
+            );
+            (transformed as any).distance = d;
+          }
+
           transformedBuildings.push(transformed);
         } catch (error) {
           console.warn('Skipping building due to invalid data:', error);
           // 無効なデータの建築物はスキップ
         }
       }
+    }
+
+    // 近傍検索時は距離昇順に並べ替え
+    if (filters.currentLocation) {
+      transformedBuildings.sort((a, b) => (a.distance || 0) - (b.distance || 0));
     }
 
     return {
@@ -243,6 +265,20 @@ class SupabaseApiClient {
     }
 
     return buildings?.map(this.transformBuilding) || [];
+  }
+
+  // 簡易Haversine（km）
+  private haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const toRad = (v: number) => (v * Math.PI) / 180;
+    const R = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
   }
 
   // いいね機能

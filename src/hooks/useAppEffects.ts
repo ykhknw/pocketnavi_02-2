@@ -81,6 +81,10 @@ export function useAppEffects() {
       const hasVideos = searchParams.get('hasVideos') === 'true';
       const radius = parseInt(searchParams.get('radius') || '5', 10);
       const page = parseInt(searchParams.get('page') || '1', 10);
+      const latStr = searchParams.get('lat');
+      const lngStr = searchParams.get('lng');
+      const lat = latStr !== null ? parseFloat(latStr) : null;
+      const lng = lngStr !== null ? parseFloat(lngStr) : null;
       
        setFilters({
         query,
@@ -91,7 +95,9 @@ export function useAppEffects() {
         hasPhotos,
         hasVideos,
         radius,
-         currentLocation: null,
+         currentLocation: lat !== null && !Number.isNaN(lat) && lng !== null && !Number.isNaN(lng)
+           ? { lat, lng }
+           : null,
          completionYear: searchParams.get('year') ? Number(searchParams.get('year')) : undefined
       });
       
@@ -112,7 +118,7 @@ export function useAppEffects() {
     const updateURL = () => {
       if (isUpdatingFromURL) return;
       
-      // デバウンス処理でURL更新を最適化
+       // デバウンス処理でURL更新を最適化
       const timeoutId = setTimeout(() => {
         updateURLWithFilters(filters, currentPage);
       }, 300);

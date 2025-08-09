@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, useCallback } from 'react';
+// React import not required with JSX runtime
+import { Suspense, lazy, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
@@ -32,11 +33,14 @@ export function HomePage() {
   const handleBuildingSelect = useCallback((building: Building | null) => {
     if (building) {
       const slug = building.slug || building.id.toString();
+      // 一覧上の表示番号を計算してstateに渡す
+      const idx = context.currentBuildings.findIndex(b => b.id === building.id);
+      const displayIndex = (idx >= 0 ? context.startIndex + idx + 1 : 1);
       navigate(`/building/${slug}`, {
-        state: { building }
+        state: { building, displayIndex }
       });
     }
-  }, [navigate]);
+  }, [navigate, context.currentBuildings, context.startIndex]);
 
   const {
     isAuthenticated,

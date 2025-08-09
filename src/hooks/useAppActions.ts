@@ -12,6 +12,15 @@ export function useAppActions() {
     
     if (filters.query) searchParams.set('q', filters.query);
     if (filters.radius !== 5) searchParams.set('radius', filters.radius.toString());
+    // 位置情報があれば lat/lng もURLに含める（周辺検索のURL維持）
+    if (filters.currentLocation &&
+        typeof filters.currentLocation.lat === 'number' &&
+        typeof filters.currentLocation.lng === 'number' &&
+        !Number.isNaN(filters.currentLocation.lat) &&
+        !Number.isNaN(filters.currentLocation.lng)) {
+      searchParams.set('lat', String(filters.currentLocation.lat));
+      searchParams.set('lng', String(filters.currentLocation.lng));
+    }
     if (filters.architects && filters.architects.length > 0) searchParams.set('architects', filters.architects.join(','));
     if (filters.buildingTypes && filters.buildingTypes.length > 0) searchParams.set('buildingTypes', filters.buildingTypes.join(','));
     if (filters.prefectures && filters.prefectures.length > 0) searchParams.set('prefectures', filters.prefectures.join(','));

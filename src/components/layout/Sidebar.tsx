@@ -36,7 +36,7 @@ function SidebarComponent({
   onSearchClick
 }: SidebarProps) {
   return (
-    <div className="lg:col-span-1 space-y-6 lg:pl-4">
+    <div className="lg:col-span-1 space-y-6 lg:pl-4 pt-6">
       <Map
         buildings={buildings}
         selectedBuilding={selectedBuilding}

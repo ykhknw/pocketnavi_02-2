@@ -38,8 +38,8 @@ export function useAppState() {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [filters, setFilters] = useState<SearchFilters>(initialFilters);
   
-  // フィルターの変更を追跡するためのref（初回はnullにして初回比較をスキップ）
-  const prevFiltersRef = useRef<SearchFilters | null>(null);
+  // フィルターの変更を追跡するためのref
+  const prevFiltersRef = useRef<SearchFilters>(filters);
   
   // URLが変更されたときに状態を更新
   const isUpdatingFromURL = useRef(false);
@@ -83,21 +83,28 @@ export function useAppState() {
 
 // URLからフィルターとページ情報を解析する関数
 function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFilters; currentPage: number } {
+  const query = searchParams.get('q') || '';
+  const radius = parseInt(searchParams.get('radius') || '5', 10);
+  const latStr = searchParams.get('lat');
+  const lngStr = searchParams.get('lng');
+  const lat = latStr !== null ? parseFloat(latStr) : null;
+  const lng = lngStr !== null ? parseFloat(lngStr) : null;
+
   const filters: SearchFilters = {
-    query: searchParams.get('q') || '',
-    radius: parseInt(searchParams.get('radius') || '5', 10),
+    query,
+    radius,
     architects: searchParams.get('architects')?.split(',').filter(Boolean) || [],
     buildingTypes: searchParams.get('buildingTypes')?.split(',').filter(Boolean) || [],
     prefectures: searchParams.get('prefectures')?.split(',').filter(Boolean) || [],
     areas: searchParams.get('areas')?.split(',').filter(Boolean) || [],
     hasPhotos: searchParams.get('hasPhotos') === 'true',
     hasVideos: searchParams.get('hasVideos') === 'true',
-    currentLocation: null,
-    completionYear: searchParams.get('year') ? Number(searchParams.get('year')) : undefined,
-    excludeResidential: searchParams.get('excl') === '0' ? false : true
+    currentLocation: lat !== null && !Number.isNaN(lat) && lng !== null && !Number.isNaN(lng)
+      ? { lat, lng }
+      : null
   };
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   return { filters, currentPage };
-} 
+}

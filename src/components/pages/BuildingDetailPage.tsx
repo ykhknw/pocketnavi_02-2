@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required with JSX runtime
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSupabaseToggle } from '../../hooks/useSupabaseToggle';
 import { useBuildingBySlug } from '../../hooks/useSupabaseBuildings';
@@ -25,22 +25,17 @@ export function BuildingDetailPage() {
   const buildingFromState = location.state?.building;
   const finalBuilding = buildingFromState || building;
 
-  const handleClose = () => {
-    // ブラウザの履歴を使用して前のページに戻る
-    navigate(-1);
-  };
+  // navigate(-1) を直接ボタンで使用するため、handleCloseは削除
 
-  const handleLike = (buildingId: number) => {
+  const handleLike = (_buildingId: number) => {
     // Like処理（実装は省略）
   };
 
-  const handlePhotoLike = (photoId: number) => {
+  const handlePhotoLike = (_photoId: number) => {
     // Photo like処理（実装は省略）
   };
 
-  const handleSearchAround = (lat: number, lng: number) => {
-    navigate(`/?lat=${lat}&lng=${lng}&radius=2`);
-  };
+  // 検索周辺機能はSidebarのMap側で処理、ここでは未使用
 
   if (loading) {
     return (
@@ -85,8 +80,14 @@ export function BuildingDetailPage() {
     );
   }
 
-  // 表示インデックスを計算（簡易版）
-  const displayIndex = 1; // 詳細ページでは常に1として表示
+  // 表示インデックス: 一覧から渡された値を優先し、なければ一覧の並びで推定
+  const displayIndex = (() => {
+    if (!finalBuilding || !context) return 1;
+    const fromState = location.state?.displayIndex as number | undefined;
+    if (typeof fromState === 'number' && fromState > 0) return fromState;
+    const idx = context.currentBuildings.findIndex(b => b.id === finalBuilding.id);
+    return idx >= 0 ? context.startIndex + idx + 1 : 1;
+  })();
 
   if (!context) {
     return <div>Loading...</div>;
@@ -108,19 +109,21 @@ export function BuildingDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="space-y-6">
-              {/* 一覧に戻るボタンと見出し */}
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/')}
-                  className="flex items-center gap-2"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  {context.language === 'ja' ? '一覧に戻る' : 'Back to List'}
-                </Button>
-                <h2 className="text-xl font-bold">
-                  {context.language === 'ja' ? '建築物詳細' : 'Building Details'}
-                </h2>
+              {/* 一覧に戻るボタンと見出し（カードと同じ左端に揃える） */}
+              <div className="max-w-3xl mx-auto">
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate(-1)}
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    {context.language === 'ja' ? '一覧に戻る' : 'Back to List'}
+                  </Button>
+                  <h2 className="text-xl font-bold">
+                    {context.language === 'ja' ? '建築物詳細' : 'Building Details'}
+                  </h2>
+                </div>
               </div>
 
               {/* 建築物詳細 */}
