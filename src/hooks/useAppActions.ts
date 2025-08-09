@@ -18,6 +18,8 @@ export function useAppActions() {
     if (filters.areas && filters.areas.length > 0) searchParams.set('areas', filters.areas.join(','));
     if (filters.hasPhotos) searchParams.set('hasPhotos', 'true');
     if (filters.hasVideos) searchParams.set('hasVideos', 'true');
+    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) searchParams.set('year', String(filters.completionYear));
+    if (filters.excludeResidential === false) searchParams.set('excl', '0');
     if (currentPage > 1) searchParams.set('page', currentPage.toString());
 
     const searchString = searchParams.toString();

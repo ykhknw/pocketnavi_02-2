@@ -147,6 +147,42 @@ function BuildingDetailComponent({
     navigate('/');
   }, [context, navigate]);
 
+  const handleCompletionYearSearch = useCallback((year: number) => {
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+      completionYear: year,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
+  const handlePrefectureSearch = useCallback((pref: string) => {
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [],
+      prefectures: [pref],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+      completionYear: undefined,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
 
 
   // 単一ページ表示（モーダルを削除し、インライン表示のみに）
@@ -174,26 +210,7 @@ function BuildingDetailComponent({
         </div>
 
         <div className="space-y-3 mb-3">
-          <div className="flex flex-wrap gap-1">
-            <Badge
-              variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
-              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
-              onClick={handleOpenInGoogleMaps}
-            >
-              <MapPin className="h-3 w-3 mr-1" />
-              {language === 'ja' ? building.location : (building.locationEn || building.location)}
-            </Badge>
-            {building.distance && (
-              <Badge
-                variant="outline"
-                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
-              >
-                {formatDistance(building.distance)}
-              </Badge>
-            )}
-          </div>
-
+          {/* architects */}
           <div>
             <div className="flex flex-wrap gap-1">
               {building.architects.map(architect => {
@@ -216,6 +233,38 @@ function BuildingDetailComponent({
             </div>
           </div>
 
+          {/* location / prefectures */}
+          <div className="flex flex-wrap gap-1">
+            <Badge
+              variant="outline"
+              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
+              onClick={handleOpenInGoogleMaps}
+            >
+              <MapPin className="h-3 w-3 mr-1" />
+              {language === 'ja' ? building.location : (building.locationEn || building.location)}
+            </Badge>
+            {building.prefectures && (
+              <Badge
+                variant="outline"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+                title={language === 'ja' ? 'この都道府県で検索' : 'Search by this prefecture'}
+                onClick={() => handlePrefectureSearch(building.prefectures)}
+              >
+                {building.prefectures}
+              </Badge>
+            )}
+            {building.distance && (
+              <Badge
+                variant="outline"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
+              >
+                {formatDistance(building.distance)}
+              </Badge>
+            )}
+          </div>
+
+          {/* building types */}
           <div className="flex flex-wrap gap-1">
             {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).slice(0, 3).map((type, index) => (
               <Badge
@@ -230,10 +279,13 @@ function BuildingDetailComponent({
             ))}
           </div>
 
+          {/* completion years */}
           <div className="flex flex-wrap gap-1 mb-2">
             <Badge
               variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
+              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+              title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
+              onClick={() => handleCompletionYearSearch(building.completionYears)}
             >
               <Calendar className="h-3 w-3 mr-1" />
               {building.completionYears}

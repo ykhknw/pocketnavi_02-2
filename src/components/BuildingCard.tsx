@@ -154,6 +154,44 @@ function BuildingCardComponent({
     navigate('/');
   }, [context, navigate]);
 
+  const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
+    e.stopPropagation();
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+      completionYear: year,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
+  const handlePrefectureSearch = useCallback((e: React.MouseEvent, pref: string) => {
+    e.stopPropagation();
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [],
+      prefectures: [pref],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+      completionYear: undefined,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
     if (showAllPhotos) {
@@ -191,26 +229,6 @@ function BuildingCardComponent({
         </div>
 
         <div className="space-y-3 mb-3">
-          <div className="flex flex-wrap gap-1">
-            <Badge
-              variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
-              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
-              onClick={handleOpenInGoogleMaps}
-            >
-              <MapPin className="h-3 w-3 mr-1" />
-              {language === 'ja' ? building.location : (building.locationEn || building.location)}
-            </Badge>
-            {building.distance && (
-              <Badge
-                variant="outline"
-                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
-              >
-                {formatDistance(building.distance)}
-              </Badge>
-            )}
-          </div>
-
           <div>
             <div className="flex flex-wrap gap-1">
               {building.architects.map(architect => {
@@ -249,11 +267,43 @@ function BuildingCardComponent({
               ))}
           </div>
 
+          <div className="flex flex-wrap gap-1">
+            <Badge
+              variant="outline"
+              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
+              onClick={handleOpenInGoogleMaps}
+            >
+              <MapPin className="h-3 w-3 mr-1" />
+              {language === 'ja' ? building.location : (building.locationEn || building.location)}
+            </Badge>
+            {building.prefectures && (
+              <Badge
+                variant="outline"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+                title={language === 'ja' ? 'この都道府県で検索' : 'Search by this prefecture'}
+                onClick={(e) => handlePrefectureSearch(e, building.prefectures)}
+              >
+                {building.prefectures}
+              </Badge>
+            )}
+            {building.distance && (
+              <Badge
+                variant="outline"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
+              >
+                {formatDistance(building.distance)}
+              </Badge>
+            )}
+          </div>
+
           {building.completionYears && (
             <div className="flex items-center gap-1">
               <Badge
                 variant="outline"
-                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+                title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
+                onClick={(e) => handleCompletionYearSearch(e, building.completionYears)}
               >
                 <Calendar className="h-3 w-3 mr-1" />
                 {building.completionYears}

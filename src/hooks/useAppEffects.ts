@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useState, useCallback, useRef } from 'react';
 import { useSupabaseBuildings } from './useSupabaseBuildings';
 import { useSupabaseToggle } from './useSupabaseToggle';
 import { useGeolocation } from './useGeolocation';
@@ -63,7 +62,7 @@ export function useAppEffects() {
 
   // URL同期効果
   const useURLSyncEffect = useCallback((
-    location: any,
+    _location: any,
     searchParams: URLSearchParams,
     setFilters: (filters: SearchFilters) => void,
     setCurrentPage: (page: number) => void,
@@ -83,7 +82,7 @@ export function useAppEffects() {
       const radius = parseInt(searchParams.get('radius') || '5', 10);
       const page = parseInt(searchParams.get('page') || '1', 10);
       
-      setFilters({
+       setFilters({
         query,
         architects,
         buildingTypes,
@@ -92,7 +91,8 @@ export function useAppEffects() {
         hasPhotos,
         hasVideos,
         radius,
-        currentLocation: null
+         currentLocation: null,
+         completionYear: searchParams.get('year') ? Number(searchParams.get('year')) : undefined
       });
       
       setCurrentPage(page);
@@ -124,9 +124,9 @@ export function useAppEffects() {
   }, []);
 
         // 位置情報効果
-      const useGeolocationEffect = useCallback((
+  const useGeolocationEffect = useCallback((
         geoLocation: { lat: number; lng: number } | null,
-        setFilters: (filters: SearchFilters) => void
+        setFilters: (filters: SearchFilters | ((prev: SearchFilters) => SearchFilters)) => void
       ) => {
         // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
         const updateLocation = () => {
@@ -147,7 +147,7 @@ export function useAppEffects() {
     buildings: Building[],
     filters: SearchFilters,
     setFilteredBuildings: (buildings: Building[]) => void,
-    setCurrentPage: (page: number) => void,
+    _setCurrentPage: (page: number) => void,
     searchHistory: any[],
     setSearchHistory: (history: any[]) => void,
     prevFiltersRef: React.MutableRefObject<SearchFilters | null>,

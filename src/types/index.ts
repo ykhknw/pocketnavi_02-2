@@ -70,6 +70,8 @@ export interface SearchFilters {
   hasPhotos: boolean;
   hasVideos: boolean;
   currentLocation: { lat: number; lng: number } | null;
+  completionYear?: number | null;
+  excludeResidential?: boolean;
 }
 
 export interface Language {

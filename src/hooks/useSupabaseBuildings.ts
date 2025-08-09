@@ -42,7 +42,7 @@ export function useSupabaseBuildings(
       try {
         // Supabase API使用時
 
-        const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage, language);
+         const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage, language);
         
         return result;
       } catch (err) {

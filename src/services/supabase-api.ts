@@ -151,6 +151,11 @@ class SupabaseApiClient {
       query = query.not('youtubeUrl', 'is', null);
     }
 
+    // 建築年フィルター
+    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+      query = query.eq('completionYears', filters.completionYear);
+    }
+
     // 地理位置フィルター（PostGISを使用する場合）
     if (filters.currentLocation) {
       // 簡易的な距離計算（より正確にはPostGIS使用）
@@ -161,6 +166,13 @@ class SupabaseApiClient {
                .lte('lat', lat + radius * 0.009)
                .gte('lng', lng - radius * 0.011)
                .lte('lng', lng + radius * 0.011);
+    }
+
+    // 住宅系の除外（デフォルト有効）
+    if (filters.excludeResidential !== false) {
+      query = query
+        .not('buildingTypes', 'eq', '住宅')
+        .not('buildingTypesEn', 'eq', 'housing');
     }
 
     const start = (page - 1) * limit;

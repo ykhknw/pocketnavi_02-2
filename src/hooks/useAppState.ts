@@ -92,7 +92,9 @@ function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFi
     areas: searchParams.get('areas')?.split(',').filter(Boolean) || [],
     hasPhotos: searchParams.get('hasPhotos') === 'true',
     hasVideos: searchParams.get('hasVideos') === 'true',
-    currentLocation: null
+    currentLocation: null,
+    completionYear: searchParams.get('year') ? Number(searchParams.get('year')) : undefined,
+    excludeResidential: searchParams.get('excl') === '0' ? false : true
   };
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);

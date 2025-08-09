@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Search, MapPin, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchFilters } from '../types';
 import { architectsData, prefecturesData, buildingUsageData } from '../data/searchData';
@@ -129,6 +129,17 @@ export function SearchForm({
 }: SearchFormProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
+  // Escキーで詳細検索メニューを閉じる
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showAdvanced) {
+        setShowAdvanced(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAdvanced]);
+
   // 選択された項目数を計算（useMemoで最適化）
   const selectedCounts = useMemo(() => ({
     architects: filters.architects?.length || 0,
@@ -222,44 +233,50 @@ export function SearchForm({
   return (
     <Card className="mb-6">
       <CardContent className="p-6">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <Input
-                type="text"
-                placeholder={t('searchPlaceholder', language)}
-                value={filters.query}
-                onChange={(e) => handleQueryChange(e.target.value)}
-                className="pl-10"
-              />
+        {(() => {
+          const needBottomSpace = showAdvanced || !!locationError || !!filters.currentLocation;
+          const marginClass = needBottomSpace ? 'mb-4' : 'mb-0';
+          return (
+            <div className={`flex flex-col md:flex-row gap-4 ${marginClass}`}>
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder={t('searchPlaceholder', language)}
+                    value={filters.query}
+                    onChange={(e) => handleQueryChange(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  onClick={onGetLocation}
+                  disabled={locationLoading}
+                >
+                  <MapPin className="h-4 w-4" />
+                  {locationLoading ? t('loading', language) : t('currentLocation', language)}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => setShowAdvanced(!showAdvanced)}
+                  className="relative"
+                >
+                  <Filter className="h-4 w-4" />
+                  {t('detailedSearch', language)}
+                  {hasActiveFilters && (
+                    <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {Object.values(selectedCounts).reduce((sum, count) => sum + count, 0)}
+                    </span>
+                  )}
+                </Button>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <Button
-              onClick={onGetLocation}
-              disabled={locationLoading}
-            >
-              <MapPin className="h-4 w-4" />
-              {locationLoading ? t('loading', language) : t('currentLocation', language)}
-            </Button>
-            
-            <Button
-              variant="outline"
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="relative"
-            >
-              <Filter className="h-4 w-4" />
-              {t('detailedSearch', language)}
-              {hasActiveFilters && (
-                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {Object.values(selectedCounts).reduce((sum, count) => sum + count, 0)}
-                </span>
-              )}
-            </Button>
-          </div>
-        </div>
+          );
+        })()}
 
         {locationError && (
           <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
@@ -291,16 +308,28 @@ export function SearchForm({
           <div className="border-t pt-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-foreground">{t('detailedSearch', language)}</h3>
-              {hasActiveFilters && (
+              <div className="flex items-center gap-2">
+                {/* 強制的に閉じるボタン（常時表示） */}
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
-                  onClick={clearFilters}
+                  onClick={() => setShowAdvanced(false)}
+                  title={language === 'ja' ? '詳細検索メニューを閉じる' : 'Close detailed search'}
                 >
-                  <X className="h-4 w-4" />
-                  {t('clearFilters', language)}
+                  {language === 'ja' ? '閉じる' : 'Close'}
                 </Button>
-              )}
+                {hasActiveFilters && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    title={language === 'ja' ? '選択したフィルターをすべてクリア' : 'Clear all selected filters'}
+                  >
+                    <X className="h-4 w-4" />
+                    {t('clearFilters', language)}
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* 選択状態のサマリー表示 */}
@@ -384,6 +413,7 @@ export function SearchForm({
             )}
 
             <div className="space-y-2 border rounded-lg">
+              {/* 100%幅: 建築家 */}
               <CollapsibleSection
                 title={language === 'ja' ? '建築家' : 'Architects'}
                 selectedCount={filters.architects?.length || 0}
@@ -399,6 +429,7 @@ export function SearchForm({
 
               <div className="border-t" />
 
+              {/* 100%幅: 都道府県 */}
               <CollapsibleSection
                 title={language === 'ja' ? '都道府県' : 'Prefectures'}
                 selectedCount={filters.prefectures.length}
@@ -414,44 +445,72 @@ export function SearchForm({
 
               <div className="border-t" />
 
+              {/* 100%幅: 用途 */}
               <CollapsibleSection
-                title={language === 'ja' ? '建物用途' : 'Building Usage'}
+                title={language === 'ja' ? '用途' : 'Building Usage'}
                 selectedCount={filters.buildingTypes.length}
               >
                 <SearchableList
                   items={buildingUsages}
                   selectedItems={filters.buildingTypes}
                   onToggle={handleBuildingTypeToggle}
-                  searchPlaceholder={language === 'ja' ? '建物用途で検索...' : 'Search building usage...'}
+                  searchPlaceholder={language === 'ja' ? '用途で検索...' : 'Search building usage...'}
                   maxHeight="250px"
                 />
               </CollapsibleSection>
 
               <div className="border-t" />
 
-              <CollapsibleSection
-                title={language === 'ja' ? 'メディア' : 'Media'}
-                selectedCount={(filters.hasPhotos ? 1 : 0) + (filters.hasVideos ? 1 : 0)}
-              >
-                <div className="space-y-2 pt-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="has-photos"
-                      checked={filters.hasPhotos}
-                      onCheckedChange={(checked) => onFiltersChange({ ...filters, hasPhotos: !!checked })}
-                    />
-                    <Label htmlFor="has-photos" className="text-sm">{t('withPhotos', language)}</Label>
+              {/* 50% + 50%: メディア と 建築年 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <CollapsibleSection
+                  title={language === 'ja' ? 'メディア' : 'Media'}
+                  selectedCount={(filters.hasPhotos ? 1 : 0) + (filters.hasVideos ? 1 : 0)}
+                >
+                  <div className="space-y-2 pt-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="has-photos"
+                        checked={filters.hasPhotos}
+                        onCheckedChange={(checked) => onFiltersChange({ ...filters, hasPhotos: !!checked })}
+                      />
+                      <Label htmlFor="has-photos" className="text-sm">{t('withPhotos', language)}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="has-videos"
+                        checked={filters.hasVideos}
+                        onCheckedChange={(checked) => onFiltersChange({ ...filters, hasVideos: !!checked })}
+                      />
+                      <Label htmlFor="has-videos" className="text-sm">{t('withVideos', language)}</Label>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="has-videos"
-                      checked={filters.hasVideos}
-                      onCheckedChange={(checked) => onFiltersChange({ ...filters, hasVideos: !!checked })}
+                </CollapsibleSection>
+
+                <CollapsibleSection
+                  title={language === 'ja' ? '建築年' : 'Completion Year'}
+                  selectedCount={filters.completionYear ? 1 : 0}
+                >
+                  <div className="space-y-2 pt-2">
+                    <Label htmlFor="completion-year" className="text-sm">{language === 'ja' ? '建築年を入力' : 'Enter year'}</Label>
+                    <Input
+                      id="completion-year"
+                      type="number"
+                      inputMode="numeric"
+                      placeholder={language === 'ja' ? '例: 1995' : 'e.g., 1995'}
+                      value={typeof filters.completionYear === 'number' && !isNaN(filters.completionYear) ? String(filters.completionYear) : ''}
+                      onChange={(e) => {
+                        const val = e.target.value.trim();
+                        onFiltersChange({
+                          ...filters,
+                          completionYear: val === '' ? undefined : Number(val)
+                        });
+                      }}
+                      className="text-sm"
                     />
-                    <Label htmlFor="has-videos" className="text-sm">{t('withVideos', language)}</Label>
                   </div>
-                </div>
-              </CollapsibleSection>
+                </CollapsibleSection>
+              </div>
             </div>
           </div>
         )}

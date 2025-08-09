@@ -82,6 +82,19 @@ export function searchBuildings(
     );
   }
 
+  // Completion year filter
+  if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+    results = results.filter(building => building.completionYears === filters.completionYear);
+  }
+
+  // Exclude residential by default
+  if (filters.excludeResidential !== false) {
+    results = results.filter(building =>
+      !building.buildingTypes.includes('住宅') &&
+      !(building.buildingTypesEn || []).includes('housing')
+    );
+  }
+
   // Distance filter
   if (filters.currentLocation) {
     results = results.filter(building => {
