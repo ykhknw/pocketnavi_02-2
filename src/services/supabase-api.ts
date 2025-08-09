@@ -107,7 +107,7 @@ class SupabaseApiClient {
       .select(`
         *,
         building_architects!inner(
-          architects_table(*)
+          architects_table!inner(*)
         )
       `, { count: 'exact' })
       .not('lat', 'is', null)
@@ -118,14 +118,17 @@ class SupabaseApiClient {
       query = query.or(`title.ilike.%${filters.query}%,titleEn.ilike.%${filters.query}%,location.ilike.%${filters.query}%`);
     }
 
-    // 建築家フィルター
+    // 建築家フィルター（言語切替対応 / 関連テーブルの列を参照）
     if (filters.architects && filters.architects.length > 0) {
-      console.log('🏗️ Applying architect filters:', filters.architects);
-      const architectConditions = filters.architects.map(architect => 
-        `architectDetails.ilike.%${architect}%`
-      );
-      console.log('🏗️ Architect conditions:', architectConditions);
-      query = query.or(architectConditions.join(','));
+      const column = language === 'ja' ? 'architectJa' : 'architectEn';
+      const conditions = filters.architects.map((name) => {
+        const escaped = String(name).replace(/[,]/g, '');
+        return `${column}.ilike.*${escaped}*`;
+      });
+      if (conditions.length > 0) {
+        // 直接 architects_table を foreignTable として指定し、その列に対して or 条件を適用
+        query = (query as any).or(conditions.join(','), { foreignTable: 'building_architects.architects_table' });
+      }
     }
 
     // 建物用途フィルター
