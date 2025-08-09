@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -7,6 +8,7 @@ import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { t } from '../utils/translations';
+import { useAppContext } from './providers/AppProvider';
 
 interface BuildingCardProps {
   building: Building;
@@ -69,6 +71,8 @@ function BuildingCardComponent({
   index,
   language
 }: BuildingCardProps) {
+  const context = useAppContext();
+  const navigate = useNavigate();
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   
   // 建築物IDに基づいて安定した自然画像を取得
@@ -111,6 +115,44 @@ function BuildingCardComponent({
       window.open(url, '_blank');
     }
   }, [building.lat, building.lng]);
+
+  const handleArchitectSearch = useCallback((e: React.MouseEvent, name: string) => {
+    e.stopPropagation();
+    // 既存フィルタをリセットし、建築家のみ設定
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [name],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
+  const handleBuildingTypeSearch = useCallback((e: React.MouseEvent, type: string) => {
+    e.stopPropagation();
+    // 既存フィルタをリセットし、用途のみ設定
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [type],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
 
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
@@ -180,13 +222,31 @@ function BuildingCardComponent({
                   <Badge
                     key={`${architect.architect_id}-${index}`}
                     variant="default"
-                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm"
+                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm cursor-pointer"
+                    title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
+                    onClick={(e) => handleArchitectSearch(e, name.trim())}
                   >
                     {name.trim()}
                   </Badge>
                 ));
               })}
             </div>
+          </div>
+
+          <div className="flex flex-wrap gap-1">
+            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes))
+              .slice(0, 3)
+              .map((type, index) => (
+                <Badge
+                  key={`${type}-${index}`}
+                  variant="secondary"
+                  className="border-gray-300 text-gray-700 text-sm cursor-pointer hover:bg-gray-100"
+                  title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
+                  onClick={(e) => handleBuildingTypeSearch(e, type)}
+                >
+                  {type}
+                </Badge>
+              ))}
           </div>
 
           {building.completionYears && (

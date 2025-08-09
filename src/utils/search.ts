@@ -43,20 +43,14 @@ export function searchBuildings(
     // console.debug('🏗️ After architect filter:', results.length, 'buildings');
   }
 
-  // Building type filter
+  // Building type filter (language-aware)
   if (filters.buildingTypes.length > 0) {
-    // console.debug('🏢 Building type filter applied:', filters.buildingTypes);
     results = results.filter(building => {
-      const buildingTypes = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
-      const matches = filters.buildingTypes.some(type =>
-        buildingTypes.some(buildingType => 
-          buildingType.toLowerCase().includes(type.toLowerCase())
-        )
+      const typesToCheck = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
+      return filters.buildingTypes.some(type =>
+        typesToCheck.some(bt => bt.toLowerCase().includes(type.toLowerCase()))
       );
-        // if (matches) { console.debug('✅ Building type match:', { building: building.title, types: buildingTypes, filter: filters.buildingTypes }); }
-      return matches;
     });
-    // console.debug('🏢 After building type filter:', results.length, 'buildings');
   }
 
   // Prefecture filter (language-aware)

@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -7,6 +8,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { t } from '../utils/translations';
 import { getStableNatureImage } from '../utils/unsplash';
+import { useAppContext } from './providers/AppProvider';
 
 interface BuildingDetailProps {
   building: Building;
@@ -66,6 +68,8 @@ function BuildingDetailComponent({
   language, 
   displayIndex
 }: BuildingDetailProps) {
+  const context = useAppContext();
+  const navigate = useNavigate();
   // 実際の建築写真かどうかを判定
   const hasRealPhotos = building.photos.length > 0;
   const isRealThumbnail = !building.thumbnailUrl.includes('pexels.com');
@@ -106,6 +110,42 @@ function BuildingDetailComponent({
       window.open(url, '_blank');
     }
   }, [building.lat, building.lng]);
+
+  const handleArchitectSearch = useCallback((name: string) => {
+    // 既存フィルタをリセットし、建築家のみ設定してトップへ遷移
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [name],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
+
+  const handleBuildingTypeSearch = useCallback((type: string) => {
+    // 既存フィルタをリセットし、用途のみ設定してトップへ遷移
+    context.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [type],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+    });
+    context.setCurrentPage(1);
+    context.handleSearchStart();
+    navigate('/');
+  }, [context, navigate]);
 
 
 
@@ -165,7 +205,9 @@ function BuildingDetailComponent({
                   <Badge
                     key={`${architect.architect_id}-${index}`}
                     variant="default"
-                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm"
+                    className="bg-primary/10 text-primary hover:bg-primary/20 text-sm cursor-pointer"
+                    title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
+                    onClick={() => handleArchitectSearch(name.trim())}
                   >
                     {name.trim()}
                   </Badge>
@@ -179,7 +221,9 @@ function BuildingDetailComponent({
               <Badge
                 key={`${type}-${index}`}
                 variant="secondary"
-                className="border-gray-300 text-gray-700 text-sm"
+                className="border-gray-300 text-gray-700 text-sm cursor-pointer hover:bg-gray-100"
+                title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
+                onClick={() => handleBuildingTypeSearch(type)}
               >
                 {type}
               </Badge>

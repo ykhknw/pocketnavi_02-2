@@ -172,6 +172,25 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);
 
+  // 言語切替時にフィルタをリセットするラッパー
+  const handleToggleLanguage = useCallback(() => {
+    effects.toggleLanguage();
+    state.setFilters({
+      query: '',
+      radius: 5,
+      architects: [],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      currentLocation: null,
+    });
+    state.setCurrentPage(1);
+    state.setSelectedBuilding(null);
+    state.setShowDetail(false);
+  }, [effects.toggleLanguage, state.setFilters, state.setCurrentPage, state.setSelectedBuilding, state.setShowDetail]);
+
   const contextValue: AppContextType = {
     // 状態
     selectedBuilding: state.selectedBuilding,
@@ -218,7 +237,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     
     // その他の状態
     language: effects.language,
-    toggleLanguage: effects.toggleLanguage,
+    toggleLanguage: handleToggleLanguage,
     getCurrentLocation: effects.getCurrentLocation,
     locationLoading: effects.locationLoading,
     locationError: effects.locationError,

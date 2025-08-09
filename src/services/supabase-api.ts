@@ -131,13 +131,12 @@ class SupabaseApiClient {
       }
     }
 
-    // 建物用途フィルター
+    // 建物用途フィルター（言語切替対応）
     if (filters.buildingTypes && filters.buildingTypes.length > 0) {
-      console.log('🏢 Applying building type filters:', filters.buildingTypes);
+      const column = language === 'ja' ? 'buildingTypes' : 'buildingTypesEn';
       const buildingTypeConditions = filters.buildingTypes.map(type => 
-        `buildingTypes.ilike.%${type}%`
+        `${column}.ilike.*${String(type).replace(/[,]/g, '')}*`
       );
-      console.log('🏢 Building type conditions:', buildingTypeConditions);
       query = query.or(buildingTypeConditions.join(','));
     }
 
