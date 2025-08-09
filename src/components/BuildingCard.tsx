@@ -100,6 +100,18 @@ function BuildingCardComponent({
     setShowAllPhotos(prev => !prev);
   }, []);
 
+  const handleOpenInGoogleMaps = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    const { lat, lng } = building;
+    if (
+      typeof lat === 'number' && typeof lng === 'number' &&
+      !isNaN(lat) && !isNaN(lng)
+    ) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+      window.open(url, '_blank');
+    }
+  }, [building.lat, building.lng]);
+
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
     if (showAllPhotos) {
@@ -140,7 +152,9 @@ function BuildingCardComponent({
           <div className="flex flex-wrap gap-1">
             <Badge
               variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
+              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
+              onClick={handleOpenInGoogleMaps}
             >
               <MapPin className="h-3 w-3 mr-1" />
               {language === 'ja' ? building.location : (building.locationEn || building.location)}

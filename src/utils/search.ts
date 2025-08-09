@@ -59,11 +59,12 @@ export function searchBuildings(
     // console.debug('🏢 After building type filter:', results.length, 'buildings');
   }
 
-  // Prefecture filter
+  // Prefecture filter (language-aware)
   if (filters.prefectures.length > 0) {
-    results = results.filter(building =>
-      filters.prefectures.includes(building.prefectures)
-    );
+    results = results.filter(building => {
+      const prefValue = language === 'ja' ? building.prefectures : (building.prefecturesEn || building.prefectures);
+      return filters.prefectures.includes(prefValue);
+    });
   }
 
   // Area filter

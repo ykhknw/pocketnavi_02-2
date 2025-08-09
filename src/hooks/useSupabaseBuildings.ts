@@ -42,7 +42,7 @@ export function useSupabaseBuildings(
       try {
         // Supabase API使用時
 
-        const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage);
+        const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage, language);
         
         return result;
       } catch (err) {
@@ -137,7 +137,7 @@ export function useSupabaseBuildings(
               total: mockBuildings.length
             };
           }
-          return await supabaseApiClient.searchBuildings(filters, nextPage, itemsPerPage);
+          return await supabaseApiClient.searchBuildings(filters, nextPage, itemsPerPage, language);
         },
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,

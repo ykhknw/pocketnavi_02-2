@@ -12,6 +12,7 @@ export interface Building {
   parentStructures: string[];
   structures: string[];
   prefectures: string;
+  prefecturesEn?: string;
   areas: string;
   location: string;
   locationEn?: string;

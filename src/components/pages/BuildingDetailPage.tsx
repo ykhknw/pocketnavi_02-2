@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useLanguage } from '../../hooks/useLanguage';
 import { useSupabaseToggle } from '../../hooks/useSupabaseToggle';
 import { useBuildingBySlug } from '../../hooks/useSupabaseBuildings';
 import { useAppContext } from '../providers/AppProvider';
@@ -16,7 +15,6 @@ export function BuildingDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { language } = useLanguage();
   const { useApi } = useSupabaseToggle();
   const context = useAppContext();
   
@@ -102,7 +100,7 @@ export function BuildingDetailPage() {
         onLoginClick={() => context.setShowLoginModal(true)}
         onLogout={() => {/* handle logout */}}
         onAdminClick={() => context.setShowAdminPanel(true)}
-        language={language}
+        language={context.language}
         onLanguageToggle={context.toggleLanguage}
       />
       
@@ -118,10 +116,10 @@ export function BuildingDetailPage() {
                   className="flex items-center gap-2"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  {language === 'ja' ? '一覧に戻る' : 'Back to List'}
+                  {context.language === 'ja' ? '一覧に戻る' : 'Back to List'}
                 </Button>
                 <h2 className="text-xl font-bold">
-                  {language === 'ja' ? '建築物詳細' : 'Building Details'}
+                  {context.language === 'ja' ? '建築物詳細' : 'Building Details'}
                 </h2>
               </div>
 
@@ -131,7 +129,7 @@ export function BuildingDetailPage() {
                   building={finalBuilding}
                   onLike={handleLike}
                   onPhotoLike={handlePhotoLike}
-                  language={language}
+                  language={context.language}
                   displayIndex={displayIndex}
                 />
               </div>
@@ -144,7 +142,7 @@ export function BuildingDetailPage() {
                   onGetLocation={context.getCurrentLocation}
                   locationLoading={context.locationLoading}
                   locationError={context.locationError}
-                  language={language}
+                  language={context.language}
                   onSearchStart={context.handleSearchStart}
                 />
               </div>
@@ -157,7 +155,7 @@ export function BuildingDetailPage() {
               selectedBuilding={finalBuilding}
               onBuildingSelect={context.handleBuildingSelect}
               currentLocation={context.filters.currentLocation}
-              language={language}
+              language={context.language}
               startIndex={context.startIndex}
               onSearchAround={context.handleSearchAround}
               likedBuildings={context.likedBuildings}
@@ -171,7 +169,7 @@ export function BuildingDetailPage() {
         </div>
       </div>
       
-      <Footer language={language} />
+      <Footer language={context.language} />
     </div>
   );
 } 

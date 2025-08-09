@@ -96,7 +96,12 @@ class SupabaseApiClient {
     return await this.transformBuilding(building);
   }
 
-  async searchBuildings(filters: SearchFilters, page: number = 1, limit: number = 10): Promise<{ buildings: Building[], total: number }> {
+  async searchBuildings(
+    filters: SearchFilters,
+    page: number = 1,
+    limit: number = 10,
+    language: 'ja' | 'en' = 'ja'
+  ): Promise<{ buildings: Building[], total: number }> {
     let query = supabase
       .from('buildings_table_2')
       .select(`
@@ -133,9 +138,10 @@ class SupabaseApiClient {
       query = query.or(buildingTypeConditions.join(','));
     }
 
-    // 都道府県フィルター
+    // 都道府県フィルター（言語切替対応）
     if (filters.prefectures.length > 0) {
-      query = query.in('prefectures', filters.prefectures);
+      const column = language === 'ja' ? 'prefectures' : 'prefecturesEn';
+      query = query.in(column as any, filters.prefectures);
     }
 
     // 動画フィルター
@@ -442,6 +448,7 @@ class SupabaseApiClient {
       parentStructures: parseCommaSeparated(data.parentStructures),
       structures: parseCommaSeparated(data.structures),
       prefectures: data.prefectures,
+      prefecturesEn: data.prefecturesEn || null,
       areas: data.areas,
       location: data.location,
       locationEn: data.locationEn_from_datasheetChunkEn || data.location,
