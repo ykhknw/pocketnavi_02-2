@@ -175,8 +175,9 @@ function SearchFormComponent({
     buildingTypes: filters.buildingTypes?.length || 0,
     prefectures: filters.prefectures?.length || 0,
     areas: filters.areas?.length || 0,
-    completionYear: filters.completionYear ? 1 : 0
-  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear]);
+    completionYear: filters.completionYear ? 1 : 0,
+    locationSearch: filters.currentLocation ? 1 : 0 // 地点検索を追加
+  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear, filters.currentLocation]);
 
   // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
   // useEffect(() => {
@@ -379,9 +380,9 @@ function SearchFormComponent({
                           </span>
                         ))
                       : null}
-                      {filters.completionYear && (
+                      {filters.completionYear ? (
                         <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
-                          {filters.completionYear}
+                          {filters.completionYear}年
                           <button
                             onClick={() => handleCompletionYearClear()}
                             className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
@@ -390,34 +391,23 @@ function SearchFormComponent({
                             <X className="h-3 w-3" />
                           </button>
                         </span>
-                      )}
-                      {(filters.hasPhotos || filters.hasVideos) && (
-                        <>
-                          {filters.hasPhotos && (
-                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
-                              {language === 'ja' ? '写真あり' : 'Has photos'}
-                              <button
-                                onClick={() => handleMediaToggle('photos', false)}
-                                className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                                title={language === 'ja' ? '削除' : 'Remove'}
-                              >
-                                <X className="h-3 w-3" />
-                              </button>
-                            </span>
-                          )}
-                          {filters.hasVideos && (
-                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
-                              {language === 'ja' ? '動画あり' : 'Has videos'}
-                              <button
-                                onClick={() => handleMediaToggle('videos', false)}
-                                className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                                title={language === 'ja' ? '削除' : 'Remove'}
-                              >
-                                <X className="h-3 w-3" />
-                              </button>
-                            </span>
-                          )}
-                        </>
+                      ) : null}
+                      {filters.currentLocation ? (
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          {language === 'ja' ? '地点検索' : 'Location Search'}
+                          <button
+                            onClick={handleLocationClear}
+                            className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            title={language === 'ja' ? '削除' : 'Remove'}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ) : null}
+                      {!hasActiveFilters && (
+                        <span className="text-muted-foreground ml-2">
+                          {language === 'ja' ? 'なし' : 'None'}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -540,19 +530,85 @@ function SearchFormComponent({
 
               <div className="border-t" />
 
-              {/* 100%幅: 都道府県 */}
-              <CollapsibleSection
-                title={language === 'ja' ? '都道府県' : 'Prefectures'}
-                selectedCount={filters.prefectures.length}
-              >
-                <SearchableList
-                  items={prefectures}
-                  selectedItems={filters.prefectures}
-                  onToggle={handlePrefectureToggle}
-                  searchPlaceholder={language === 'ja' ? '都道府県名で検索...' : 'Search prefectures...'}
-                  maxHeight="250px"
-                />
-              </CollapsibleSection>
+              {/* 50% + 50%: 都道府県 と 地点検索 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <CollapsibleSection
+                  title={language === 'ja' ? '都道府県' : 'Prefectures'}
+                  selectedCount={filters.prefectures.length}
+                >
+                  <SearchableList
+                    items={prefectures}
+                    selectedItems={filters.prefectures}
+                    onToggle={handlePrefectureToggle}
+                    searchPlaceholder={language === 'ja' ? '都道府県名で検索...' : 'Search prefectures...'}
+                    maxHeight="250px"
+                  />
+                </CollapsibleSection>
+
+                <CollapsibleSection
+                  title={language === 'ja' ? '地点検索' : 'Location Search'}
+                  selectedCount={filters.currentLocation ? 1 : 0}
+                >
+                  <div className="space-y-3 pt-2">
+                    <div className="space-y-2">
+                      <Label className="text-sm">{language === 'ja' ? '検索半径' : 'Search radius'}</Label>
+                      <div className="space-y-2">
+                        {[5, 10, 20].map((radius) => (
+                          <div key={radius} className="flex items-center space-x-2">
+                            <input
+                              type="radio"
+                              id={`radius-${radius}`}
+                              name="radius"
+                              value={radius}
+                              checked={filters.radius === radius}
+                              onChange={(e) => {
+                                const newRadius = Number(e.target.value);
+                                onFiltersChange({ ...filters, radius: newRadius });
+                              }}
+                              className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                            />
+                            <Label htmlFor={`radius-${radius}`} className="text-sm cursor-pointer">
+                              {radius}km
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {!filters.currentLocation && (
+                      <div className="pt-2">
+                        <Button
+                          onClick={onGetLocation}
+                          disabled={locationLoading}
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                        >
+                          <MapPin className="h-4 w-4 mr-2" />
+                          {locationLoading ? t('loading', language) : t('currentLocation', language)}
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {filters.currentLocation && (
+                      <div className="pt-2">
+                        <div className="text-xs text-muted-foreground mb-2">
+                          {language === 'ja' ? '現在地が設定されています' : 'Current location is set'}
+                        </div>
+                        <Button
+                          onClick={handleLocationClear}
+                          variant="ghost"
+                          size="sm"
+                          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <X className="h-4 w-4 mr-2" />
+                          {language === 'ja' ? '地点検索を解除' : 'Clear location search'}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </CollapsibleSection>
+              </div>
 
               <div className="border-t" />
 
