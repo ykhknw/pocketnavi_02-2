@@ -335,6 +335,13 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
     });
   };
 
+  // ボタンの順序をデバッグ用にログ出力
+  console.log('Map buttons order:', [
+    { order: 1, text: t('searchAround', language) },
+    { order: 2, text: t('getDirections', language) },
+    { order: 3, text: t('viewOnGoogleMap', language) }
+  ]);
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div 
@@ -351,27 +358,36 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
       
       {/* Action buttons for selected building */}
       {selectedBuilding && onSearchAround && (
-        <div className="p-4 space-y-2">
+        <div className="p-4 space-y-2" style={{ display: 'flex', flexDirection: 'column' }}>
           <button
-            onClick={() => window.open(`https://www.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}`, '_blank')}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            data-order="1"
+            data-testid="search-around-button"
+            onClick={() => onSearchAround(selectedBuilding.lat, selectedBuilding.lng)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            style={{ order: 1 }}
           >
-            <Globe className="h-4 w-4" />
-            {t('viewOnGoogleMap', language)}
+            <MapPin className="h-4 w-4" />
+            {t('searchAround', language)}
           </button>
           <button
+            data-order="2"
+            data-testid="get-directions-button"
             onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedBuilding.lat},${selectedBuilding.lng}`, '_blank')}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            style={{ order: 2 }}
           >
             <Play className="h-4 w-4" />
             {t('getDirections', language)}
           </button>
           <button
-            onClick={() => onSearchAround(selectedBuilding.lat, selectedBuilding.lng)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            data-order="3"
+            data-testid="view-google-maps-button"
+            onClick={() => window.open(`https://www.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}`, '_blank')}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            style={{ order: 3 }}
           >
-            <MapPin className="h-4 w-4" />
-            {t('searchAround', language)}
+            <Globe className="h-4 w-4" />
+            {t('viewOnGoogleMap', language)}
           </button>
         </div>
       )}

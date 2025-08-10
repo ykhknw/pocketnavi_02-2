@@ -216,6 +216,13 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
     onSearchAround(building.lat, building.lng);
   };
 
+  // ボタンの順序をデバッグ用にログ出力
+  console.log('DetailMap buttons order:', [
+    { order: 1, text: t('searchAround', language) },
+    { order: 2, text: t('getDirections', language) },
+    { order: 3, text: t('viewOnGoogleMap', language) }
+  ]);
+
   return (
     <Card>
       <CardContent className="p-0">
@@ -230,30 +237,45 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-4">
-          <Button
-            onClick={handleViewOnGoogleMap}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-          >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            {t('viewOnGoogleMap', language)}
-          </Button>
-          
-          <Button
-            onClick={handleGetDirections}
-            className="w-full bg-green-500 hover:bg-green-600 text-white"
-          >
-            <Navigation className="h-4 w-4 mr-2" />
-            {t('getDirections', language)}
-          </Button>
-          
-          <Button
-            onClick={handleSearchAround}
-            className="w-full bg-purple-500 hover:bg-purple-600 text-white"
-          >
-            <Search className="h-4 w-4 mr-2" />
-                            {language === 'ja' ? '付近を検索' : 'Search Nearby'}
-          </Button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(0, 1fr))' }}>
+          {[
+            {
+              order: 1,
+              testId: 'search-around-button',
+              onClick: handleSearchAround,
+              className: 'w-full bg-purple-500 hover:bg-purple-600 text-white',
+              icon: <Search className="h-4 w-4 mr-2" />,
+              text: t('searchAround', language)
+            },
+            {
+              order: 2,
+              testId: 'get-directions-button',
+              onClick: handleGetDirections,
+              className: 'w-full bg-green-500 hover:bg-green-600 text-white',
+              icon: <Navigation className="h-4 w-4 mr-2" />,
+              text: t('getDirections', language)
+            },
+            {
+              order: 3,
+              testId: 'view-google-maps-button',
+              onClick: handleViewOnGoogleMap,
+              className: 'w-full bg-blue-500 hover:bg-blue-600 text-white',
+              icon: <ExternalLink className="h-4 w-4 mr-2" />,
+              text: t('viewOnGoogleMap', language)
+            }
+          ].map((button) => (
+            <Button
+              key={button.order}
+              data-order={button.order}
+              data-testid={button.testId}
+              onClick={button.onClick}
+              className={button.className}
+              style={{ order: button.order }}
+            >
+              {button.icon}
+              {button.text}
+            </Button>
+          ))}
         </div>
       </CardContent>
     </Card>

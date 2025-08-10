@@ -11,7 +11,7 @@ export function useAppActions() {
     const searchParams = new URLSearchParams();
     
     if (filters.query) searchParams.set('q', filters.query);
-    if (filters.radius !== 2) searchParams.set('radius', filters.radius.toString());
+    if (filters.radius !== 5) searchParams.set('radius', filters.radius.toString());
     // 位置情報があれば lat/lng もURLに含める（周辺検索のURL維持）
     if (filters.currentLocation &&
         typeof filters.currentLocation.lat === 'number' &&

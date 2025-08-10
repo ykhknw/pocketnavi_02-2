@@ -87,7 +87,7 @@ export function useAppState() {
 // URLからフィルターとページ情報を解析する関数
 function parseFiltersFromURL(searchParams: URLSearchParams): { filters: SearchFilters; currentPage: number } {
   const query = searchParams.get('q') || '';
-  const radius = parseInt(searchParams.get('radius') || '2', 10);
+  const radius = parseInt(searchParams.get('radius') || '5', 10);
   const latStr = searchParams.get('lat');
   const lngStr = searchParams.get('lng');
   const lat = latStr !== null ? parseFloat(latStr) : null;

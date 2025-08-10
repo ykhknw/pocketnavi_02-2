@@ -79,7 +79,7 @@ export function useAppEffects() {
       const areas = searchParams.get('areas')?.split(',') || [];
       const hasPhotos = searchParams.get('hasPhotos') === 'true';
       const hasVideos = searchParams.get('hasVideos') === 'true';
-      const radius = parseInt(searchParams.get('radius') || '2', 10);
+      const radius = parseInt(searchParams.get('radius') || '5', 10);
       const page = parseInt(searchParams.get('page') || '1', 10);
       const latStr = searchParams.get('lat');
       const lngStr = searchParams.get('lng');

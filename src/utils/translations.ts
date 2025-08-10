@@ -18,7 +18,8 @@ export const translations = {
     media: 'メディア',
     withPhotos: '写真あり',
     withVideos: '動画あり',
-    searchingFromLocation: '現在地から検索中',
+    searchingFromLocation: '地点検索',
+    clearLocationSearch: '地点検索を解除',
     radius: '半径',
     
     // Building List
@@ -45,8 +46,8 @@ export const translations = {
     video: '動画',
     location: '位置情報',
     viewOnGoogleMap: 'Google Maps',
-    getDirections: 'Get Directions',
-    searchAround: 'Search Nearby',
+    getDirections: 'ルートを検索',
+    searchAround: '付近を検索',
     
     // Map
     map: '地図',
@@ -108,7 +109,8 @@ export const translations = {
     media: 'Media',
     withPhotos: 'With Photos',
     withVideos: 'With Videos',
-    searchingFromLocation: 'Searching from current location',
+    searchingFromLocation: 'Location Search',
+    clearLocationSearch: 'Clear Location Search',
     radius: 'Radius',
     
     // Building List

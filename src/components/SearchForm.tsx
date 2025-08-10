@@ -154,6 +154,7 @@ function SearchFormComponent({
     filters.areas.length > 0 ||
     filters.hasPhotos ||
     filters.hasVideos ||
+    filters.currentLocation || // 地点検索も含める
     (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear));
 
   // Escキーで詳細検索を閉じる
@@ -196,6 +197,20 @@ function SearchFormComponent({
   const handleRadiusChange = useCallback((radius: number) => {
     onFiltersChange({ ...filters, radius });
   }, [filters, onFiltersChange]);
+
+  const handleLocationClear = useCallback(() => {
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    
+    // 地点検索を解除（currentLocation、lat、lng、radiusをリセット）
+    onFiltersChange({
+      ...filters,
+      currentLocation: null,
+      radius: 5 // デフォルト値に戻す
+    });
+  }, [filters, onFiltersChange, onSearchStart]);
 
   const handleArchitectToggle = useCallback((architect: string) => {
     const currentArchitects = filters.architects || [];
@@ -267,17 +282,17 @@ function SearchFormComponent({
   const clearFilters = useCallback(() => {
     onFiltersChange({
       query: '',
-      radius: 2,
+      radius: 5,
       architects: [],
       buildingTypes: [],
       prefectures: [],
       areas: [],
       hasPhotos: false,
       hasVideos: false,
-      currentLocation: filters.currentLocation,
+      currentLocation: null, // 地点検索もクリア
       completionYear: undefined
     });
-  }, [onFiltersChange, filters.currentLocation]);
+  }, [onFiltersChange]);
 
   const architects = architectsData[language];
   const prefectures = prefecturesData[language];
@@ -465,6 +480,16 @@ function SearchFormComponent({
                   <option value={10}>10km</option>
                   <option value={20}>20km</option>
                 </select>
+                {/* 地点検索個別解除ボタン */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLocationClear}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  title={t('clearLocationSearch', language)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
             </div>
           </div>

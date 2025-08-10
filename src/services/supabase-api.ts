@@ -102,6 +102,11 @@ class SupabaseApiClient {
     limit: number = 10,
     language: 'ja' | 'en' = 'ja'
   ): Promise<{ buildings: Building[], total: number }> {
+    // 地点検索が有効な場合は、PostGISの空間関数を使用
+    if (filters.currentLocation) {
+      return this.searchBuildingsWithDistance(filters, page, limit, language);
+    }
+
     let query = supabase
       .from('buildings_table_2')
       .select(`
@@ -156,24 +161,6 @@ class SupabaseApiClient {
       query = query.eq('completionYears', filters.completionYear);
     }
 
-    // 地理位置フィルター（PostgreSQL + PostGIS、性能優先）
-    if (filters.currentLocation) {
-      const { lat, lng } = filters.currentLocation;
-      const radius = filters.radius;
-      // まずはBBoxで粗く絞る（インデックス活用）
-      const latDelta = radius / 111.32;
-      const lngDelta = radius / (111.32 * Math.cos((lat * Math.PI) / 180));
-      query = query
-        .gte('lat', lat - latDelta)
-        .lte('lat', lat + latDelta)
-        .gte('lng', lng - lngDelta)
-        .lte('lng', lng + lngDelta);
-
-      // Supabase RPCでPostGISのST_DWithin + 距離昇順を使う方法も用意
-      // ただし、本関数はselectベースの他条件と組み合わせが多いので、
-      // ここではBBoxで候補を落としてからクライアント側で最終距離ソートを行う
-    }
-
     // 住宅系の除外（デフォルト有効）
     if (filters.excludeResidential !== false) {
       query = query
@@ -209,17 +196,6 @@ class SupabaseApiClient {
           if (filters.hasPhotos && transformed.photos.length === 0) {
             continue; // 写真がない場合はスキップ
           }
-          
-          // 近傍検索が有効な時は距離を付与（簡易Haversine）
-          if (filters.currentLocation) {
-            const d = this.haversineKm(
-              filters.currentLocation.lat,
-              filters.currentLocation.lng,
-              transformed.lat,
-              transformed.lng
-            );
-            (transformed as any).distance = d;
-          }
 
           transformedBuildings.push(transformed);
         } catch (error) {
@@ -229,14 +205,247 @@ class SupabaseApiClient {
       }
     }
 
-    // 近傍検索時は距離昇順に並べ替え
-    if (filters.currentLocation) {
-      transformedBuildings.sort((a, b) => (a.distance || 0) - (b.distance || 0));
-    }
-
     return {
       buildings: transformedBuildings,
       total: count || 0
+    };
+  }
+
+  // 地点検索用の新しい関数：PostGISの空間関数を使用
+  private async searchBuildingsWithDistance(
+    filters: SearchFilters,
+    page: number = 1,
+    limit: number = 10,
+    language: 'ja' | 'en' = 'ja'
+  ): Promise<{ buildings: Building[], total: number }> {
+    const { lat, lng } = filters.currentLocation!;
+    const radius = filters.radius;
+    const start = (page - 1) * limit;
+    const end = start + limit - 1;
+
+    console.log('🔍 PostGIS検索開始:', { 
+      lat, lng, radius, page, limit, start, end,
+      filters: {
+        query: filters.query,
+        architects: filters.architects,
+        buildingTypes: filters.buildingTypes,
+        prefectures: filters.prefectures,
+        hasVideos: filters.hasVideos,
+        completionYear: filters.completionYear,
+        excludeResidential: filters.excludeResidential
+      }
+    });
+
+    try {
+      // PostGISの空間関数を使用して距離順にソート
+      const { data: buildings, error, count } = await supabase
+        .rpc('search_buildings_with_distance', {
+          search_lat: lat,
+          search_lng: lng,
+          search_radius: radius,
+          search_query: filters.query.trim() || null,
+          search_architects: filters.architects?.length > 0 ? filters.architects : null,
+          search_building_types: filters.buildingTypes?.length > 0 ? filters.buildingTypes : null,
+          search_prefectures: filters.prefectures?.length > 0 ? filters.prefectures : null,
+          search_has_videos: filters.hasVideos || false,
+          search_completion_year: typeof filters.completionYear === 'number' && !isNaN(filters.completionYear) ? filters.completionYear : null,
+          search_exclude_residential: filters.excludeResidential !== false,
+          search_language: language,
+          page_start: start,
+          page_limit: limit
+        });
+
+      if (error) {
+        console.warn('PostGIS RPC failed, falling back to client-side sorting:', error);
+        // フォールバック: 従来の方法でBBox検索 + クライアント側ソート
+        return this.searchBuildingsWithFallback(filters, page, limit, language);
+      }
+
+      console.log('🔍 PostGIS検索成功:', { 
+        buildingsCount: buildings?.length || 0, 
+        totalCount: count || 0,
+        firstBuildingDistance: buildings?.[0]?.distance,
+        lastBuildingDistance: buildings?.[buildings?.length - 1]?.distance
+      });
+
+      // データ変換と写真フィルター
+      const transformedBuildings: Building[] = [];
+      if (buildings) {
+        for (const building of buildings) {
+          try {
+            const transformed = await this.transformBuilding(building);
+            
+            // 写真フィルター（変換後に適用）
+            if (filters.hasPhotos && transformed.photos.length === 0) {
+              continue; // 写真がない場合はスキップ
+            }
+
+            // 距離情報を設定（PostGISから取得済み）
+            if (building.distance !== undefined) {
+              (transformed as any).distance = building.distance;
+            }
+
+            transformedBuildings.push(transformed);
+          } catch (error) {
+            console.warn('Skipping building due to invalid data:', error);
+            // 無効なデータの建築物はスキップ
+          }
+        }
+      }
+
+      return {
+        buildings: transformedBuildings,
+        total: count || 0
+      };
+
+    } catch (error) {
+      console.warn('PostGIS search failed, using fallback method:', error);
+      // エラーが発生した場合はフォールバック
+      return this.searchBuildingsWithFallback(filters, page, limit, language);
+    }
+  }
+
+  // フォールバック用の関数：従来のBBox検索 + クライアント側ソート
+  private async searchBuildingsWithFallback(
+    filters: SearchFilters,
+    page: number = 1,
+    limit: number = 10,
+    language: 'ja' | 'en' = 'ja'
+  ): Promise<{ buildings: Building[], total: number }> {
+    const { lat, lng } = filters.currentLocation!;
+    const radius = filters.radius;
+
+    console.log('🔄 フォールバック処理開始（クライアント側ソート）:', { 
+      lat, lng, radius, page, limit 
+    });
+
+    // BBoxで粗く絞る（インデックス活用）
+    const latDelta = radius / 111.32;
+    const lngDelta = radius / (111.32 * Math.cos((lat * Math.PI) / 180));
+
+    let query = supabase
+      .from('buildings_table_2')
+      .select(`
+        *,
+        building_architects!inner(
+          architects_table!inner(*)
+        )
+      `, { count: 'exact' })
+      .not('lat', 'is', null)
+      .not('lng', 'is', null)
+      .gte('lat', lat - latDelta)
+      .lte('lat', lat + latDelta)
+      .gte('lng', lng - lngDelta)
+      .lte('lng', lng + lngDelta);
+
+    // テキスト検索
+    if (filters.query.trim()) {
+      query = query.or(`title.ilike.%${filters.query}%,titleEn.ilike.%${filters.query}%,location.ilike.%${filters.query}%`);
+    }
+
+    // 建築家フィルター
+    if (filters.architects && filters.architects.length > 0) {
+      const column = language === 'ja' ? 'architectJa' : 'architectEn';
+      const conditions = filters.architects.map((name) => {
+        const escaped = String(name).replace(/[,]/g, '');
+        return `${column}.ilike.*${escaped}*`;
+      });
+      if (conditions.length > 0) {
+        query = (query as any).or(conditions.join(','), { foreignTable: 'building_architects.architects_table' });
+      }
+    }
+
+    // 建物用途フィルター
+    if (filters.buildingTypes && filters.buildingTypes.length > 0) {
+      const column = language === 'ja' ? 'buildingTypes' : 'buildingTypesEn';
+      const buildingTypeConditions = filters.buildingTypes.map(type => 
+        `${column}.ilike.*${String(type).replace(/[,]/g, '')}*`
+      );
+      query = query.or(buildingTypeConditions.join(','));
+    }
+
+    // 都道府県フィルター
+    if (filters.prefectures.length > 0) {
+      const column = language === 'ja' ? 'prefectures' : 'prefecturesEn';
+      query = query.in(column as any, filters.prefectures);
+    }
+
+    // 動画フィルター
+    if (filters.hasVideos) {
+      query = query.not('youtubeUrl', 'is', null);
+    }
+
+    // 建築年フィルター
+    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+      query = query.eq('completionYears', filters.completionYear);
+    }
+
+    // 住宅系の除外
+    if (filters.excludeResidential !== false) {
+      query = query
+        .not('buildingTypes', 'eq', '住宅')
+        .not('buildingTypesEn', 'eq', 'housing');
+    }
+
+    // 全件取得してから距離ソート（フォールバック用）
+    const { data: buildings, error, count } = await query;
+
+    if (error) {
+      throw new SupabaseApiError(500, error.message);
+    }
+
+    console.log('🔄 フォールバック処理: BBox検索結果:', { 
+      totalBuildings: buildings?.length || 0,
+      count: count || 0
+    });
+
+    // データ変換と写真フィルター
+    const transformedBuildings: Building[] = [];
+    if (buildings) {
+      for (const building of buildings) {
+        try {
+          const transformed = await this.transformBuilding(building);
+          
+          // 写真フィルター（変換後に適用）
+          if (filters.hasPhotos && transformed.photos.length === 0) {
+            continue; // 写真がない場合はスキップ
+          }
+          
+          // 距離を計算
+          const d = this.haversineKm(lat, lng, transformed.lat, transformed.lng);
+          (transformed as any).distance = d;
+
+          transformedBuildings.push(transformed);
+        } catch (error) {
+          console.warn('Skipping building due to invalid data:', error);
+          // 無効なデータの建築物はスキップ
+        }
+      }
+    }
+
+    // 距離でソート
+    transformedBuildings.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+
+    console.log('🔄 フォールバック処理: 距離ソート完了:', { 
+      sortedBuildings: transformedBuildings.length,
+      firstDistance: transformedBuildings[0]?.distance,
+      lastDistance: transformedBuildings[transformedBuildings.length - 1]?.distance
+    });
+
+    // ページ分割
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const paginatedBuildings = transformedBuildings.slice(start, end);
+
+    console.log('🔄 フォールバック処理: ページ分割完了:', { 
+      page, limit, start, end,
+      paginatedCount: paginatedBuildings.length,
+      totalCount: transformedBuildings.length
+    });
+
+    return {
+      buildings: paginatedBuildings,
+      total: transformedBuildings.length
     };
   }
 
