@@ -239,6 +239,31 @@ function SearchFormComponent({
     onFiltersChange({ ...filters, prefectures: newPrefectures });
   }, [filters, onFiltersChange, onSearchStart]);
 
+  const handleAreaToggle = useCallback((area: string) => {
+    const currentAreas = filters.areas || [];
+    const newAreas = currentAreas.includes(area)
+      ? currentAreas.filter(a => a !== area)
+      : [...currentAreas, area];
+    
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    
+    onFiltersChange({ ...filters, areas: newAreas });
+  }, [filters, onFiltersChange, onSearchStart]);
+
+  const handleCompletionYearClear = useCallback(() => {
+    onFiltersChange({ ...filters, completionYear: undefined });
+  }, [filters, onFiltersChange]);
+
+  const handleMediaToggle = useCallback((type: 'photos' | 'videos', checked: boolean) => {
+    onFiltersChange({
+      ...filters,
+      [type]: checked
+    });
+  }, [filters, onFiltersChange]);
+
   const clearFilters = useCallback(() => {
     onFiltersChange({
       query: '',
@@ -277,6 +302,111 @@ function SearchFormComponent({
                     className="pl-10"
                   />
                 </div>
+                
+                {/* 選択状態のサマリー表示（トグルを開かなくても確認可能） */}
+                {hasActiveFilters && (
+                  <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">{language === 'ja' ? '選択中の項目：' : 'Selected items: '}</span>
+                      {filters.architects && filters.architects.length > 0 ? 
+                        filters.architects.map(arch => (
+                          <span key={arch} className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                            {arch}
+                            <button
+                              onClick={() => handleArchitectToggle(arch)}
+                              className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                              title={language === 'ja' ? '削除' : 'Remove'}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))
+                      : null}
+                      {filters.buildingTypes && filters.buildingTypes.length > 0 ? 
+                        filters.buildingTypes.map(type => (
+                          <span key={type} className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                            {type}
+                            <button
+                              onClick={() => handleBuildingTypeToggle(type)}
+                              className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                              title={language === 'ja' ? '削除' : 'Remove'}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))
+                      : null}
+                      {filters.prefectures && filters.prefectures.length > 0 ? 
+                        filters.prefectures.map(pref => (
+                          <span key={pref} className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                            {pref}
+                            <button
+                              onClick={() => handlePrefectureToggle(pref)}
+                              className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                              title={language === 'ja' ? '削除' : 'Remove'}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))
+                      : null}
+                      {filters.areas && filters.areas.length > 0 ? 
+                        filters.areas.map(area => (
+                          <span key={area} className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                            {area}
+                            <button
+                              onClick={() => handleAreaToggle(area)}
+                              className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                              title={language === 'ja' ? '削除' : 'Remove'}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))
+                      : null}
+                      {filters.completionYear && (
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          {filters.completionYear}
+                          <button
+                            onClick={() => handleCompletionYearClear()}
+                            className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            title={language === 'ja' ? '削除' : 'Remove'}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      )}
+                      {(filters.hasPhotos || filters.hasVideos) && (
+                        <>
+                          {filters.hasPhotos && (
+                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                              {language === 'ja' ? '写真あり' : 'Has photos'}
+                              <button
+                                onClick={() => handleMediaToggle('photos', false)}
+                                className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                                title={language === 'ja' ? '削除' : 'Remove'}
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </span>
+                          )}
+                          {filters.hasVideos && (
+                            <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                              {language === 'ja' ? '動画あり' : 'Has videos'}
+                              <button
+                                onClick={() => handleMediaToggle('videos', false)}
+                                className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                                title={language === 'ja' ? '削除' : 'Remove'}
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div className="flex gap-2">
@@ -367,102 +497,6 @@ function SearchFormComponent({
                 )}
               </div>
             </div>
-
-            {/* 選択状態のサマリー表示 */}
-            {hasActiveFilters && (
-              <div className="mb-4 p-3 bg-muted/50 rounded-lg">
-                <h4 className="text-sm font-medium mb-2">{language === 'ja' ? '選択中の項目:' : 'Selected items:'}</h4>
-                <div className="space-y-1 text-sm">
-                  {filters.architects && filters.architects.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">{language === 'ja' ? '建築家:' : 'Architects:'}</span>
-                      <div className="flex flex-wrap gap-1">
-                        {filters.architects.map(arch => (
-                          <span key={arch} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
-                            {arch}
-                            <button
-                              onClick={() => handleArchitectToggle(arch)}
-                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {filters.buildingTypes && filters.buildingTypes.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">{language === 'ja' ? '建物用途:' : 'Building types:'}</span>
-                      <div className="flex flex-wrap gap-1">
-                        {filters.buildingTypes.map(type => (
-                          <span key={type} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
-                            {type}
-                            <button
-                              onClick={() => handleBuildingTypeToggle(type)}
-                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {filters.prefectures && filters.prefectures.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">{language === 'ja' ? '都道府県:' : 'Prefectures:'}</span>
-                      <div className="flex flex-wrap gap-1">
-                        {filters.prefectures.map(pref => (
-                          <span key={pref} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
-                            {pref}
-                            <button
-                              onClick={() => handlePrefectureToggle(pref)}
-                              className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {typeof filters.completionYear === 'number' && !isNaN(filters.completionYear) && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">{language === 'ja' ? '建築年:' : 'Completion Year:'}</span>
-                      <div className="flex flex-wrap gap-1">
-                        <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
-                          {filters.completionYear}
-                          <button
-                            onClick={() => onFiltersChange({ ...filters, completionYear: undefined })}
-                            className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {(filters.hasPhotos || filters.hasVideos) && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground">{language === 'ja' ? 'メディア:' : 'Media:'}</span>
-                      <div className="flex flex-wrap gap-1">
-                        {filters.hasPhotos && (
-                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                            {t('withPhotos', language)}
-                          </span>
-                        )}
-                        {filters.hasVideos && (
-                          <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
-                            {t('withVideos', language)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
 
             <div className="space-y-2 border rounded-lg">
               {/* 100%幅: 建築家 */}

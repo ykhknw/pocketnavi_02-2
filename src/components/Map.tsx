@@ -264,7 +264,11 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             }
             
             if (hasValidBounds && bounds.isValid()) {
-              mapInstanceRef.current.fitBounds(bounds, { padding: [20, 20] });
+              // 建築物詳細ページと同じ適度なZOOMレベル（16）を最大値として設定
+              mapInstanceRef.current.fitBounds(bounds, { 
+                padding: [20, 20],
+                maxZoom: 16
+              });
             } else {
               // Fallback to first valid building
               mapInstanceRef.current.setView([validBuildings[0].lat, validBuildings[0].lng], 12);
