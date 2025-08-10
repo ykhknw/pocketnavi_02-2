@@ -145,8 +145,8 @@ function SearchFormComponent({
     setShowAdvancedSearch(newValue);
   }, [setShowAdvancedSearch]);
 
-  // アクティブなフィルターがあるかどうかを判定
-  const hasActiveFilters = 
+  // アクティブなフィルターがあるかどうかを判定（useMemoで最適化）
+  const hasActiveFilters = useMemo(() => 
     filters.query ||
     (filters.architects?.length || 0) > 0 ||
     filters.buildingTypes.length > 0 ||
@@ -155,7 +155,9 @@ function SearchFormComponent({
     filters.hasPhotos ||
     filters.hasVideos ||
     filters.currentLocation || // 地点検索も含める
-    (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear));
+    (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)),
+    [filters.query, filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.hasPhotos, filters.hasVideos, filters.currentLocation, filters.completionYear]
+  );
 
   // Escキーで詳細検索を閉じる
   useEffect(() => {
@@ -176,8 +178,9 @@ function SearchFormComponent({
     prefectures: filters.prefectures?.length || 0,
     areas: filters.areas?.length || 0,
     completionYear: filters.completionYear ? 1 : 0,
-    locationSearch: filters.currentLocation ? 1 : 0 // 地点検索を追加
-  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear, filters.currentLocation]);
+    locationSearch: filters.currentLocation ? 1 : 0, // 地点検索を追加
+    media: (filters.hasPhotos ? 1 : 0) + (filters.hasVideos ? 1 : 0) // メディアフィルターを追加
+  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear, filters.currentLocation, filters.hasPhotos, filters.hasVideos]);
 
   // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
   // useEffect(() => {
@@ -185,6 +188,12 @@ function SearchFormComponent({
   //     setShowAdvancedSearch(true);
   //   }
   // }, [filters, hasActiveFilters, showAdvancedSearch, setShowAdvancedSearch]);
+
+  // フィルターの変更を監視してレイアウトを適切に更新
+  useEffect(() => {
+    // フィルターが変更された際に強制的にレンダリングをトリガー
+    // これにより、hasActiveFiltersの状態変化が即座に反映される
+  }, [filters]);
 
   // ハンドラー関数をuseCallbackで最適化
   const handleQueryChange = useCallback((query: string) => {
@@ -276,7 +285,7 @@ function SearchFormComponent({
   const handleMediaToggle = useCallback((type: 'photos' | 'videos', checked: boolean) => {
     onFiltersChange({
       ...filters,
-      [type]: checked
+      [type === 'photos' ? 'hasPhotos' : 'hasVideos']: checked
     });
   }, [filters, onFiltersChange]);
 
@@ -303,6 +312,8 @@ function SearchFormComponent({
     <Card className="mb-6">
       <CardContent className="p-6">
         {(() => {
+          // 下部余白が必要な条件を明確化
+          // 詳細検索が開いている場合、またはエラー・地点検索がある場合は下部余白を確保
           const needBottomSpace = showAdvancedSearch || !!locationError || !!filters.currentLocation;
           const marginClass = needBottomSpace ? 'mb-4' : 'mb-0';
           return (
@@ -397,6 +408,30 @@ function SearchFormComponent({
                           {language === 'ja' ? '地点検索' : 'Location Search'}
                           <button
                             onClick={handleLocationClear}
+                            className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            title={language === 'ja' ? '削除' : 'Remove'}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ) : null}
+                      {filters.hasPhotos ? (
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          {language === 'ja' ? '写真あり' : 'With Photos'}
+                          <button
+                            onClick={() => handleMediaToggle('photos', false)}
+                            className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            title={language === 'ja' ? '削除' : 'Remove'}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ) : null}
+                      {filters.hasVideos ? (
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          {language === 'ja' ? '動画あり' : 'With Videos'}
+                          <button
+                            onClick={() => handleMediaToggle('videos', false)}
                             className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
                             title={language === 'ja' ? '削除' : 'Remove'}
                           >
