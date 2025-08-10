@@ -363,7 +363,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             data-order="1"
             data-testid="search-around-button"
             onClick={() => onSearchAround(selectedBuilding.lat, selectedBuilding.lng)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 hover:border-green-300 rounded-lg transition-colors"
             style={{ order: 1 }}
           >
             <MapPin className="h-4 w-4" />
@@ -373,7 +373,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             data-order="2"
             data-testid="get-directions-button"
             onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedBuilding.lat},${selectedBuilding.lng}`, '_blank')}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 border border-yellow-200 hover:border-yellow-300 rounded-lg transition-colors"
             style={{ order: 2 }}
           >
             <Play className="h-4 w-4" />
@@ -383,7 +383,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
             data-order="3"
             data-testid="view-google-maps-button"
             onClick={() => window.open(`https://www.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}`, '_blank')}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 hover:border-blue-300 rounded-lg transition-colors"
             style={{ order: 3 }}
           >
             <Globe className="h-4 w-4" />

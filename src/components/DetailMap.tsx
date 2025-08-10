@@ -238,12 +238,12 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(0, 1fr))' }}>
-          {[
+          {          [
             {
               order: 1,
               testId: 'search-around-button',
               onClick: handleSearchAround,
-              className: 'w-full bg-purple-500 hover:bg-purple-600 text-white',
+              className: 'w-full bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 hover:border-green-300 transition-colors',
               icon: <Search className="h-4 w-4 mr-2" />,
               text: t('searchAround', language)
             },
@@ -251,7 +251,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
               order: 2,
               testId: 'get-directions-button',
               onClick: handleGetDirections,
-              className: 'w-full bg-green-500 hover:bg-green-600 text-white',
+              className: 'w-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 border border-yellow-200 hover:border-yellow-300 transition-colors',
               icon: <Navigation className="h-4 w-4 mr-2" />,
               text: t('getDirections', language)
             },
@@ -259,7 +259,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
               order: 3,
               testId: 'view-google-maps-button',
               onClick: handleViewOnGoogleMap,
-              className: 'w-full bg-blue-500 hover:bg-blue-600 text-white',
+              className: 'w-full bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 hover:border-blue-300 transition-colors',
               icon: <ExternalLink className="h-4 w-4 mr-2" />,
               text: t('viewOnGoogleMap', language)
             }
