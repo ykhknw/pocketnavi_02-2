@@ -1,4 +1,5 @@
 import React, { memo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Building, SearchFilters } from '../../types';
 import { SearchForm } from '../SearchForm';
@@ -30,6 +31,8 @@ interface MainContentProps {
   locationLoading: boolean;
   locationError: string | null;
   getCurrentLocation: () => void;
+  showAdvancedSearch: boolean;
+  setShowAdvancedSearch: (show: boolean) => void;
   
   // 言語
   language: 'ja' | 'en';
@@ -65,6 +68,8 @@ function MainContentComponent({
   locationLoading,
   locationError,
   getCurrentLocation,
+  showAdvancedSearch,
+  setShowAdvancedSearch,
   language,
   handleBuildingSelect,
   handleLike,
@@ -74,6 +79,8 @@ function MainContentComponent({
   handleSearchStart,
   getPaginationRange
 }: MainContentProps) {
+  const navigate = useNavigate();
+  
   // すべてのuseCallbackを条件分岐の外に移動
   const handlePreviousPage = useCallback(() => handlePageChange(currentPage - 1), [handlePageChange, currentPage]);
   const handleNextPage = useCallback(() => handlePageChange(currentPage + 1), [handlePageChange, currentPage]);
@@ -108,6 +115,8 @@ function MainContentComponent({
         locationError={locationError}
         language={language}
         onSearchStart={handleSearchStart}
+        showAdvancedSearch={showAdvancedSearch}
+        setShowAdvancedSearch={setShowAdvancedSearch}
       />
 
       {buildingsLoading && (
@@ -140,6 +149,7 @@ function MainContentComponent({
             onPhotoLike={handlePhotoLike}
             language={language}
             displayIndex={currentBuildings.findIndex(b => b.id === selectedBuilding.id) + startIndex + 1}
+            navigate={navigate}
           />
         </div>
       ) : (

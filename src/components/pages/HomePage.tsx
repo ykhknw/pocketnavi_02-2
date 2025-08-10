@@ -91,6 +91,8 @@ export function HomePage() {
               locationLoading={context.locationLoading}
               locationError={context.locationError}
               getCurrentLocation={context.getCurrentLocation}
+              showAdvancedSearch={context.showAdvancedSearch}
+              setShowAdvancedSearch={context.setShowAdvancedSearch}
               language={language}
               handleBuildingSelect={handleBuildingSelect}
               handleLike={context.handleLike}

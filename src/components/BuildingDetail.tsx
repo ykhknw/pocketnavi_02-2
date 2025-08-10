@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useCallback, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -66,10 +65,9 @@ function BuildingDetailComponent({
   onLike, 
   onPhotoLike, 
   language, 
-  displayIndex
+  displayIndex,
 }: BuildingDetailProps) {
   const context = useAppContext();
-  const navigate = useNavigate();
   // 実際の建築写真かどうかを判定
   const hasRealPhotos = building.photos.length > 0;
   const isRealThumbnail = !building.thumbnailUrl.includes('pexels.com');
@@ -112,76 +110,36 @@ function BuildingDetailComponent({
   }, [building.lat, building.lng]);
 
   const handleArchitectSearch = useCallback((name: string) => {
-    // 既存フィルタをリセットし、建築家のみ設定してトップへ遷移
-    context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [name],
-      buildingTypes: [],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-    });
-    context.setCurrentPage(1);
-    context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    // 詳細ページから一覧ページに戻り、建築家のみで検索
+    const searchParams = new URLSearchParams();
+    searchParams.set('architects', name);
+    const url = `/?${searchParams.toString()}`;
+    window.location.href = url;
+  }, []);
 
   const handleBuildingTypeSearch = useCallback((type: string) => {
-    // 既存フィルタをリセットし、用途のみ設定してトップへ遷移
-    context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [type],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-    });
-    context.setCurrentPage(1);
-    context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    // 詳細ページから一覧ページに戻り、建物用途のみで検索
+    const searchParams = new URLSearchParams();
+    searchParams.set('buildingTypes', type);
+    const url = `/?${searchParams.toString()}`;
+    window.location.href = url;
+  }, []);
 
   const handleCompletionYearSearch = useCallback((year: number) => {
-    context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-      completionYear: year,
-    });
-    context.setCurrentPage(1);
-    context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    // 詳細ページから一覧ページに戻り、建築年のみで検索
+    const searchParams = new URLSearchParams();
+    searchParams.set('completionYear', year.toString());
+    const url = `/?${searchParams.toString()}`;
+    window.location.href = url;
+  }, []);
 
   const handlePrefectureSearch = useCallback((pref: string) => {
-    context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [],
-      prefectures: [pref],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-      completionYear: undefined,
-    });
-    context.setCurrentPage(1);
-    context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    // 詳細ページから一覧ページに戻り、都道府県のみで検索
+    const searchParams = new URLSearchParams();
+    searchParams.set('prefectures', pref);
+    const url = `/?${searchParams.toString()}`;
+    window.location.href = url;
+  }, []);
 
 
 
@@ -266,7 +224,7 @@ function BuildingDetailComponent({
 
           {/* building types */}
           <div className="flex flex-wrap gap-1">
-            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).slice(0, 3).map((type, index) => (
+            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes)).map((type, index) => (
               <Badge
                 key={`${type}-${index}`}
                 variant="secondary"

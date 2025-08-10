@@ -18,6 +18,8 @@ interface SearchFormProps {
   locationError: string | null;
   language: 'ja' | 'en';
   onSearchStart?: () => void; // 検索開始時のコールバック
+  showAdvancedSearch: boolean;
+  setShowAdvancedSearch: (show: boolean) => void;
 }
 
 interface CollapsibleSectionProps {
@@ -125,28 +127,47 @@ export function SearchForm({
   locationLoading,
   locationError,
   language,
-  onSearchStart
+  onSearchStart,
+  showAdvancedSearch,
+  setShowAdvancedSearch
 }: SearchFormProps) {
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
   // Escキーで詳細検索メニューを閉じる
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && showAdvanced) {
-        setShowAdvanced(false);
+      if (e.key === 'Escape' && showAdvancedSearch) {
+        setShowAdvancedSearch(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showAdvanced]);
+  }, [showAdvancedSearch, setShowAdvancedSearch]);
 
   // 選択された項目数を計算（useMemoで最適化）
   const selectedCounts = useMemo(() => ({
     architects: filters.architects?.length || 0,
     buildingTypes: filters.buildingTypes?.length || 0,
     prefectures: filters.prefectures?.length || 0,
-    areas: filters.areas?.length || 0
-  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas]);
+    areas: filters.areas?.length || 0,
+    completionYear: filters.completionYear ? 1 : 0
+  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear]);
+
+  // アクティブなフィルターがあるかどうかを判定
+  const hasActiveFilters = 
+    filters.query ||
+    (filters.architects?.length || 0) > 0 ||
+    filters.buildingTypes.length > 0 ||
+    filters.prefectures.length > 0 ||
+    filters.areas.length > 0 ||
+    filters.hasPhotos ||
+    filters.hasVideos ||
+    (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear));
+
+  // フィルターが変更されたときに詳細検索を自動的に開く
+  useEffect(() => {
+    if (hasActiveFilters && !showAdvancedSearch) {
+      setShowAdvancedSearch(true);
+    }
+  }, [filters, hasActiveFilters, showAdvancedSearch, setShowAdvancedSearch]);
 
   // ハンドラー関数をuseCallbackで最適化
   const handleQueryChange = useCallback((query: string) => {
@@ -213,18 +234,10 @@ export function SearchForm({
       areas: [],
       hasPhotos: false,
       hasVideos: false,
-      currentLocation: filters.currentLocation
+      currentLocation: filters.currentLocation,
+      completionYear: undefined
     });
   }, [onFiltersChange, filters.currentLocation]);
-
-  const hasActiveFilters = 
-    filters.query ||
-    (filters.architects?.length || 0) > 0 ||
-    filters.buildingTypes.length > 0 ||
-    filters.prefectures.length > 0 ||
-    filters.areas.length > 0 ||
-    filters.hasPhotos ||
-    filters.hasVideos;
 
   const architects = architectsData[language];
   const prefectures = prefecturesData[language];
@@ -234,7 +247,7 @@ export function SearchForm({
     <Card className="mb-6">
       <CardContent className="p-6">
         {(() => {
-          const needBottomSpace = showAdvanced || !!locationError || !!filters.currentLocation;
+          const needBottomSpace = showAdvancedSearch || !!locationError || !!filters.currentLocation;
           const marginClass = needBottomSpace ? 'mb-4' : 'mb-0';
           return (
             <div className={`flex flex-col md:flex-row gap-4 ${marginClass}`}>
@@ -262,7 +275,7 @@ export function SearchForm({
                 
                 <Button
                   variant="outline"
-                  onClick={() => setShowAdvanced(!showAdvanced)}
+                  onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
                   className="relative"
                 >
                   <Filter className="h-4 w-4" />
@@ -304,7 +317,7 @@ export function SearchForm({
           </div>
         )}
 
-        {showAdvanced && (
+        {showAdvancedSearch && (
           <div className="border-t pt-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-foreground">{t('detailedSearch', language)}</h3>
@@ -313,7 +326,7 @@ export function SearchForm({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setShowAdvanced(false)}
+                  onClick={() => setShowAdvancedSearch(false)}
                   title={language === 'ja' ? '詳細検索メニューを閉じる' : 'Close detailed search'}
                 >
                   {language === 'ja' ? '閉じる' : 'Close'}
@@ -388,6 +401,22 @@ export function SearchForm({
                             </button>
                           </span>
                         ))}
+                      </div>
+                    </div>
+                  )}
+                  {typeof filters.completionYear === 'number' && !isNaN(filters.completionYear) && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{language === 'ja' ? '建築年:' : 'Completion Year:'}</span>
+                      <div className="flex flex-wrap gap-1">
+                        <span className="bg-primary/10 text-primary px-2 py-1 rounded text-xs flex items-center gap-1">
+                          {filters.completionYear}
+                          <button
+                            onClick={() => onFiltersChange({ ...filters, completionYear: undefined })}
+                            className="ml-1 hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
                       </div>
                     </div>
                   )}

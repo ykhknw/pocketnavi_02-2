@@ -10,6 +10,7 @@ export interface AppState {
   likedBuildings: LikedBuilding[];
   searchHistory: SearchHistory[];
   showLoginModal: boolean;
+  showAdvancedSearch: boolean;
   currentPage: number;
   filters: SearchFilters;
 }
@@ -24,6 +25,7 @@ export interface AppActions {
   setLikedBuildings: (buildings: LikedBuilding[]) => void;
   setSearchHistory: (history: SearchHistory[]) => void;
   setShowLoginModal: (show: boolean) => void;
+  setShowAdvancedSearch: (show: boolean) => void;
   setCurrentPage: (page: number) => void;
   setFilters: (filters: SearchFilters) => void;
 }

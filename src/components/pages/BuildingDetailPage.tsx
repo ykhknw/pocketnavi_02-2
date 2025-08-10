@@ -7,7 +7,6 @@ import { AppHeader } from '../layout/AppHeader';
 import { BuildingDetail } from '../BuildingDetail';
 import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
-import { SearchForm } from '../SearchForm';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
 
@@ -134,19 +133,6 @@ export function BuildingDetailPage() {
                   onPhotoLike={handlePhotoLike}
                   language={context.language}
                   displayIndex={displayIndex}
-                />
-              </div>
-
-              {/* 検索フォーム */}
-              <div className="max-w-3xl mx-auto">
-                <SearchForm
-                  filters={context.filters}
-                  onFiltersChange={context.setFilters}
-                  onGetLocation={context.getCurrentLocation}
-                  locationLoading={context.locationLoading}
-                  locationError={context.locationError}
-                  language={context.language}
-                  onSearchStart={context.handleSearchStart}
                 />
               </div>
             </div>

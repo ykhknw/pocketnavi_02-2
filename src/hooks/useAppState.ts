@@ -15,6 +15,7 @@ export function useAppState() {
   const [likedBuildings, setLikedBuildings] = useState<LikedBuilding[]>([]);
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   
   // 人気検索
   const [popularSearches] = useState<SearchHistory[]>([
@@ -64,6 +65,8 @@ export function useAppState() {
     setSearchHistory,
     showLoginModal,
     setShowLoginModal,
+    showAdvancedSearch,
+    setShowAdvancedSearch,
     
     // 検索・フィルター状態
     currentPage,

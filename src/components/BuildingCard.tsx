@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -72,7 +71,6 @@ function BuildingCardComponent({
   language
 }: BuildingCardProps) {
   const context = useAppContext();
-  const navigate = useNavigate();
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   
   // 建築物IDに基づいて安定した自然画像を取得
@@ -118,79 +116,70 @@ function BuildingCardComponent({
 
   const handleArchitectSearch = useCallback((e: React.MouseEvent, name: string) => {
     e.stopPropagation();
-    // 既存フィルタをリセットし、建築家のみ設定
+    // 既存フィルターを保持し、建築家のみを追加/更新
+    const currentArchitects = context.filters.architects || [];
+    const newArchitects = currentArchitects.includes(name)
+      ? currentArchitects.filter(a => a !== name)
+      : [...currentArchitects, name];
+    
     context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [name],
-      buildingTypes: [],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
+      ...context.filters,
+      architects: newArchitects,
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    context.setShowAdvancedSearch(true);
+    // 現在のページを維持するため、navigate('/')を削除
+  }, [context]);
 
   const handleBuildingTypeSearch = useCallback((e: React.MouseEvent, type: string) => {
     e.stopPropagation();
-    // 既存フィルタをリセットし、用途のみ設定
+    // 既存フィルターを保持し、建物用途のみを追加/更新
+    const currentTypes = context.filters.buildingTypes || [];
+    const newTypes = currentTypes.includes(type)
+      ? currentTypes.filter(t => t !== type)
+      : [...currentTypes, type];
+    
     context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [type],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
+      ...context.filters,
+      buildingTypes: newTypes,
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    context.setShowAdvancedSearch(true);
+    // 現在のページを維持するため、navigate('/')を削除
+  }, [context]);
 
   const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
     e.stopPropagation();
+    // 既存フィルターを保持し、建築年のみを追加/更新
     context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [],
-      prefectures: [],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
+      ...context.filters,
       completionYear: year,
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    context.setShowAdvancedSearch(true);
+    // 現在のページを維持するため、navigate('/')を削除
+  }, [context]);
 
   const handlePrefectureSearch = useCallback((e: React.MouseEvent, pref: string) => {
     e.stopPropagation();
+    // 既存フィルターを保持し、都道府県のみを追加/更新
+    const currentPrefectures = context.filters.prefectures || [];
+    const newPrefectures = currentPrefectures.includes(pref)
+      ? currentPrefectures.filter(p => p !== pref)
+      : [...currentPrefectures, pref];
+    
     context.setFilters({
-      query: '',
-      radius: 5,
-      architects: [],
-      buildingTypes: [],
-      prefectures: [pref],
-      areas: [],
-      hasPhotos: false,
-      hasVideos: false,
-      currentLocation: null,
-      completionYear: undefined,
+      ...context.filters,
+      prefectures: newPrefectures,
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    navigate('/');
-  }, [context, navigate]);
+    context.setShowAdvancedSearch(true);
+    // 現在のページを維持するため、navigate('/')を削除
+  }, [context]);
 
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
@@ -253,7 +242,6 @@ function BuildingCardComponent({
 
           <div className="flex flex-wrap gap-1">
             {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes))
-              .slice(0, 3)
               .map((type, index) => (
                 <Badge
                   key={`${type}-${index}`}
