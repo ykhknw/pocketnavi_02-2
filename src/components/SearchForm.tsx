@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Search, MapPin, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { SearchFilters } from '../types';
 import { architectsData, prefecturesData, buildingUsageData } from '../data/searchData';
@@ -120,7 +120,7 @@ function SearchableList({
   );
 }
 
-export function SearchForm({
+function SearchFormComponent({
   filters,
   onFiltersChange,
   onGetLocation,
@@ -131,25 +131,19 @@ export function SearchForm({
   showAdvancedSearch,
   setShowAdvancedSearch
 }: SearchFormProps) {
-  // Escキーで詳細検索メニューを閉じる
+  // 内部状態としてshowAdvancedSearchを管理
+  const [internalShowAdvancedSearch, setInternalShowAdvancedSearch] = useState(showAdvancedSearch);
+  
+  // 外部のshowAdvancedSearchと内部状態を同期
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && showAdvancedSearch) {
-        setShowAdvancedSearch(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showAdvancedSearch, setShowAdvancedSearch]);
+    setInternalShowAdvancedSearch(showAdvancedSearch);
+  }, [showAdvancedSearch]);
 
-  // 選択された項目数を計算（useMemoで最適化）
-  const selectedCounts = useMemo(() => ({
-    architects: filters.architects?.length || 0,
-    buildingTypes: filters.buildingTypes?.length || 0,
-    prefectures: filters.prefectures?.length || 0,
-    areas: filters.areas?.length || 0,
-    completionYear: filters.completionYear ? 1 : 0
-  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear]);
+  // 内部状態が変更された場合、外部にも通知
+  const handleAdvancedSearchToggle = useCallback((newValue: boolean) => {
+    setInternalShowAdvancedSearch(newValue);
+    setShowAdvancedSearch(newValue);
+  }, [setShowAdvancedSearch]);
 
   // アクティブなフィルターがあるかどうかを判定
   const hasActiveFilters = 
@@ -162,12 +156,33 @@ export function SearchForm({
     filters.hasVideos ||
     (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear));
 
-  // フィルターが変更されたときに詳細検索を自動的に開く
+  // Escキーで詳細検索を閉じる
   useEffect(() => {
-    if (hasActiveFilters && !showAdvancedSearch) {
-      setShowAdvancedSearch(true);
-    }
-  }, [filters, hasActiveFilters, showAdvancedSearch, setShowAdvancedSearch]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && internalShowAdvancedSearch) {
+        handleAdvancedSearchToggle(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [internalShowAdvancedSearch, handleAdvancedSearchToggle]);
+
+  // 選択された項目数を計算（useMemoで最適化）
+  const selectedCounts = useMemo(() => ({
+    architects: filters.architects?.length || 0,
+    buildingTypes: filters.buildingTypes?.length || 0,
+    prefectures: filters.prefectures?.length || 0,
+    areas: filters.areas?.length || 0,
+    completionYear: filters.completionYear ? 1 : 0
+  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear]);
+
+  // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
+  // useEffect(() => {
+  //   if (hasActiveFilters && !showAdvancedSearch) {
+  //     setShowAdvancedSearch(true);
+  //   }
+  // }, [filters, hasActiveFilters, showAdvancedSearch, setShowAdvancedSearch]);
 
   // ハンドラー関数をuseCallbackで最適化
   const handleQueryChange = useCallback((query: string) => {
@@ -227,7 +242,7 @@ export function SearchForm({
   const clearFilters = useCallback(() => {
     onFiltersChange({
       query: '',
-      radius: 5,
+      radius: 2,
       architects: [],
       buildingTypes: [],
       prefectures: [],
@@ -275,7 +290,15 @@ export function SearchForm({
                 
                 <Button
                   variant="outline"
-                  onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+                  onClick={() => {
+                    const newValue = !internalShowAdvancedSearch;
+                    
+                    try {
+                      handleAdvancedSearchToggle(newValue);
+                    } catch (error) {
+                      console.error('内部状態変更エラー:', error);
+                    }
+                  }}
                   className="relative"
                 >
                   <Filter className="h-4 w-4" />
@@ -317,7 +340,7 @@ export function SearchForm({
           </div>
         )}
 
-        {showAdvancedSearch && (
+        {internalShowAdvancedSearch && (
           <div className="border-t pt-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-foreground">{t('detailedSearch', language)}</h3>
@@ -326,7 +349,7 @@ export function SearchForm({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setShowAdvancedSearch(false)}
+                  onClick={() => handleAdvancedSearchToggle(false)}
                   title={language === 'ja' ? '詳細検索メニューを閉じる' : 'Close detailed search'}
                 >
                   {language === 'ja' ? '閉じる' : 'Close'}
@@ -547,3 +570,20 @@ export function SearchForm({
     </Card>
   );
 }
+
+// React.memoを使用してコンポーネントを最適化
+export const SearchForm = React.memo(SearchFormComponent, (prevProps, nextProps) => {
+  // showAdvancedSearchが変更された場合は必ず再レンダリング
+  if (prevProps.showAdvancedSearch !== nextProps.showAdvancedSearch) {
+    return false; // 再レンダリング
+  }
+  
+  // その他のpropsの変更をチェック
+  const shouldUpdate = 
+    prevProps.filters !== nextProps.filters ||
+    prevProps.language !== nextProps.language ||
+    prevProps.locationLoading !== nextProps.locationLoading ||
+    prevProps.locationError !== nextProps.locationError;
+  
+  return !shouldUpdate; // shouldUpdateがtrueの場合は再レンダリング
+});

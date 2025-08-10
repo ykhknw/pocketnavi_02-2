@@ -252,7 +252,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
             className="w-full bg-purple-500 hover:bg-purple-600 text-white"
           >
             <Search className="h-4 w-4 mr-2" />
-            {language === 'ja' ? 'Search Nearby' : 'Search Nearby'}
+                            {language === 'ja' ? '付近を検索' : 'Search Nearby'}
           </Button>
         </div>
       </CardContent>

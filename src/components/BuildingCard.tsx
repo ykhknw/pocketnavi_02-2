@@ -128,7 +128,6 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    context.setShowAdvancedSearch(true);
     // 現在のページを維持するため、navigate('/')を削除
   }, [context]);
 
@@ -146,7 +145,6 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    context.setShowAdvancedSearch(true);
     // 現在のページを維持するため、navigate('/')を削除
   }, [context]);
 
@@ -159,7 +157,6 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    context.setShowAdvancedSearch(true);
     // 現在のページを維持するため、navigate('/')を削除
   }, [context]);
 
@@ -177,7 +174,6 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    context.setShowAdvancedSearch(true);
     // 現在のページを維持するため、navigate('/')を削除
   }, [context]);
 

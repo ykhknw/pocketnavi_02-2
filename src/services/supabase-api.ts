@@ -1,4 +1,4 @@
-import { PhotoChecker } from '../utils/photo-checker';
+
 import { supabase } from '../lib/supabase'
 import { Building, SearchFilters, Architect, Photo } from '../types'
 
@@ -464,24 +464,13 @@ class SupabaseApiClient {
       }));
     }
 
-    // 外部写真URLの生成
+    // 外部写真URLの生成（画像チェックを無効化）
     const generatePhotosFromUid = async (uid: string): Promise<Photo[]> => {
-      if (!uid) return [];
-      
-      // 実際に存在する写真のみを取得
-      const existingPhotos = await PhotoChecker.getExistingPhotos(uid);
-      
-      return existingPhotos.map((photo, index) => ({
-        id: index + 1,
-        building_id: data.building_id,
-        url: photo.url,
-        thumbnail_url: photo.url,
-        likes: 0,
-        created_at: new Date().toISOString()
-      }));
+      // 画像チェックを無効化し、全てのデータで画像がないものとして扱う
+      return [];
     };
 
-    // 写真データを非同期で取得
+    // 写真データを取得（画像なし）
     const photos = await generatePhotosFromUid(data.uid);
     
     return {

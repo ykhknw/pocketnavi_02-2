@@ -204,22 +204,22 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);
 
-  // フィルターが変更されたときに詳細検索を自動的に開く
-  useEffect(() => {
-    const hasActiveFilters = 
-      state.filters.query ||
-      (state.filters.architects?.length || 0) > 0 ||
-      state.filters.buildingTypes.length > 0 ||
-      state.filters.prefectures.length > 0 ||
-      state.filters.areas.length > 0 ||
-      state.filters.hasPhotos ||
-      state.filters.hasVideos ||
-      (typeof state.filters.completionYear === 'number' && !isNaN(state.filters.completionYear));
+  // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
+  // useEffect(() => {
+  //   const hasActiveFilters = 
+  //     state.filters.query ||
+  //     (state.filters.architects?.length || 0) > 0 ||
+  //     state.filters.buildingTypes.length > 0 ||
+  //     state.filters.prefectures.length > 0 ||
+  //     state.filters.areas.length > 0 ||
+  //     state.filters.hasPhotos ||
+  //     state.filters.hasVideos ||
+  //     (typeof state.filters.completionYear === 'number' && !isNaN(state.filters.completionYear));
     
-    if (hasActiveFilters && !state.showAdvancedSearch) {
-      state.setShowAdvancedSearch(true);
-    }
-  }, [state.filters, state.showAdvancedSearch, state.setShowAdvancedSearch]);
+  //   if (hasActiveFilters && !state.showAdvancedSearch) {
+  //     // 自動的に詳細検索を開く機能は一時的に無効化
+  //   }
+  // }, [state.filters, state.showAdvancedSearch]);
 
   const contextValue: AppContextType = {
     // 状態
