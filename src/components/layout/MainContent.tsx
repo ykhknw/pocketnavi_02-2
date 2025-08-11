@@ -107,25 +107,15 @@ function MainContentComponent({
           case 'ArrowLeft':
             event.preventDefault();
             if (currentPage > 1) {
-              handlePreviousPage();
+              const newPage = Math.max(1, currentPage - 5);
+              handlePageChange(newPage);
             }
             break;
           case 'ArrowRight':
             event.preventDefault();
             if (currentPage < totalPages) {
-              handleNextPage();
-            }
-            break;
-          case 'Home':
-            event.preventDefault();
-            if (currentPage > 1) {
-              handlePageChange(1);
-            }
-            break;
-          case 'End':
-            event.preventDefault();
-            if (currentPage < totalPages) {
-              handlePageChange(totalPages);
+              const newPage = Math.min(totalPages, currentPage + 5);
+              handlePageChange(newPage);
             }
             break;
         }
@@ -144,32 +134,6 @@ function MainContentComponent({
           event.preventDefault();
           if (currentPage < totalPages) {
             handleNextPage();
-          }
-          break;
-        case 'Home':
-          event.preventDefault();
-          if (currentPage > 1) {
-            handlePageChange(1);
-          }
-          break;
-        case 'End':
-          event.preventDefault();
-          if (currentPage < totalPages) {
-            handlePageChange(totalPages);
-          }
-          break;
-        case 'PageUp':
-          event.preventDefault();
-          if (currentPage > 1) {
-            const newPage = Math.max(1, currentPage - 5);
-            handlePageChange(newPage);
-          }
-          break;
-        case 'PageDown':
-          event.preventDefault();
-          if (currentPage < totalPages) {
-            const newPage = Math.min(totalPages, currentPage + 5);
-            handlePageChange(newPage);
           }
           break;
       }
@@ -306,16 +270,8 @@ function MainContentComponent({
                         <span>{language === 'ja' ? '前/次のページ' : 'Previous/Next page'}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Home/End</span>
-                        <span>{language === 'ja' ? '最初/最後のページ' : 'First/Last page'}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>PageUp/Down</span>
-                        <span>{language === 'ja' ? '5ページ移動' : 'Move 5 pages'}</span>
-                      </div>
-                      <div className="flex justify-between">
                         <span>Ctrl + ← →</span>
-                        <span>{language === 'ja' ? '前/次のページ' : 'Previous/Next page'}</span>
+                        <span>{language === 'ja' ? '5ページ移動' : 'Move 5 pages'}</span>
                       </div>
                     </div>
                   </div>

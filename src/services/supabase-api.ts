@@ -212,30 +212,55 @@ class SupabaseApiClient {
 
     // 建築家フィルター（言語切替対応 / 関連テーブルの列を参照）
     if (filters.architects && filters.architects.length > 0) {
-      const column = language === 'ja' ? 'architectJa' : 'architectEn';
-      const conditions = filters.architects.map((name) => {
-        const escaped = String(name).replace(/[,]/g, '');
-        return `${column}.ilike.*${escaped}*`;
-      });
-      
-      // 🔍 建築家フィルターの詳細ログを追加
-      console.log('🔍 建築家フィルター詳細:', {
+      console.log('🔍 建築家フィルター開始:', {
         filters: filters.architects,
         language,
-        column,
-        conditions,
         rawFilters: filters
       });
       
-      if (conditions.length > 0) {
-        // 直接 architects_table を foreignTable として指定し、その列に対して or 条件を適用
-        query = (query as any).or(conditions.join(','), { foreignTable: 'building_architects.architects_table' });
-        
-        // 🔍 クエリ適用後のログ
-        console.log('🔍 建築家フィルター適用後:', {
-          conditionsApplied: conditions.join(','),
-          foreignTable: 'building_architects.architects_table'
+      try {
+        // ステップ1: 建築家名で検索して建築家IDを取得
+        const architectConditions = filters.architects.map(name => {
+          const escaped = String(name).replace(/[,]/g, '');
+          return language === 'ja' 
+            ? `architectJa.ilike.*${escaped}*`
+            : `architectEn.ilike.*${escaped}*`;
         });
+        
+        const { data: architects, error: architectError } = await supabase
+          .from('architects_table')
+          .select('architect_id')
+          .or(architectConditions.join(','));
+        
+        if (architectError) {
+          console.warn('🔍 建築家フィルター検索エラー（ステップ1）:', architectError);
+        } else if (architects && architects.length > 0) {
+          const architectIds = architects.map(a => a.architect_id);
+          console.log('🔍 建築家フィルター検索結果（architect_id）:', architectIds.length, '件');
+          
+          // ステップ2: 建築家IDから建築物IDを取得
+          const { data: buildingIds, error: buildingError } = await supabase
+            .from('building_architects')
+            .select('building_id')
+            .in('architect_id', architectIds);
+          
+          if (buildingError) {
+            console.warn('🔍 建築家フィルター検索エラー（ステップ2）:', buildingError);
+          } else if (buildingIds && buildingIds.length > 0) {
+            const filterBuildingIds = buildingIds.map(b => b.building_id);
+            console.log('🔍 建築家フィルター検索結果（building_id）:', filterBuildingIds.length, '件');
+            
+            // 建築家フィルター条件を直接クエリに適用
+            query = (query as any).in('building_id', filterBuildingIds);
+            
+            console.log('🔍 建築家フィルター条件適用完了:', {
+              filterBuildingIds: filterBuildingIds.length,
+              appliedQuery: query
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('🔍 建築家フィルターでエラー:', error);
       }
     }
 
