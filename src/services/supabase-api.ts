@@ -134,27 +134,32 @@ class SupabaseApiClient {
        .not('lat', 'is', null)
        .not('lng', 'is', null);
 
-     // 🔍 建築家名検索の結果を保存する変数を追加
-     let architectBuildingIds: number[] = [];
+           // 🔍 建築家名検索の結果を保存する変数（OR条件統合用）
+      let architectBuildingIds: number[] = [];
 
-    // テキスト検索（建築家名含む）
-    if (filters.query.trim()) {
-      // メインテーブルの検索条件
-      const mainConditions = [
-        `title.ilike.%${filters.query}%`,
-        `titleEn.ilike.%${filters.query}%`,
-        `location.ilike.%${filters.query}%`
-      ];
-      
-      console.log('🔍 検索条件（メイン）:', { 
-        query: filters.query, 
-        mainConditions
-      });
-      
-      // メイン条件を適用
-      query = (query as any).or(mainConditions.join(','));
-      
-             // 建築家名の検索条件（関連テーブル）- 正しいSupabase構文で修正
+         // テキスト検索（建築家名含む）- 全ての条件をOR条件に統合
+     if (filters.query.trim()) {
+       // 全ての検索条件を配列に格納
+       const allConditions: string[] = [];
+       
+       // メインテーブルの検索条件（言語対応）
+       if (language === 'ja') {
+         allConditions.push(`title.ilike.%${filters.query}%`);
+         allConditions.push(`buildingTypes.ilike.%${filters.query}%`);
+         allConditions.push(`location.ilike.%${filters.query}%`);
+       } else {
+         allConditions.push(`titleEn.ilike.%${filters.query}%`);
+         allConditions.push(`buildingTypesEn.ilike.%${filters.query}%`);
+         allConditions.push(`locationEn_from_datasheetChunkEn.ilike.%${filters.query}%`);
+       }
+       
+       console.log('🔍 検索条件（メイン）:', { 
+         query: filters.query, 
+         language,
+         allConditions
+       });
+       
+       // 建築家名の検索条件（関連テーブル）
        try {
          console.log('🔍 建築家名検索開始:', filters.query);
          
@@ -176,45 +181,34 @@ class SupabaseApiClient {
              .select('building_id')
              .in('architect_id', architectIds);
            
-                       if (buildingError) {
-              console.warn('🔍 建築家名検索エラー（ステップ2）:', buildingError);
-            } else if (buildingIds && buildingIds.length > 0) {
-              // 🔍 building_idの受け渡し処理を詳細にログ出力
-              console.log('🔍 buildingIds from architect search:', buildingIds);
-              console.log('🔍 buildingIds type:', typeof buildingIds, Array.isArray(buildingIds));
-              console.log('🔍 buildingIds length:', buildingIds.length);
-              
-              const allBuildingIds = buildingIds.map(b => b.building_id);
-              console.log('🔍 allBuildingIds after map:', allBuildingIds);
-              console.log('🔍 allBuildingIds type:', typeof allBuildingIds, Array.isArray(allBuildingIds));
-              console.log('🔍 allBuildingIds length:', allBuildingIds.length);
-              
-              // 🔍 建築家名検索結果を保存する変数に代入
-              architectBuildingIds = allBuildingIds;
-              
-              console.log('🔍 architectBuildingIds代入後:', architectBuildingIds);
-              console.log('🔍 architectBuildingIds type:', typeof architectBuildingIds, Array.isArray(architectBuildingIds));
-              console.log('🔍 architectBuildingIds length:', architectBuildingIds.length);
-              
-              // ステップ3: 建築家名で見つかった建築物を追加
-              const architectQuery = `building_id.in.(${allBuildingIds.join(',')})`;
-              query = query.or(architectQuery);
-              
-              // 🔍 建築家名検索クエリ適用後のログ
-              console.log('🔍 建築家名検索クエリ適用後:', {
-                architectQuery,
-                allBuildingIds: allBuildingIds.length,
-                sampleBuildingIds: allBuildingIds.slice(0, 5), // 最初の5件を表示
-                queryObject: query,
-                architectBuildingIds: architectBuildingIds.length,
-                sampleArchitectBuildingIds: architectBuildingIds.slice(0, 5)
-              });
-            }
+           if (buildingError) {
+             console.warn('🔍 建築家名検索エラー（ステップ2）:', buildingError);
+           } else if (buildingIds && buildingIds.length > 0) {
+             const allBuildingIds = buildingIds.map(b => b.building_id);
+             console.log('🔍 建築家名検索結果（building_id）:', allBuildingIds.length, '件');
+             
+             // 建築家名検索結果を保存
+             architectBuildingIds = allBuildingIds;
+             
+             // 建築家名検索条件をOR条件に追加
+             allConditions.push(`building_id.in.(${allBuildingIds.join(',')})`);
+             
+             console.log('🔍 建築家名検索クエリ適用後（OR条件統合）:', {
+               allConditions,
+               architectBuildingIds: architectBuildingIds.length
+             });
+           }
          }
        } catch (error) {
          console.warn('🔍 建築家名検索でエラー:', error);
        }
-    }
+       
+       // 全ての条件をOR条件として適用
+       if (allConditions.length > 0) {
+         query = (query as any).or(allConditions.join(','));
+         console.log('🔍 統合されたOR条件適用完了:', allConditions.join(','));
+       }
+     }
 
     // 建築家フィルター（言語切替対応 / 関連テーブルの列を参照）
     if (filters.architects && filters.architects.length > 0) {
@@ -277,30 +271,15 @@ class SupabaseApiClient {
          .not('buildingTypesEn', 'eq', 'housing');
      }
 
-     // 🔍 建築家名検索結果を最終クエリに適用
-     console.log('🔍 IN条件適用前の状態:', {
-       architectBuildingIds_exists: !!architectBuildingIds,
-       architectBuildingIds_length: architectBuildingIds?.length,
-       architectBuildingIds_type: typeof architectBuildingIds,
-       architectBuildingIds_isArray: Array.isArray(architectBuildingIds),
-       sample_ids: architectBuildingIds?.slice(0, 5)
-     });
-
-     if (architectBuildingIds && architectBuildingIds.length > 0) {
-       console.log('🔍 IN条件適用開始...');
-       console.log('🔍 適用前のクエリオブジェクト:', query);
-       
-       query = query.in('building_id', architectBuildingIds);
-       
-       console.log('🔍 IN条件適用後のクエリオブジェクト:', query);
-       console.log('🔍 IN条件適用完了');
-     } else {
-       console.log('🔍 IN条件スキップ理由:', {
-         architectBuildingIds_is_null: architectBuildingIds === null,
-         architectBuildingIds_is_undefined: architectBuildingIds === undefined,
-         length_is_zero: architectBuildingIds?.length === 0
-       });
-     }
+                                               // 🔍 建築家名検索結果は既にOR条件に統合済み（重複なし）
+        console.log('🔍 建築家名検索結果の統合状況:', {
+          architectBuildingIds_exists: !!architectBuildingIds,
+          architectBuildingIds_length: architectBuildingIds?.length,
+          architectBuildingIds_type: typeof architectBuildingIds,
+          architectBuildingIds_isArray: Array.isArray(architectBuildingIds),
+          sample_ids: architectBuildingIds?.slice(0, 5),
+          note: 'OR条件に統合済みのため、追加のIN条件は不要'
+        });
 
      console.log('🔍 最終的なクエリオブジェクト（実行直前）:', query);
 
