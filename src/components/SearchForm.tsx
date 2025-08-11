@@ -173,6 +173,7 @@ function SearchFormComponent({
 
   // 選択された項目数を計算（useMemoで最適化）
   const selectedCounts = useMemo(() => ({
+    query: filters.query.trim() ? 1 : 0, // 検索文字列を追加
     architects: filters.architects?.length || 0,
     buildingTypes: filters.buildingTypes?.length || 0,
     prefectures: filters.prefectures?.length || 0,
@@ -180,7 +181,7 @@ function SearchFormComponent({
     completionYear: filters.completionYear ? 1 : 0,
     locationSearch: filters.currentLocation ? 1 : 0, // 地点検索を追加
     media: (filters.hasPhotos ? 1 : 0) + (filters.hasVideos ? 1 : 0) // メディアフィルターを追加
-  }), [filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear, filters.currentLocation, filters.hasPhotos, filters.hasVideos]);
+  }), [filters.query, filters.architects, filters.buildingTypes, filters.prefectures, filters.areas, filters.completionYear, filters.currentLocation, filters.hasPhotos, filters.hasVideos]);
 
   // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
   // useEffect(() => {
@@ -202,6 +203,14 @@ function SearchFormComponent({
       onSearchStart();
     }
     onFiltersChange({ ...filters, query });
+  }, [filters, onFiltersChange, onSearchStart]);
+
+  const handleQueryClear = useCallback(() => {
+    // 検索開始時のコールバックを呼び出し
+    if (onSearchStart) {
+      onSearchStart();
+    }
+    onFiltersChange({ ...filters, query: '' });
   }, [filters, onFiltersChange, onSearchStart]);
 
   const handleRadiusChange = useCallback((radius: number) => {
@@ -335,6 +344,18 @@ function SearchFormComponent({
                   <div className="mt-3 p-3 bg-muted/50 rounded-lg">
                     <div className="text-sm text-muted-foreground">
                       <span className="font-medium">{language === 'ja' ? '選択中の項目：' : 'Selected items: '}</span>
+                      {filters.query.trim() ? (
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          {filters.query}
+                          <button
+                            onClick={handleQueryClear}
+                            className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
+                            title={language === 'ja' ? '削除' : 'Remove'}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ) : null}
                       {filters.architects && filters.architects.length > 0 ? 
                         filters.architects.map(arch => (
                           <span key={arch} className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
@@ -404,8 +425,18 @@ function SearchFormComponent({
                         </span>
                       ) : null}
                       {filters.currentLocation ? (
-                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
-                          {language === 'ja' ? '地点検索' : 'Location Search'}
+                        <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-2 py-1 rounded text-xs ml-2">
+                          <span>{language === 'ja' ? '地点検索' : 'Location Search'}</span>
+                          <select
+                            value={filters.radius}
+                            onChange={(e) => handleRadiusChange(Number(e.target.value))}
+                            className="px-1 py-0.5 border border-primary/20 rounded text-xs bg-primary/5 text-primary min-w-[50px]"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <option value={5}>5km</option>
+                            <option value={10}>10km</option>
+                            <option value={20}>20km</option>
+                          </select>
                           <button
                             onClick={handleLocationClear}
                             className="hover:bg-primary/20 rounded-full w-4 h-4 flex items-center justify-center"
@@ -490,35 +521,7 @@ function SearchFormComponent({
           </div>
         )}
 
-        {filters.currentLocation && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-green-700 text-sm">{t('searchingFromLocation', language)}</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">{t('radius', language)}:</span>
-                <select
-                  value={filters.radius}
-                  onChange={(e) => handleRadiusChange(Number(e.target.value))}
-                  className="px-2 py-1 border border-input rounded text-sm bg-background"
-                >
-                  <option value={5}>5km</option>
-                  <option value={10}>10km</option>
-                  <option value={20}>20km</option>
-                </select>
-                {/* 地点検索個別解除ボタン */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLocationClear}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  title={t('clearLocationSearch', language)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {internalShowAdvancedSearch && (
           <div className="border-t pt-4">
@@ -628,7 +631,10 @@ function SearchFormComponent({
                     {filters.currentLocation && (
                       <div className="pt-2">
                         <div className="text-xs text-muted-foreground mb-2">
-                          {language === 'ja' ? '現在地が設定されています' : 'Current location is set'}
+                          {language === 'ja' 
+                            ? `検索中心: (${filters.currentLocation.lat.toFixed(6)}, ${filters.currentLocation.lng.toFixed(6)})`
+                            : `Search center: (${filters.currentLocation.lat.toFixed(6)}, ${filters.currentLocation.lng.toFixed(6)})`
+                          }
                         </div>
                         <Button
                           onClick={handleLocationClear}

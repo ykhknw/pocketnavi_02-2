@@ -77,7 +77,8 @@ function BuildingCardComponent({
   const natureImage = useMemo(() => getStableNatureImage(building.id), [building.id]);
 
   // ハンドラー関数をuseCallbackで最適化
-  const handleExternalImageSearch = useCallback((query: string) => {
+  const handleExternalImageSearch = useCallback((e: React.MouseEvent, query: string) => {
+    e.stopPropagation(); // イベントの伝播を防ぐ
     const encodedQuery = encodeURIComponent(query);
     window.open(`https://images.google.com/images?q=${encodedQuery}`, '_blank');
   }, []);
@@ -251,9 +252,9 @@ function BuildingCardComponent({
                 variant="outline"
                 className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
                 title={language === 'ja' ? 'この都道府県で検索' : 'Search by this prefecture'}
-                onClick={(e) => handlePrefectureSearch(e, building.prefectures)}
+                onClick={(e) => handlePrefectureSearch(e, language === 'ja' ? building.prefectures : (building.prefecturesEn || building.prefectures))}
               >
-                {building.prefectures}
+                {language === 'ja' ? building.prefectures : (building.prefecturesEn || building.prefectures)}
               </Badge>
             )}
             {building.distance && (
@@ -339,7 +340,7 @@ function BuildingCardComponent({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleExternalImageSearch(getSearchQuery())}
+            onClick={(e) => handleExternalImageSearch(e, getSearchQuery())}
             className="text-xs"
           >
             <ExternalLink className="h-3 w-3 mr-1" />
