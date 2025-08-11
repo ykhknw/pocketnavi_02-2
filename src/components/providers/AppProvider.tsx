@@ -7,6 +7,7 @@ import { useAppActions } from '../../hooks/useAppActions';
 import { useAppHandlers } from '../../hooks/useAppHandlers';
 import { useAppEffects } from '../../hooks/useAppEffects';
 
+
 // React Queryクライアントの設定
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +43,8 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     effects.useApi,
     effects.language
   );
+
+
   
   // URL同期効果（location.search の変化に反応して実行）
   const syncURLToState = effects.useURLSyncEffect(
@@ -97,12 +100,20 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   }, [effects.useApi, buildingsData.buildings, state.filters, effects.language]);
   
   // ページネーション計算
+  const totalItemsForPagination = effects.useApi 
+    ? buildingsData.totalBuildings  // API使用時はAPI結果数
+    : effects.filteredBuildings.length;  // モックデータの結果数
+
   const pagination = actions.calculatePagination(
-    effects.useApi ? buildingsData.totalBuildings : effects.filteredBuildings.length,
+    totalItemsForPagination,
     state.itemsPerPage,
     state.currentPage
   );
 
+
+
+
+  
   // デバッグログ
   console.log('ページネーション計算:', {
     useApi: effects.useApi,
@@ -113,7 +124,8 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     totalPages: pagination.totalPages,
     startIndex: pagination.startIndex,
     hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
-    architects: state.filters.architects
+    architects: state.filters.architects,
+
   });
   
   // 現在の建物リスト

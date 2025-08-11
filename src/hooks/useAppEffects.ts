@@ -5,6 +5,7 @@ import { useGeolocation } from './useGeolocation';
 import { useLanguage } from './useLanguage';
 import { SearchFilters, Building } from '../types';
 import { searchBuildings } from '../utils/search';
+import { useOptimizedSearch } from './useOptimizedSearch';
 
 export function useAppEffects() {
   // Supabase接続状態
@@ -147,7 +148,7 @@ export function useAppEffects() {
         return updateLocation;
       }, []);
 
-  // フィルター変更効果（最適化版）
+  // フィルター変更効果（段階的検索対応版）
   const useFilterChangeEffect = useCallback((
     useApi: boolean,
     buildings: Building[],

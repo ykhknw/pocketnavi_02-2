@@ -124,3 +124,4 @@ export function searchBuildings(
   // console.debug('🔍 Final results:', results.length, 'buildings');
   return results;
 }
+
