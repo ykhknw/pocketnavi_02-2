@@ -8,6 +8,7 @@ import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
 import { Building } from '../../types';
+import { ScrollToTopButton } from '../ScrollToTopButton';
 
 // 重いコンポーネントを動的インポート
 const LoginModal = lazy(() => import('../LoginModal').then(module => ({ default: module.LoginModal })));
@@ -125,6 +126,12 @@ export function HomePage() {
       </div>
       
       <Footer language={language} />
+
+      {/* スクロールトップボタン */}
+      <ScrollToTopButton 
+        variant="fab" 
+        language={language}
+      />
 
       {/* モーダルコンポーネント */}
       {showLoginModal && (

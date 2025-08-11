@@ -237,21 +237,6 @@ function BuildingCardComponent({
           </div>
 
           <div className="flex flex-wrap gap-1">
-            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes))
-              .map((type, index) => (
-                <Badge
-                  key={`${type}-${index}`}
-                  variant="secondary"
-                  className="border-gray-300 text-gray-700 text-sm cursor-pointer hover:bg-gray-100"
-                  title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
-                  onClick={(e) => handleBuildingTypeSearch(e, type)}
-                >
-                  {type}
-                </Badge>
-              ))}
-          </div>
-
-          <div className="flex flex-wrap gap-1">
             <Badge
               variant="outline"
               className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
@@ -279,6 +264,21 @@ function BuildingCardComponent({
                 {formatDistance(building.distance)}
               </Badge>
             )}
+          </div>
+
+          <div className="flex flex-wrap gap-1">
+            {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes))
+              .map((type, index) => (
+                <Badge
+                  key={`${type}-${index}`}
+                  variant="secondary"
+                  className="border-gray-300 text-gray-700 text-sm cursor-pointer hover:bg-gray-100"
+                  title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
+                  onClick={(e) => handleBuildingTypeSearch(e, type)}
+                >
+                  {type}
+                </Badge>
+              ))}
           </div>
 
           {building.completionYears && (

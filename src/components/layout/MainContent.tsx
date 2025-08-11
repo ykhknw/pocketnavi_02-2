@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Building, SearchFilters } from '../../types';
@@ -90,6 +90,99 @@ function MainContentComponent({
       handlePageChange(page);
     }
   }, [handlePageChange]);
+
+  // キーボードショートカットの実装
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // フォーム入力中はキーボードショートカットを無効化
+      if (event.target instanceof HTMLInputElement || 
+          event.target instanceof HTMLTextAreaElement || 
+          event.target instanceof HTMLSelectElement) {
+        return;
+      }
+
+      // Ctrl/Cmd + キーの組み合わせ
+      if (event.ctrlKey || event.metaKey) {
+        switch (event.key) {
+          case 'ArrowLeft':
+            event.preventDefault();
+            if (currentPage > 1) {
+              handlePreviousPage();
+            }
+            break;
+          case 'ArrowRight':
+            event.preventDefault();
+            if (currentPage < totalPages) {
+              handleNextPage();
+            }
+            break;
+          case 'Home':
+            event.preventDefault();
+            if (currentPage > 1) {
+              handlePageChange(1);
+            }
+            break;
+          case 'End':
+            event.preventDefault();
+            if (currentPage < totalPages) {
+              handlePageChange(totalPages);
+            }
+            break;
+        }
+        return;
+      }
+
+      // 単独のキー
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          if (currentPage > 1) {
+            handlePreviousPage();
+          }
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          if (currentPage < totalPages) {
+            handleNextPage();
+          }
+          break;
+        case 'Home':
+          event.preventDefault();
+          if (currentPage > 1) {
+            handlePageChange(1);
+          }
+          break;
+        case 'End':
+          event.preventDefault();
+          if (currentPage < totalPages) {
+            handlePageChange(totalPages);
+          }
+          break;
+        case 'PageUp':
+          event.preventDefault();
+          if (currentPage > 1) {
+            const newPage = Math.max(1, currentPage - 5);
+            handlePageChange(newPage);
+          }
+          break;
+        case 'PageDown':
+          event.preventDefault();
+          if (currentPage < totalPages) {
+            const newPage = Math.min(totalPages, currentPage + 5);
+            handlePageChange(newPage);
+          }
+          break;
+      }
+    };
+
+    // キーボードイベントリスナーを追加
+    document.addEventListener('keydown', handleKeyDown);
+
+    // クリーンアップ
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentPage, totalPages, handlePageChange, handlePreviousPage, handleNextPage]);
 
   if (buildingsError) {
     return (
@@ -193,39 +286,81 @@ function MainContentComponent({
 
               {/* Pagination */}
               {(useApi ? totalBuildings : filteredBuildings.length) >= 10 && totalPages > 1 && (
-                <div className="flex justify-center items-center space-x-2 mt-8 w-full">
-                  <button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {language === 'ja' ? '前へ' : 'Previous'}
-                  </button>
+                <div className="flex flex-col items-center space-y-4 mt-8 w-full">
+                  {/* ページ情報の表示改善 */}
+                  <div className="text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-lg">
+                    {language === 'ja' 
+                      ? `ページ ${currentPage} / ${totalPages} (全${useApi ? totalBuildings : filteredBuildings.length}件)`
+                      : `Page ${currentPage} of ${totalPages} (${useApi ? totalBuildings : filteredBuildings.length} total items)`
+                    }
+                  </div>
                   
-                  {getPaginationRange().map((page, index) => (
+                  {/* キーボードショートカットの説明 */}
+                  <div className="text-xs text-muted-foreground bg-blue-50 border border-blue-200 px-3 py-2 rounded-lg max-w-md text-center">
+                    <div className="font-medium mb-1">
+                      {language === 'ja' ? 'キーボードショートカット' : 'Keyboard Shortcuts'}
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between">
+                        <span>← →</span>
+                        <span>{language === 'ja' ? '前/次のページ' : 'Previous/Next page'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Home/End</span>
+                        <span>{language === 'ja' ? '最初/最後のページ' : 'First/Last page'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>PageUp/Down</span>
+                        <span>{language === 'ja' ? '5ページ移動' : 'Move 5 pages'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Ctrl + ← →</span>
+                        <span>{language === 'ja' ? '前/次のページ' : 'Previous/Next page'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* ページネーションコントロール */}
+                  <div className="flex justify-center items-center space-x-2">
                     <button
-                      key={index}
-                      onClick={() => handlePageClick(page)}
-                      disabled={typeof page !== 'number'}
-                      className={`px-3 py-2 rounded-md text-sm font-medium ${
-                        typeof page === 'number'
-                          ? page === currentPage
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                          : 'text-gray-400 cursor-default'
-                      }`}
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
                     >
-                      {page}
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                      {language === 'ja' ? '前へ' : 'Previous'}
                     </button>
-                  ))}
-                  
-                  <button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {language === 'ja' ? '次へ' : 'Next'}
-                  </button>
+                    
+                    {getPaginationRange().map((page, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handlePageClick(page)}
+                        disabled={typeof page !== 'number'}
+                        className={`px-3 py-2 rounded-md text-sm font-medium ${
+                          typeof page === 'number'
+                            ? page === currentPage
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-400 cursor-default'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
+                    >
+                      {language === 'ja' ? '次へ' : 'Next'}
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               )}
             </>
@@ -260,4 +395,4 @@ const arePropsEqual = (prevProps: MainContentProps, nextProps: MainContentProps)
   );
 };
 
-export const MainContent = memo(MainContentComponent, arePropsEqual); 
+export const MainContent = memo(MainContentComponent, arePropsEqual);

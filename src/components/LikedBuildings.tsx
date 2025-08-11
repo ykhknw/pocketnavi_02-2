@@ -13,7 +13,10 @@ interface LikedBuildingsProps {
 }
 
 export function LikedBuildings({ likedBuildings, language, onBuildingClick, onRemoveBuilding }: LikedBuildingsProps) {
-  if (likedBuildings.length === 0) {
+  // likedBuildingsがundefinedまたはnullの場合は空配列として扱う
+  const safeLikedBuildings = likedBuildings || [];
+  
+  if (safeLikedBuildings.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -37,12 +40,12 @@ export function LikedBuildings({ likedBuildings, language, onBuildingClick, onRe
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Heart className="h-5 w-5 text-red-500" />
-          {t('likedBuildings', language)} ({likedBuildings.length})
+          {t('likedBuildings', language)} ({safeLikedBuildings.length})
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          {likedBuildings.map((building) => (
+          {safeLikedBuildings.map((building) => (
             <div key={building.id} className="flex items-center gap-2 group">
               <Button
                 variant="ghost"

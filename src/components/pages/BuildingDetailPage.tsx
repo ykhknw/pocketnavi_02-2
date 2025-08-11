@@ -9,6 +9,7 @@ import { Sidebar } from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { ScrollToTopButton } from '../ScrollToTopButton';
 
 export function BuildingDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -140,25 +141,31 @@ export function BuildingDetailPage() {
           
           <div className="lg:col-span-1">
             <Sidebar
-              buildings={context.currentBuildings}
+              buildings={context.currentBuildings || []}
               selectedBuilding={finalBuilding}
-              onBuildingSelect={context.handleBuildingSelect}
-              currentLocation={context.filters.currentLocation}
-              language={context.language}
+              onBuildingSelect={() => {/* 詳細ページでは未使用 */}}
+              currentLocation={context.locationLoading ? null : { lat: 0, lng: 0 }}
               startIndex={context.startIndex}
               onSearchAround={context.handleSearchAround}
+              language={context.language}
               likedBuildings={context.likedBuildings}
               onLikedBuildingClick={context.handleLikedBuildingClick}
               onRemoveLikedBuilding={context.handleRemoveLikedBuilding}
-              recentSearches={context.searchHistory}
-              popularSearches={context.popularSearches}
+              recentSearches={context.searchHistory || []}
+              popularSearches={context.popularSearches || []}
               onSearchClick={context.handleSearchFromHistory}
             />
           </div>
         </div>
       </div>
-      
+
       <Footer language={context.language} />
+
+      {/* スクロールトップボタン */}
+      <ScrollToTopButton 
+        variant="fab" 
+        language={context.language}
+      />
     </div>
   );
 } 

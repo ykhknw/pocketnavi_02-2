@@ -9,7 +9,7 @@ export const translations = {
     
     // Search
     searchPlaceholder: '建築物名、建築家名、地域名で検索...',
-    currentLocation: '現在地',
+    currentLocation: '現在地を検索',
     detailedSearch: '詳細検索',
     clearFilters: 'フィルターをクリア',
     buildingTypes: '建築種別',
@@ -100,7 +100,7 @@ export const translations = {
     
     // Search
     searchPlaceholder: 'Search by building name, architect, or location...',
-    currentLocation: 'Current Location',
+    currentLocation: 'Search Current Location',
     detailedSearch: 'Advanced Search',
     clearFilters: 'Clear Filters',
     buildingTypes: 'Building Types',

@@ -398,10 +398,10 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
 // Props比較関数
 const arePropsEqual = (prevProps: MapProps, nextProps: MapProps): boolean => {
   return (
-    prevProps.buildings.length === nextProps.buildings.length &&
-    prevProps.buildings.every((building, index) => 
-      building.id === nextProps.buildings[index]?.id
-    ) &&
+    (prevProps.buildings?.length ?? 0) === (nextProps.buildings?.length ?? 0) &&
+    (prevProps.buildings?.every((building, index) => 
+      building.id === nextProps.buildings?.[index]?.id
+    ) ?? true) &&
     prevProps.selectedBuilding?.id === nextProps.selectedBuilding?.id &&
     prevProps.currentLocation?.lat === nextProps.currentLocation?.lat &&
     prevProps.currentLocation?.lng === nextProps.currentLocation?.lng &&
