@@ -128,6 +128,11 @@ export function useAppHandlers() {
       radius: 5
     }));
     setCurrentPage(1);
+    
+    // ホームページにナビゲート（建築物詳細ページから移動する場合）
+    if (window.location.pathname.startsWith('/building/')) {
+      window.location.href = `/?lat=${lat}&lng=${lng}&radius=5`;
+    }
   };
 
   // ページ変更ハンドラー

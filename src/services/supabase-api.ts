@@ -878,7 +878,7 @@ class SupabaseApiClient {
       return isNaN(parsed) ? new Date().getFullYear() : parsed;
     };
 
-    // 建築家データの変換（全角スペース区切りに対応）
+    // 建築家データの変換（building_architectsテーブルのみから取得）
     let architects: any[] = [];
     if (data.building_architects && data.building_architects.length > 0) {
       // データベースから取得した建築家データ
@@ -888,16 +888,8 @@ class SupabaseApiClient {
         architectEn: ba.architects_table?.architectEn || ba.architects_table?.architectJa || '',
         websites: []
       }));
-    } else if (data.architectDetails) {
-      // architectDetailsフィールドから建築家名を抽出（全角スペース区切り）
-      const architectNames = parseFullWidthSpaceSeparated(data.architectDetails);
-      architects = architectNames.map((name, index) => ({
-        architect_id: index + 1,
-        architectJa: name,
-        architectEn: name,
-        websites: []
-      }));
     }
+    // architectDetailsフィールドからのフォールバック処理を削除
 
     // 外部写真URLの生成（画像チェックを無効化）
     const generatePhotosFromUid = async (uid: string): Promise<Photo[]> => {

@@ -632,8 +632,8 @@ function SearchFormComponent({
                       <div className="pt-2">
                         <div className="text-xs text-muted-foreground mb-2">
                           {language === 'ja' 
-                            ? `検索中心: (${filters.currentLocation.lat.toFixed(6)}, ${filters.currentLocation.lng.toFixed(6)})`
-                            : `Search center: (${filters.currentLocation.lat.toFixed(6)}, ${filters.currentLocation.lng.toFixed(6)})`
+                            ? `検索中心: (${filters.currentLocation.lat.toFixed(4)}, ${filters.currentLocation.lng.toFixed(4)})`
+                            : `Search center: (${filters.currentLocation.lat.toFixed(4)}, ${filters.currentLocation.lng.toFixed(4)})`
                           }
                         </div>
                         <Button
