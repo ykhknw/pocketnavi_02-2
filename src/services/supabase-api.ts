@@ -1,6 +1,7 @@
 
 import { supabase } from '../lib/supabase'
 import { Building, SearchFilters, Architect, Photo } from '../types'
+import { sessionManager } from '../utils/session-manager'
 
 export class SupabaseApiError extends Error {
   constructor(public status: number, message: string) {
@@ -981,17 +982,20 @@ export async function saveSearchToGlobalHistory(
   filters?: Partial<SearchFilters>,
   userId?: number
 ): Promise<boolean> {
-  try {
-    // セッションIDを生成（匿名ユーザー用）
-    const sessionId = userId ? null : `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  // 時間制限チェック
+  if (!sessionManager.canSearch(query, searchType)) {
+    console.log('重複検索をスキップ:', query);
+    return false;
+  }
 
+  try {
     const { error } = await supabase
       .from('global_search_history')
       .insert({
         query,
         search_type: searchType,
         user_id: userId || null,
-        user_session_id: sessionId,
+        user_session_id: sessionManager.getSessionId(),
         filters: filters || null
       });
 
@@ -1000,6 +1004,7 @@ export async function saveSearchToGlobalHistory(
       return false;
     }
 
+    console.log('グローバル検索履歴に保存完了:', query);
     return true;
   } catch (error) {
     console.error('グローバル検索履歴の保存でエラーが発生:', error);
