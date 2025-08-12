@@ -122,6 +122,7 @@ export function HomePage() {
               popularSearchesLoading={context.popularSearchesLoading}
               popularSearchesError={context.popularSearchesError}
               onSearchClick={context.handleSearchFromHistory}
+              onRemoveRecentSearch={context.handleRemoveRecentSearch}
               onFilterSearchClick={(filters) => {
                 if (filters) {
                   // 既存のフィルターを保持しながら、新しいフィルターを適用

@@ -32,6 +32,7 @@ export interface Architect {
   architect_id: number;
   architectJa: string;
   architectEn: string;
+  slug?: string;
   websites: Website[];
 }
 

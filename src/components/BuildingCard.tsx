@@ -164,10 +164,12 @@ function BuildingCardComponent({
 
   const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
     e.stopPropagation();
-    // 既存フィルターを保持し、建築年のみを追加/更新
+    // 既存フィルターを保持し、建築年の選択/解除を切り替え
+    const newCompletionYear = context.filters.completionYear === year ? null : year;
+    
     context.setFilters({
       ...context.filters,
-      completionYear: year,
+      completionYear: newCompletionYear,
     });
     context.setCurrentPage(1);
     context.handleSearchStart();

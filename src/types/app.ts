@@ -53,6 +53,7 @@ export interface AppHandlers {
   handleSearchAround: (lat: number, lng: number) => void;
   handlePageChange: (page: number) => void;
   handleSearchStart: () => void;
+  handleRemoveRecentSearch: (index: number) => void;
 }
 
 export interface AppContextType extends AppState, AppActions, AppHandlers {

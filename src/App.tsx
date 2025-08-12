@@ -4,6 +4,7 @@ import { AppProvider } from './components/providers/AppProvider';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { HomePage } from './components/pages/HomePage';
 import { BuildingDetailPage } from './components/pages/BuildingDetailPage';
+import { ArchitectPage } from './components/pages/ArchitectPage';
 
 import { Routes, Route } from 'react-router-dom';
 import { useLanguage } from './hooks/useLanguage';
@@ -17,6 +18,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/building/:slug" element={<BuildingDetailPage />} />
+        <Route path="/architect/:slug" element={<ArchitectPage />} />
       </Routes>
     </ErrorBoundary>
   );

@@ -754,6 +754,7 @@ class SupabaseApiClient {
       architect_id: arch.architect_id,
       architectJa: arch.architectJa,
       architectEn: arch.architectEn || arch.architectJa,
+      slug: arch.slug,
       websites: [] // TODO: architect_websites_3テーブルから取得
     })) || [];
   }
@@ -886,6 +887,7 @@ class SupabaseApiClient {
         architect_id: ba.architects_table?.architect_id || 0,
         architectJa: ba.architects_table?.architectJa || '',
         architectEn: ba.architects_table?.architectEn || ba.architects_table?.architectJa || '',
+        slug: ba.architects_table?.slug,
         websites: []
       }));
     }
@@ -952,13 +954,28 @@ export async function fetchPopularSearches(days: number = 7): Promise<SearchHist
     }
 
     // SearchHistory型に変換
-    return data.map(item => ({
-      query: item.query,
-      searchedAt: item.last_searched,
-      count: item.total_searches,
-      type: item.search_type as 'text' | 'architect' | 'prefecture',
-      filters: null // 人気検索ではフィルター情報は不要
-    }));
+    return data.map(item => {
+      let filters = null;
+      
+      // 検索タイプに基づいてフィルター情報を復元
+      if (item.search_type === 'architect') {
+        filters = {
+          architects: [item.query]
+        };
+      } else if (item.search_type === 'prefecture') {
+        filters = {
+          prefectures: [item.query]
+        };
+      }
+      
+      return {
+        query: item.query,
+        searchedAt: item.last_searched,
+        count: item.total_searches,
+        type: item.search_type as 'text' | 'architect' | 'prefecture',
+        filters: filters
+      };
+    });
   } catch (error) {
     console.error('人気検索の取得でエラーが発生:', error);
     return [];

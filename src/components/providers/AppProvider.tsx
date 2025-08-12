@@ -215,6 +215,12 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.setShowDetail(false);
   }, [state.setSelectedBuilding, state.setShowDetail]);
 
+  // 検索履歴削除ハンドラー
+  const handleRemoveRecentSearch = useCallback((index: number) => {
+    console.log('🗑️ 検索履歴削除:', index);
+    state.setSearchHistory(prev => prev.filter((_, i) => i !== index));
+  }, [state.setSearchHistory]);
+
   // フィルターが変更されたときに詳細検索を自動的に開く（一時的に無効化）
   // useEffect(() => {
   //   const hasActiveFilters = 
@@ -278,6 +284,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     handleSearchAround,
     handlePageChange,
     handleSearchStart,
+    handleRemoveRecentSearch,
     
     // その他の状態
     language: effects.language,

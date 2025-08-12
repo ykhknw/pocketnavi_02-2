@@ -107,16 +107,19 @@ export type Database = {
           architect_id: number
           architectJa: string
           architectEn: string
+          slug?: string
         }
         Insert: {
           architect_id?: number
           architectJa: string
           architectEn: string
+          slug?: string
         }
         Update: {
           architect_id?: number
           architectJa?: string
           architectEn?: string
+          slug?: string
         }
       }
       building_architects: {

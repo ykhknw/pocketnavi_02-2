@@ -8,6 +8,7 @@ import { Badge } from './ui/badge';
 import { t } from '../utils/translations';
 import { getStableNatureImage } from '../utils/unsplash';
 import { useAppContext } from './providers/AppProvider';
+import { cn } from '../lib/utils';
 
 interface BuildingDetailProps {
   building: Building;
@@ -126,12 +127,15 @@ function BuildingDetailComponent({
   }, []);
 
   const handleCompletionYearSearch = useCallback((year: number) => {
-    // 詳細ページから一覧ページに戻り、建築年のみで検索
+    // 詳細ページから一覧ページに戻り、建築年の選択/解除を切り替え
     const searchParams = new URLSearchParams();
-    searchParams.set('completionYear', year.toString());
+    const newCompletionYear = context.filters.completionYear === year ? null : year;
+    if (newCompletionYear !== null) {
+      searchParams.set('completionYear', newCompletionYear.toString());
+    }
     const url = `/?${searchParams.toString()}`;
     window.location.href = url;
-  }, []);
+  }, [context.filters.completionYear]);
 
   const handlePrefectureSearch = useCallback((pref: string) => {
     // 詳細ページから一覧ページに戻り、都道府県のみで検索
@@ -238,17 +242,35 @@ function BuildingDetailComponent({
           </div>
 
           {/* completion years */}
-          <div className="flex flex-wrap gap-1 mb-2">
-            <Badge
-              variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
-              title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
-              onClick={() => handleCompletionYearSearch(building.completionYears)}
-            >
-              <Calendar className="h-3 w-3 mr-1" />
-              {building.completionYears}
-            </Badge>
-          </div>
+          {building.completionYears && (() => {
+            const isHighlighted = context.filters.completionYear === building.completionYears;
+            
+            return (
+              <div className="flex flex-wrap gap-1 mb-2">
+                <Badge
+                  variant={isHighlighted ? "default" : "outline"}
+                  className={cn(
+                    "text-sm cursor-pointer transition-all duration-300",
+                    isHighlighted ? [
+                      "bg-orange-500 text-white",
+                      "ring-2 ring-orange-500/50",
+                      "scale-105",
+                      "font-semibold",
+                      "shadow-md"
+                    ] : [
+                      "border-gray-300 text-gray-700 bg-gray-50",
+                      "hover:bg-gray-100"
+                    ]
+                  )}
+                  title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
+                  onClick={() => handleCompletionYearSearch(building.completionYears)}
+                >
+                  <Calendar className="h-3 w-3 mr-1" />
+                  {building.completionYears}
+                </Badge>
+              </div>
+            );
+          })()}
         </div>
 
         <div className="flex items-center justify-between mb-4">

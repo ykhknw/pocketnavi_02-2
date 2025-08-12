@@ -21,6 +21,7 @@ interface SidebarProps {
   popularSearchesError?: string | null;
   onSearchClick: (query: string) => void;
   onFilterSearchClick?: (filters: Partial<SearchHistory['filters']>) => void;
+  onRemoveRecentSearch?: (index: number) => void;
 }
 
 function SidebarComponent({
@@ -39,7 +40,8 @@ function SidebarComponent({
   popularSearchesLoading = false,
   popularSearchesError = null,
   onSearchClick,
-  onFilterSearchClick
+  onFilterSearchClick,
+  onRemoveRecentSearch
 }: SidebarProps) {
   return (
     <div className="lg:col-span-1 space-y-6 lg:pl-4 pt-6">
@@ -68,6 +70,7 @@ function SidebarComponent({
         language={language}
         onSearchClick={onSearchClick}
         onFilterSearchClick={onFilterSearchClick}
+        onRemoveRecentSearch={onRemoveRecentSearch}
       />
     </div>
   );

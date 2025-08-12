@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, TrendingUp, Search, User, MapPin } from 'lucide-react';
+import { Clock, TrendingUp, Search, User, MapPin, X } from 'lucide-react';
 import { SearchHistory } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -14,6 +14,7 @@ interface SearchHistoryProps {
   language: 'ja' | 'en';
   onSearchClick: (query: string) => void;
   onFilterSearchClick?: (filters: Partial<SearchHistory['filters']>) => void;
+  onRemoveRecentSearch?: (index: number) => void;
 }
 
 export function SearchHistoryComponent({ 
@@ -23,7 +24,8 @@ export function SearchHistoryComponent({
   popularSearchesError = null,
   language, 
   onSearchClick,
-  onFilterSearchClick
+  onFilterSearchClick,
+  onRemoveRecentSearch
 }: SearchHistoryProps) {
   // undefinedチェックを追加
   const safeRecentSearches = recentSearches || [];
@@ -51,34 +53,57 @@ export function SearchHistoryComponent({
                 // フィルター検索の場合は特別な表示
                 if (search.type === 'architect' || search.type === 'prefecture') {
                   return (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onFilterSearchClick?.(search.filters)}
-                      className="text-sm flex items-center gap-1"
-                    >
-                      {search.type === 'architect' ? (
-                        <User className="h-3 w-3" />
-                      ) : (
-                        <MapPin className="h-3 w-3" />
-                      )}
-                      {search.query}
-                    </Button>
+                    <div key={index} className="relative group">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onFilterSearchClick?.(search.filters)}
+                        className="text-sm flex items-center gap-1 pr-5"
+                      >
+                        {search.type === 'architect' ? (
+                          <User className="h-3 w-3" />
+                        ) : (
+                          <MapPin className="h-3 w-3" />
+                        )}
+                        {search.query}
+                      </Button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRemoveRecentSearch?.(index);
+                        }}
+                        className="absolute -right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 hover:bg-red-100 rounded-full w-4 h-4 flex items-center justify-center transition-opacity z-10 border border-red-200"
+                        title={language === 'ja' ? '削除' : 'Remove'}
+                      >
+                        <X className="h-2.5 w-2.5 text-red-500" />
+                      </button>
+                    </div>
                   );
                 }
                 
                 // 通常のテキスト検索
                 return (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onSearchClick(search.query)}
-                    className="text-sm"
-                  >
-                    {search.query}
-                  </Button>
+                  <div key={index} className="relative group">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onSearchClick(search.query)}
+                      className="text-sm flex items-center gap-1 pr-5"
+                    >
+                      <Search className="h-3 w-3" />
+                      {search.query}
+                    </Button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemoveRecentSearch?.(index);
+                      }}
+                      className="absolute -right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 hover:bg-red-100 rounded-full w-4 h-4 flex items-center justify-center transition-opacity z-10 border border-red-200"
+                      title={language === 'ja' ? '削除' : 'Remove'}
+                    >
+                      <X className="h-2.5 w-2.5 text-red-500" />
+                    </button>
+                  </div>
                 );
               })}
             </div>
@@ -116,20 +141,47 @@ export function SearchHistoryComponent({
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {safePopularSearches.slice(0, 8).map((search, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onSearchClick(search.query)}
-                  className="text-sm"
-                >
-                  {search.query}
-                  <Badge variant="secondary" className="ml-2">
-                    {search.count}
-                  </Badge>
-                </Button>
-              ))}
+              {safePopularSearches.slice(0, 8).map((search, index) => {
+                // フィルター検索の場合は特別な表示
+                if (search.type === 'architect' || search.type === 'prefecture') {
+                  return (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onFilterSearchClick?.(search.filters)}
+                      className="text-sm flex items-center gap-1"
+                    >
+                      {search.type === 'architect' ? (
+                        <User className="h-3 w-3" />
+                      ) : (
+                        <MapPin className="h-3 w-3" />
+                      )}
+                      {search.query}
+                      <Badge variant="secondary" className="ml-2">
+                        {search.count}
+                      </Badge>
+                    </Button>
+                  );
+                }
+                
+                // 通常のテキスト検索
+                return (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onSearchClick(search.query)}
+                    className="text-sm flex items-center gap-1"
+                  >
+                    <Search className="h-3 w-3" />
+                    {search.query}
+                    <Badge variant="secondary" className="ml-2">
+                      {search.count}
+                    </Badge>
+                  </Button>
+                );
+              })}
             </div>
           )}
         </CardContent>
