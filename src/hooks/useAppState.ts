@@ -17,17 +17,8 @@ export function useAppState() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   
-  // 人気検索
-  const [popularSearches] = useState<SearchHistory[]>([
-    { query: '安藤忠雄', searchedAt: '', count: 45 },
-    { query: '美術館', searchedAt: '', count: 38 },
-    { query: '東京', searchedAt: '', count: 32 },
-    { query: '現代建築', searchedAt: '', count: 28 },
-    { query: 'コンクリート', searchedAt: '', count: 24 },
-    { query: '隈研吾', searchedAt: '', count: 22 },
-    { query: '図書館', searchedAt: '', count: 19 },
-    { query: '駅舎', searchedAt: '', count: 16 }
-  ]);
+  // 人気検索（動的に取得するため空配列で初期化）
+  const [popularSearches, setPopularSearches] = useState<SearchHistory[]>([]);
   
   // ページネーション設定
   const itemsPerPage = 10;

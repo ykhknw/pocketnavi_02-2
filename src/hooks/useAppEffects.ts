@@ -174,9 +174,9 @@ export function useAppEffects() {
         buildingsCount: buildings.length 
       });
       
-      // 検索履歴を更新
+      // テキスト検索のみを履歴に更新（フィルター検索は別途記録）
       if (filters.query && filters.query.trim()) {
-        const existingIndex = searchHistory.findIndex(h => h.query === filters.query);
+        const existingIndex = searchHistory.findIndex(h => h.query === filters.query && h.type === 'text');
         if (existingIndex >= 0) {
           const updated = [...searchHistory];
           updated[existingIndex] = {
@@ -187,7 +187,12 @@ export function useAppEffects() {
           setSearchHistory(updated);
         } else {
           (setSearchHistory as any)((prev: any[]) => [
-            { query: filters.query, searchedAt: new Date().toISOString(), count: 1 },
+            { 
+              query: filters.query, 
+              searchedAt: new Date().toISOString(), 
+              count: 1,
+              type: 'text'
+            },
             ...prev.slice(0, 19)
           ]);
         }
@@ -224,7 +229,18 @@ export function useAppEffects() {
     setFilteredBuildings,
     useSupabaseBuildingsEffect,
     useURLSyncEffect,
-    useURLUpdateEffect,
+    useURLUpdateEffect: useCallback((
+      filters: SearchFilters,
+      currentPage: number,
+      updateURLWithFilters: (filters: SearchFilters, currentPage: number) => void,
+      isUpdatingFromURL: boolean
+    ) => {
+      const updateURL = () => {
+        if (isUpdatingFromURL) return;
+        updateURLWithFilters(filters, currentPage);
+      };
+      return updateURL;
+    }, []),
     useGeolocationEffect,
     useFilterChangeEffect
   };

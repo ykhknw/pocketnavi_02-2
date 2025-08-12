@@ -28,6 +28,13 @@ export interface AppActions {
   setShowAdvancedSearch: (show: boolean) => void;
   setCurrentPage: (page: number) => void;
   setFilters: (filters: SearchFilters) => void;
+  updateSearchHistory: (
+    searchHistory: SearchHistory[],
+    setSearchHistory: (history: SearchHistory[]) => void,
+    query: string,
+    type?: 'text' | 'architect' | 'prefecture',
+    filters?: Partial<SearchFilters>
+  ) => void;
 }
 
 export interface AppHandlers {
@@ -67,5 +74,7 @@ export interface AppContextType extends AppState, AppActions, AppHandlers {
   apiStatus: string;
   isSupabaseConnected: boolean;
   popularSearches: SearchHistory[];
+  popularSearchesLoading: boolean;
+  popularSearchesError: string | null;
   getPaginationRange: () => (number | string)[];
 } 

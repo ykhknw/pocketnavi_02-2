@@ -97,53 +97,72 @@ export function useAppHandlers() {
   const handleSearchFromHistory = (
     query: string,
     setFilters: (filters: SearchFilters) => void,
-    filters: SearchFilters
+    setCurrentPage: (page: number) => void
   ) => {
     setFilters(prev => ({ ...prev, query }));
+    setCurrentPage(1);
   };
 
   // お気に入り建物クリックハンドラー
   const handleLikedBuildingClick = (
     buildingId: number,
-    buildings: Building[],
-    setSelectedBuilding: (building: Building | null) => void
+    likedBuildings: LikedBuilding[],
+    setLikedBuildings: (buildings: LikedBuilding[]) => void,
+    buildings: Building[]
   ) => {
-    const building = buildings.find(b => b.id === buildingId);
-    if (building) {
-      setSelectedBuilding(building);
-    }
+    // お気に入り建物の詳細表示（必要に応じて実装）
+    console.log('お気に入り建物クリック:', buildingId);
   };
 
   // 周辺検索ハンドラー
   const handleSearchAround = (
     lat: number,
     lng: number,
-    navigate: (path: string) => void
+    setFilters: (filters: SearchFilters) => void,
+    setCurrentPage: (page: number) => void
   ) => {
-    // デフォルト半径は5km、URLにlat/lngを必ず含める
-    navigate(`/?lat=${lat}&lng=${lng}&radius=5`);
+    // デフォルト半径は5km、位置情報をフィルターに設定
+    setFilters(prev => ({
+      ...prev,
+      currentLocation: { lat, lng },
+      radius: 5
+    }));
+    setCurrentPage(1);
   };
 
   // ページ変更ハンドラー
   const handlePageChange = (
     page: number,
-    totalPages: number,
-    currentPage: number,
-    setCurrentPage: (page: number) => void
+    setCurrentPage: (page: number) => void,
+    setFilters: (filters: SearchFilters) => void,
+    location: any
   ) => {
-    console.log(`ページ変更開始: ${page}/${totalPages}, 現在のページ: ${currentPage}`);
+    console.log(`ページ変更開始: ${page}`);
     
     // ページが実際に変更される場合のみ処理
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      console.log(`ページ変更実行: ${currentPage} → ${page}`);
+    if (page >= 1) {
+      console.log(`ページ変更実行: → ${page}`);
       setCurrentPage(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       
       // ページ変更後の処理
       console.log('✅ Page change completed');
     } else {
-      console.log(`ページ変更スキップ: ${page} (現在: ${currentPage}, 総ページ: ${totalPages})`);
+      console.log(`ページ変更スキップ: ${page}`);
     }
+  };
+
+  // お気に入り建物削除ハンドラー
+  const handleRemoveLikedBuilding = (
+    buildingId: number,
+    setLikedBuildings: (buildings: LikedBuilding[]) => void
+  ) => {
+    setLikedBuildings(prev => prev.filter(b => b.id !== buildingId));
+  };
+
+  // 検索開始ハンドラー
+  const handleSearchStart = (setCurrentPage: (page: number) => void) => {
+    setCurrentPage(1);
   };
 
   return {
@@ -158,7 +177,9 @@ export function useAppHandlers() {
     handleDeleteBuilding,
     handleSearchFromHistory,
     handleLikedBuildingClick,
+    handleRemoveLikedBuilding,
     handleSearchAround,
-    handlePageChange
+    handlePageChange,
+    handleSearchStart
   };
 } 

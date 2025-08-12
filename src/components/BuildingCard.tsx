@@ -123,13 +123,25 @@ function BuildingCardComponent({
       ? currentArchitects.filter(a => a !== name)
       : [...currentArchitects, name];
     
-    context.setFilters({
+    const newFilters = {
       ...context.filters,
       architects: newArchitects,
-    });
+    };
+    
+    context.setFilters(newFilters);
     context.setCurrentPage(1);
     context.handleSearchStart();
-    // 現在のページを維持するため、navigate('/')を削除
+    
+    // 検索履歴を更新
+    if (context.updateSearchHistory) {
+      context.updateSearchHistory(
+        context.searchHistory,
+        context.setSearchHistory,
+        name,
+        'architect',
+        newFilters
+      );
+    }
   }, [context]);
 
   const handleBuildingTypeSearch = useCallback((e: React.MouseEvent, type: string) => {
@@ -169,13 +181,25 @@ function BuildingCardComponent({
       ? currentPrefectures.filter(p => p !== pref)
       : [...currentPrefectures, pref];
     
-    context.setFilters({
+    const newFilters = {
       ...context.filters,
       prefectures: newPrefectures,
-    });
+    };
+    
+    context.setFilters(newFilters);
     context.setCurrentPage(1);
     context.handleSearchStart();
-    // 現在のページを維持するため、navigate('/')を削除
+    
+    // 検索履歴を更新
+    if (context.updateSearchHistory) {
+      context.updateSearchHistory(
+        context.searchHistory,
+        context.setSearchHistory,
+        pref,
+        'prefecture',
+        newFilters
+      );
+    }
   }, [context]);
 
   // 表示する写真を計算（useMemoで最適化）

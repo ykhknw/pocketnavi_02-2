@@ -6,6 +6,7 @@ import { useAppState } from '../../hooks/useAppState';
 import { useAppActions } from '../../hooks/useAppActions';
 import { useAppHandlers } from '../../hooks/useAppHandlers';
 import { useAppEffects } from '../../hooks/useAppEffects';
+import { usePopularSearches } from '../../hooks/usePopularSearches';
 
 
 // React Queryクライアントの設定
@@ -34,6 +35,9 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   
   // 副作用管理
   const effects = useAppEffects();
+  
+  // 動的人気検索
+  const { popularSearches, loading: popularSearchesLoading, error: popularSearchesError } = usePopularSearches(7);
   
   // Supabase建物データの取得
   const buildingsData = effects.useSupabaseBuildingsEffect(
@@ -180,34 +184,29 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   );
     
   const handleSearchFromHistory = useCallback((query: string) => 
-    handlers.handleSearchFromHistory(query, state.setFilters, state.filters),
-    [handlers.handleSearchFromHistory, state.setFilters, state.filters]
+    handlers.handleSearchFromHistory(query, state.setFilters, state.setCurrentPage),
+    [handlers.handleSearchFromHistory, state.setFilters, state.setCurrentPage]
   );
     
   const handleLikedBuildingClick = useCallback((buildingId: number) => 
-    handlers.handleLikedBuildingClick(buildingId, buildingsData.buildings, state.setSelectedBuilding),
-    [handlers.handleLikedBuildingClick, buildingsData.buildings, state.setSelectedBuilding]
+    handlers.handleLikedBuildingClick(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings),
+    [handlers.handleLikedBuildingClick, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings]
   );
     
   const handleRemoveLikedBuilding = useCallback((buildingId: number) => 
-    state.setLikedBuildings(prev => prev.filter(building => building.id !== buildingId)),
-    [state.setLikedBuildings]
+    handlers.handleRemoveLikedBuilding(buildingId, state.setLikedBuildings),
+    [handlers.handleRemoveLikedBuilding, state.setLikedBuildings]
   );
     
   const handleSearchAround = useCallback((lat: number, lng: number) => 
-    handlers.handleSearchAround(lat, lng, (path: string) => {
-      // React Routerのnavigate相当：URLを変更し、popstateでAppStateが拾う
-      window.history.pushState({}, '', path);
-      // 変更通知（popstateを発火させない環境向けに手動でイベントを送る）
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    }),
-    [handlers.handleSearchAround]
+    handlers.handleSearchAround(lat, lng, state.setFilters, state.setCurrentPage),
+    [handlers.handleSearchAround, state.setFilters, state.setCurrentPage]
   );
     
-  const handlePageChange = useCallback((page: number) => {
-    console.log('🔄 handlePageChange called:', { page, totalPages: pagination.totalPages, currentPage: state.currentPage });
-    handlers.handlePageChange(page, pagination.totalPages, state.currentPage, state.setCurrentPage);
-  }, [handlers.handlePageChange, state.setCurrentPage]);
+  const handlePageChange = useCallback((page: number) => 
+    handlers.handlePageChange(page, state.setCurrentPage, state.setFilters, state.location),
+    [handlers.handlePageChange, state.setCurrentPage, state.setFilters, state.location]
+  );
 
   // 検索開始時のコールバック（建築物詳細をクリア）
   const handleSearchStart = useCallback(() => {
@@ -261,6 +260,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     setShowAdvancedSearch: state.setShowAdvancedSearch,
     setCurrentPage: state.setCurrentPage,
     setFilters: state.setFilters,
+    updateSearchHistory: actions.updateSearchHistory,
     
     // ハンドラー
     handleBuildingSelect,
@@ -297,7 +297,9 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     useApi: effects.useApi,
     apiStatus: effects.apiStatus,
     isSupabaseConnected: effects.isSupabaseConnected,
-    popularSearches: state.popularSearches,
+    popularSearches: popularSearches,
+    popularSearchesLoading: popularSearchesLoading,
+    popularSearchesError: popularSearchesError,
     getPaginationRange: () => actions.getPaginationRange(state.currentPage, pagination.totalPages),
   };
 

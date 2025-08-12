@@ -91,10 +91,13 @@ export function useAppActions() {
   const updateSearchHistory = useCallback((
     searchHistory: SearchHistory[],
     setSearchHistory: (updater: SearchHistory[] | ((prev: SearchHistory[]) => SearchHistory[])) => void,
-    query: string
+    query: string,
+    type: 'text' | 'architect' | 'prefecture' = 'text',
+    filters?: Partial<SearchFilters>
   ) => {
     if (query.trim()) {
-      const existingIndex = searchHistory.findIndex(h => h.query === query);
+      // ローカル検索履歴の更新
+      const existingIndex = searchHistory.findIndex(h => h.query === query && h.type === type);
       if (existingIndex >= 0) {
         const updated = [...searchHistory];
         updated[existingIndex] = {
@@ -105,10 +108,23 @@ export function useAppActions() {
         setSearchHistory(updated);
       } else {
         setSearchHistory((prev: SearchHistory[]) => [
-          { query, searchedAt: new Date().toISOString(), count: 1 },
+          { 
+            query, 
+            searchedAt: new Date().toISOString(), 
+            count: 1,
+            type,
+            filters
+          },
           ...prev.slice(0, 19) // Keep only last 20 searches
         ]);
       }
+
+      // グローバル検索履歴にも保存（非同期）
+      import('../services/supabase-api').then(({ saveSearchToGlobalHistory }) => {
+        saveSearchToGlobalHistory(query, type, filters).catch(err => {
+          console.error('グローバル検索履歴の保存に失敗:', err);
+        });
+      });
     }
   }, []);
 

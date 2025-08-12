@@ -90,6 +90,8 @@ export interface SearchHistory {
   query: string;
   searchedAt: string;
   count: number;
+  type: 'text' | 'architect' | 'prefecture';
+  filters?: Partial<SearchFilters>;
 }
 
 export interface MapMarker {

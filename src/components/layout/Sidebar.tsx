@@ -17,7 +17,10 @@ interface SidebarProps {
   onRemoveLikedBuilding?: (buildingId: number) => void;
   recentSearches: SearchHistory[];
   popularSearches: SearchHistory[];
+  popularSearchesLoading?: boolean;
+  popularSearchesError?: string | null;
   onSearchClick: (query: string) => void;
+  onFilterSearchClick?: (filters: Partial<SearchHistory['filters']>) => void;
 }
 
 function SidebarComponent({
@@ -33,7 +36,10 @@ function SidebarComponent({
   onRemoveLikedBuilding,
   recentSearches,
   popularSearches,
-  onSearchClick
+  popularSearchesLoading = false,
+  popularSearchesError = null,
+  onSearchClick,
+  onFilterSearchClick
 }: SidebarProps) {
   return (
     <div className="lg:col-span-1 space-y-6 lg:pl-4 pt-6">
@@ -57,8 +63,11 @@ function SidebarComponent({
       <SearchHistoryComponent
         recentSearches={recentSearches}
         popularSearches={popularSearches}
+        popularSearchesLoading={popularSearchesLoading}
+        popularSearchesError={popularSearchesError}
         language={language}
         onSearchClick={onSearchClick}
+        onFilterSearchClick={onFilterSearchClick}
       />
     </div>
   );

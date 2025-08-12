@@ -939,3 +939,70 @@ class SupabaseApiClient {
 }
 
 export const supabaseApiClient = new SupabaseApiClient();
+
+/**
+ * 人気検索を取得
+ */
+export async function fetchPopularSearches(days: number = 7): Promise<SearchHistory[]> {
+  try {
+    const { data, error } = await supabase
+      .rpc('get_popular_searches', { days })
+      .select('*');
+
+    if (error) {
+      console.error('人気検索の取得エラー:', error);
+      return [];
+    }
+
+    if (!data) {
+      return [];
+    }
+
+    // SearchHistory型に変換
+    return data.map(item => ({
+      query: item.query,
+      searchedAt: item.last_searched,
+      count: item.total_searches,
+      type: item.search_type as 'text' | 'architect' | 'prefecture',
+      filters: null // 人気検索ではフィルター情報は不要
+    }));
+  } catch (error) {
+    console.error('人気検索の取得でエラーが発生:', error);
+    return [];
+  }
+}
+
+/**
+ * 検索履歴をグローバル履歴に保存
+ */
+export async function saveSearchToGlobalHistory(
+  query: string,
+  searchType: 'text' | 'architect' | 'prefecture',
+  filters?: Partial<SearchFilters>,
+  userId?: number
+): Promise<boolean> {
+  try {
+    // セッションIDを生成（匿名ユーザー用）
+    const sessionId = userId ? null : `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    const { error } = await supabase
+      .from('global_search_history')
+      .insert({
+        query,
+        search_type: searchType,
+        user_id: userId || null,
+        user_session_id: sessionId,
+        filters: filters || null
+      });
+
+    if (error) {
+      console.error('グローバル検索履歴の保存エラー:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('グローバル検索履歴の保存でエラーが発生:', error);
+    return false;
+  }
+}

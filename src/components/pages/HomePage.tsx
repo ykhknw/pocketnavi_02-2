@@ -119,7 +119,67 @@ export function HomePage() {
               onRemoveLikedBuilding={context.handleRemoveLikedBuilding}
               recentSearches={context.searchHistory}
               popularSearches={context.popularSearches}
+              popularSearchesLoading={context.popularSearchesLoading}
+              popularSearchesError={context.popularSearchesError}
               onSearchClick={context.handleSearchFromHistory}
+              onFilterSearchClick={(filters) => {
+                if (filters) {
+                  // 既存のフィルターを保持しながら、新しいフィルターを適用
+                  const newFilters = { ...context.filters };
+                  
+                  // 建築家フィルターの処理（既存のフィルターを保持）
+                  if (filters.architects) {
+                    newFilters.architects = filters.architects;
+                  }
+                  
+                  // 都道府県フィルターの処理（既存のフィルターを保持）
+                  if (filters.prefectures) {
+                    newFilters.prefectures = filters.prefectures;
+                  }
+                  
+                  // 建物タイプフィルターの処理（既存のフィルターを保持）
+                  if (filters.buildingTypes) {
+                    newFilters.buildingTypes = filters.buildingTypes;
+                  }
+                  
+                  // その他のフィルターも同様に処理
+                  if (filters.completionYear !== undefined) {
+                    newFilters.completionYear = filters.completionYear;
+                  }
+                  
+                  // 半径フィルターの処理
+                  if (filters.radius !== undefined) {
+                    newFilters.radius = filters.radius;
+                  }
+                  
+                  // 位置情報フィルターの処理
+                  if (filters.currentLocation) {
+                    newFilters.currentLocation = filters.currentLocation;
+                  }
+                  
+                  // 写真・動画フィルターの処理
+                  if (filters.hasPhotos !== undefined) {
+                    newFilters.hasPhotos = filters.hasPhotos;
+                  }
+                  if (filters.hasVideos !== undefined) {
+                    newFilters.hasVideos = filters.hasVideos;
+                  }
+                  
+                  // エリアフィルターの処理
+                  if (filters.areas) {
+                    newFilters.areas = filters.areas;
+                  }
+                  
+                  // 住宅除外フィルターの処理
+                  if (filters.excludeResidential !== undefined) {
+                    newFilters.excludeResidential = filters.excludeResidential;
+                  }
+                  
+                  context.setFilters(newFilters);
+                  context.setCurrentPage(1);
+                  context.handleSearchStart();
+                }
+              }}
             />
           </div>
         </div>
