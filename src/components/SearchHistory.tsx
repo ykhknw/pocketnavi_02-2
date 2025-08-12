@@ -31,6 +31,40 @@ export function SearchHistoryComponent({
   const safeRecentSearches = recentSearches || [];
   const safePopularSearches = popularSearches || [];
 
+  // 検索語の長さに応じてボタンのクラス名を決定
+  const getButtonClassName = (query: string, hasBadge: boolean = false) => {
+    const length = query.length;
+    const baseClasses = "search-button text-sm flex items-center gap-1";
+    
+    if (length <= 12) {
+      return `${baseClasses} ${hasBadge ? 'pr-2' : 'pr-5'}`;
+    } else if (length <= 20) {
+      return `${baseClasses} ${hasBadge ? 'pr-2' : 'pr-5'}`;
+    } else {
+      return `search-button-long text-sm flex items-center gap-1 ${hasBadge ? 'pr-2' : 'pr-5'}`;
+    }
+  };
+
+  // テキストのクラス名を決定
+  const getTextClassName = (query: string) => {
+    const length = query.length;
+    
+    if (length <= 20) {
+      return "search-button-text";
+    } else {
+      return "search-button-text-wrap";
+    }
+  };
+
+  // ツールチップのタイトルを生成
+  const getTooltipTitle = (query: string, type: string, count?: number) => {
+    const baseTitle = query;
+    if (count) {
+      return `${baseTitle} (${count}回)`;
+    }
+    return baseTitle;
+  };
+
   return (
     <div className="space-y-4">
       {/* Recent Searches */}
@@ -58,14 +92,15 @@ export function SearchHistoryComponent({
                         variant="outline"
                         size="sm"
                         onClick={() => onFilterSearchClick?.(search.filters)}
-                        className="text-sm flex items-center gap-1 pr-5"
+                        className={getButtonClassName(search.query)}
+                        title={getTooltipTitle(search.query, search.type)}
                       >
                         {search.type === 'architect' ? (
-                          <User className="h-3 w-3" />
+                          <User className="search-button-icon" />
                         ) : (
-                          <MapPin className="h-3 w-3" />
+                          <MapPin className="search-button-icon" />
                         )}
-                        {search.query}
+                        <span className={getTextClassName(search.query)}>{search.query}</span>
                       </Button>
                       <button
                         onClick={(e) => {
@@ -88,10 +123,11 @@ export function SearchHistoryComponent({
                       variant="outline"
                       size="sm"
                       onClick={() => onSearchClick(search.query)}
-                      className="text-sm flex items-center gap-1 pr-5"
+                      className={getButtonClassName(search.query)}
+                      title={getTooltipTitle(search.query, search.type)}
                     >
-                      <Search className="h-3 w-3" />
-                      {search.query}
+                      <Search className="search-button-icon" />
+                      <span className={getTextClassName(search.query)}>{search.query}</span>
                     </Button>
                     <button
                       onClick={(e) => {
@@ -150,15 +186,16 @@ export function SearchHistoryComponent({
                       variant="outline"
                       size="sm"
                       onClick={() => onFilterSearchClick?.(search.filters)}
-                      className="text-sm flex items-center gap-1"
+                      className={getButtonClassName(search.query, true)}
+                      title={getTooltipTitle(search.query, search.type, search.count)}
                     >
                       {search.type === 'architect' ? (
-                        <User className="h-3 w-3" />
+                        <User className="search-button-icon" />
                       ) : (
-                        <MapPin className="h-3 w-3" />
+                        <MapPin className="search-button-icon" />
                       )}
-                      {search.query}
-                      <Badge variant="secondary" className="ml-2">
+                      <span className={getTextClassName(search.query)}>{search.query}</span>
+                      <Badge variant="secondary" className="search-button-badge">
                         {search.count}
                       </Badge>
                     </Button>
@@ -172,11 +209,12 @@ export function SearchHistoryComponent({
                     variant="outline"
                     size="sm"
                     onClick={() => onSearchClick(search.query)}
-                    className="text-sm flex items-center gap-1"
+                    className={getButtonClassName(search.query, true)}
+                    title={getTooltipTitle(search.query, search.type, search.count)}
                   >
-                    <Search className="h-3 w-3" />
-                    {search.query}
-                    <Badge variant="secondary" className="ml-2">
+                    <Search className="search-button-icon" />
+                    <span className={getTextClassName(search.query)}>{search.query}</span>
+                    <Badge variant="secondary" className="search-button-badge">
                       {search.count}
                     </Badge>
                   </Button>
