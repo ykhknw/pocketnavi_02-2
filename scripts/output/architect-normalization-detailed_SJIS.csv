@@ -1,0 +1,1001 @@
+architect_id,architectJa,architectEn,original_slug,split_count,normalized_names,normalized_slugs,name_ids
+1,パンジョ設計共同体(環境開発研究所＋坂倉建築研究所),Panjo design collaborative (kankyo kaihatsu kenkyusho + sakakura architects & engineers),panjo-design-collaborative,1,パンジョ設計共同体(環境開発研究所＋坂倉建築研究所),panjiョ設計共同体環境開発研究所＋坂倉建築研究所,1
+2,鹿島建設,KAJIMA Corporation,kajima-corporation,1,鹿島建設,kajima-kensetsu,2
+3,黒川紀章建築都市設計事務所,KSYO KUROKAWA ARCHITECTS&ASSOCIATES,ksyo-kurokawa-architects-associates,1,黒川紀章建築都市設計事務所,kisho-kurokawa-architects,3
+4,日本大学小林美夫研究室＋アトリエ・K,"Mio kobayashi laboratory, nihon university + atelier k",mio-kobayashi-laboratory-nihon-university-atelier-k,1,日本大学小林美夫研究室＋アトリエ・K,日本大学小林美夫研究室＋atorie・K,4
+5,白井建築研究所,Shirai architectural institute,shirai-architectural-institute,1,白井建築研究所,白井建築研究所,5
+6,槇総合計画事務所,MAKI AND ASSOCIATES,maki-and-associates-6,1,槇総合計画事務所,maki-associates,6
+7,磯崎新アトリエ＋環境計画,Arata isozaki atelier + environmental planning,arata-isozaki-atelier-environmental-planning,1,磯崎新アトリエ＋環境計画,磯崎新atorie＋環境計画,7
+8,竹中工務店,TAKENAKA CORPORATION,takenaka-corporation-8,1,竹中工務店,takenaka-komuten,8
+9,日本電信電話公社建築局,Nippon Telegraph and Telephone Public Corporation Building Department,nippon-telegraph-and-telephone-public-corporation-building-department,1,日本電信電話公社建築局,日本電信電話公社建築局,9
+10,安井建築設計事務所,YASUI ARCHITECTS & ENGINEERS,yasui-architects-engineers-10,1,安井建築設計事務所,安井建築設計事務所,10
+11,日建設計・大阪,NIKKEN SEKKEI Planners Architects & Engineers,nikken-sekkei-planners-architects-engineers,1,日建設計・大阪,日建設計・大阪,11
+12,菊竹清訓建築設計事務所,KIYONORI KIKUTAKE ARCHITECTS,kiyonori-kikutake-architects,1,菊竹清訓建築設計事務所,菊竹清訓建築設計事務所,12
+14,篠原一男,KAZUO SHINOHARA Atelier,kazuo-shinohara-atelier-14,1,篠原一男,篠原一男,13
+15,fromnow,Fromnow,fromnow,1,fromnow,fromnow,14
+16,木村誠之助総合計画事務所,SEINOSUKE KIMURA ARCHITECTS,seinosuke-kimura-architects,1,木村誠之助総合計画事務所,木村誠之助総合計画事務所,15
+17,日建設計・東京,NIKKEN SEKKEI,nikken-sekkei-17,1,日建設計・東京,日建設計・東京,16
+19,日大生産工学部宗研究室＋千代田建築研究所,"So laboratory, college of industrial engineering, nihon university + chiyoda architectural institute",so-laboratory-college-of-industrial-engineering-nihon-university-chiyoda-architectural-institute-19,1,日大生産工学部宗研究室＋千代田建築研究所,日大生産工学部宗研究室＋千代田建築研究所,17
+20,池田設計事務所,Ikeda Design Office,ikeda-design-office,1,池田設計事務所,池田設計事務所,18
+21,岡田新一設計事務所,OKADA & ASSOCIATES,okada-associates-21,1,岡田新一設計事務所,岡田新一設計事務所,19
+22,浦辺建築事務所,Urabe architects office,urabe-architects-office,1,浦辺建築事務所,浦辺建築事務所,20
+23,黒川紀章建築・都市設計事務所,KISHO KUROKAWA Architect & Associates,kisho-kurokawa-architect-associates-23,1,黒川紀章建築・都市設計事務所,黒川紀章建築・都市設計事務所,21
+24,綜環境計画研究所,Soukankyo planning institute,soukankyo-planning-institute,1,綜環境計画研究所,綜環境計画研究所,22
+25,信設計事務所,Shin design office,shin-design-office,1,信設計事務所,信設計事務所,23
+26,一色建築設計事務所,ISSIKI ARCHITECTS & PARTNERS,issiki-architects-partners-26,1,一色建築設計事務所,一色建築設計事務所,24
+27,土岐新建築総合計画事務所,SIN TOKI ARCHITECT & ASSOCIATES,sin-toki-architect-associates,1,土岐新建築総合計画事務所,土岐新建築総合計画事務所,25
+28,青島設計室,Aoshima design office,aoshima-design-office,1,青島設計室,青島設計室,26
+29,梵寿綱,Brahma-juna,brahma-juna,1,梵寿綱,梵寿綱,27
+30,須賀徳光,Tokumitsu suga,tokumitsu-suga,1,須賀徳光,須賀徳光,28
+31,小沢明,Akira ozawa,akira-ozawa,1,小沢明,小沢明,29
+32,村田靖夫建築研究室,YASUO MURATA ARCHITECT & ASSOCIATES,yasuo-murata-architect-associates,1,村田靖夫建築研究室,村田靖夫建築研究室,30
+33,野口捷二,Shoji noguchi,shoji-noguchi,1,野口捷二,野口捷二,31
+34,荒木正彦,Masahiko araki,masahiko-araki,1,荒木正彦,荒木正彦,32
+35,内井昭蔵建築設計事務所,S. UCHII ARCHITACTS,s-uchii-architacts,1,内井昭蔵建築設計事務所,内井昭蔵建築設計事務所,33
+36,アーキヴィジョン,Archi-vision,archi-vision,1,アーキヴィジョン,aーkiヴィjiョn,34
+37,美建．設計事務所,Biken. design office,biken-design-office-37,1,美建．設計事務所,美建．設計事務所,35
+38,木島安史＋YAS都市研究所,YAS & URBANISTS,yas-urbanists-38,1,木島安史＋YAS都市研究所,木島安史＋YAS都市研究所,36
+39,伊丹潤建築設計研究所,Jun itami architects & engineers,jun-itami-architects-engineers,1,伊丹潤建築設計研究所,伊丹潤建築設計研究所,37
+41,吉村順三,Junzo yoshimura,junzo-yoshimura,1,吉村順三,吉村順三,38
+42,白沢宏規,Hiroki shirasawa,hiroki-shirasawa,1,白沢宏規,白沢宏規,39
+43,赤崎尚信,Naonobu akasaki,naonobu-akasaki,1,赤崎尚信,赤崎尚信,40
+44,関沢弘子 関沢勝一,Hiroko sekizawa katsuichi sekizawa,hiroko-sekizawa-katsuichi-sekizawa,1,関沢弘子 関沢勝一,関沢弘子-関沢勝一,41
+45,武藤章,Akira muto,akira-muto,1,武藤章,武藤章,42
+46,三井不動産 日本設計事務所 武藤構造力学研究所,Mitsui fudosan japan design office mutoh structural mechanics laboratory,mitsui-fudosan-japan-design-office-mutoh-structural-mechanics-laboratory,1,三井不動産 日本設計事務所 武藤構造力学研究所,三井不動産-日本設計事務所-武藤構造力学研究所,43
+47,大成建設,TAISEI DESIGN PLANNERS ARCHITECTS & ENGINEERS,taisei-design-planners-architects-engineers-47,1,大成建設,taisei-kensetsu,44
+49,住友不動産建築技術部・戎工務店,"Sumitomo fudosan architectural engineering department, ebisu corp.",sumitomo-fudosan-architectural-engineering-department-ebisu-corp,1,住友不動産建築技術部・戎工務店,住友不動産建築技術部・戎工務店,45
+50,竹下建築設計室,Takeshita architects & engineers,takeshita-architects-engineers,1,竹下建築設計室,竹下建築設計室,46
+51,富永譲＋フォルムシステム研究所,Yuzuru tominaga + form system research institute,yuzuru-tominaga-form-system-research-institute,1,富永譲＋フォルムシステム研究所,富永譲＋fuォrumushisutemu研究所,47
+52,トリアド建築設計事務所,Triad architectural design office,triad-architectural-design-office,1,トリアド建築設計事務所,toriado建築設計事務所,48
+54,曽根幸一＋環境設計研究所,Koichi sone + environmental design institute,koichi-sone-environmental-design-institute,1,曽根幸一＋環境設計研究所,曽根幸一＋環境設計研究所,49
+56,クラマタ・デザイン事務所,Kuramata design office,kuramata-design-office,1,クラマタ・デザイン事務所,kuramata・dezain事務所,50
+57,内田繁・三橋いく代,"Shigeru uchida, ikuyo mitsuhashi",shigeru-uchida-ikuyo-mitsuhashi-57,1,内田繁・三橋いく代,内田繁・三橋iku代,51
+58,北村陸夫建築設計室,Rikuo kitamura architects,rikuo-kitamura-architects,1,北村陸夫建築設計室,北村陸夫建築設計室,52
+59,吉岡・田島設計事務所,Yoshioka & tajima design office,yoshioka-tajima-design-office,1,吉岡・田島設計事務所,吉岡・田島設計事務所,53
+60,清水建設建築設計本部,Shimizu corporation architectural design division,shimizu-corporation-architectural-design-division,1,清水建設建築設計本部,清水建設建築設計本部,54
+61,指宿真智雄＋建築デザイン　緑地デザイン　設備デザイン,Machio ibusuki + architectural design green space design facility design,machio-ibusuki-architectural-design-green-space-design-facility-design,3,指宿真智雄＋建築デザイン | 緑地デザイン | 設備デザイン,指宿真智雄＋建築dezain | 緑地dezain | 設備dezain,55 | 56 | 57
+62,伊藤喜三郎建築研究所,K.ITO ARCHITECTS & ENGINEERS,k-ito-architects-engineers,1,伊藤喜三郎建築研究所,伊藤喜三郎建築研究所,58
+65,建築研究所アーキヴィジョン,Architectural institute archi-vision,architectural-institute-archi-vision,1,建築研究所アーキヴィジョン,建築研究所aーkiヴィjiョn,59
+66,磯崎新アトリエ,ARATA ISOZAKI & ASSOCIATES,arata-isozaki-associates-66,1,磯崎新アトリエ,arata-isozaki-atelier,60
+67,清家清　戸田建設,Kiyoshi seike toda construction,kiyoshi-seike-toda-construction,2,清家清 | 戸田建設,清家清 | 戸田建設,61 | 62
+69,芦原建築研究所,Ashihara architectural laboratory,ashihara-architectural-laboratory,1,芦原建築研究所,芦原建築研究所,63
+70,芦原建築設計研究所,Y. ASHIHARA ARCHITECT & ASSOCIATES,y-ashihara-architect-associates-70,1,芦原建築設計研究所,芦原建築設計研究所,64
+73,中島龍彦建築事務所,NAKAJIMA TATSUHIKO Architect and Associates,nakajima-tatsuhiko-architect-and-associates,1,中島龍彦建築事務所,中島龍彦建築事務所,65
+75,香山アトリエ,Kayama atelier,kayama-atelier,1,香山アトリエ,香山atorie,66
+76,DAM・DAN,DAM・DAN,dam-dan,1,DAM・DAN,DAM・DAN,67
+79,保坂陽一郎建築研究所,YOICHIRO HOSAKA ARCHITECT & ASSOCIATES,yoichiro-hosaka-architect-associates,1,保坂陽一郎建築研究所,保坂陽一郎建築研究所,68
+80,森京介建築事務所,Kyosuke Mori Architects,kyosuke-mori-architects,1,森京介建築事務所,森京介建築事務所,69
+81,日本図書館協会施設委員会,"Facilities committee, japan library association",facilities-committee-japan-library-association,1,日本図書館協会施設委員会,日本図書館協会施設委員会,70
+82,兵庫県建築部営繕課　安井建築設計事務所,"Hyogo prefectural building department, repair division, yasui architects & engineers, inc.",hyogo-prefectural-building-department-repair-division-yasui-architects-engineers-inc,1,兵庫県建築部営繕課,兵庫県建築部営繕課,71
+83,榎本建築設計事務所,ENOMOTO ARCHITECTS,enomoto-architects,1,榎本建築設計事務所,榎本建築設計事務所,72
+84,香川県土木部建築課・豊浜町建設課,"Building division, public works department, kagawa prefecture; construction division, toyohama town",building-division-public-works-department-kagawa-prefecture-construction-division-toyohama-town,1,香川県土木部建築課・豊浜町建設課,香川県土木部建築課・豊浜町建設課,73
+85,川崎製鉄営繕部建築課　村野・森建築事務所,"Murano & mori architectural office, building division, kawasaki steel repair department",murano-mori-architectural-office-building-division-kawasaki-steel-repair-department,2,川崎製鉄営繕部建築課 | 村野・森建築事務所,川崎製鉄営繕部建築課 | 村野・森建築事務所,74 | 75
+86,木村弘,Hiroshi kimura,hiroshi-kimura,1,木村弘,木村弘,76
+87,石井和紘＋難波和彦,Kazuhiro ishii + kazuhiko namba,kazuhiro-ishii-kazuhiko-namba,1,石井和紘＋難波和彦,石井和紘＋難波和彦,77
+88,上田篤＋塩路建築事務所,Atsushi ueda + shioji architects,atsushi-ueda-shioji-architects,1,上田篤＋塩路建築事務所,上田篤＋塩路建築事務所,78
+89,日新設計,Nisshin design,nisshin-design,1,日新設計,日新設計,79
+90,芙蓉総合開発,Fuyo general development co.,fuyo-general-development-co,1,芙蓉総合開発,芙蓉総合開発,80
+91,日本設計事務所,"NIHON Architects, Engineers & Consultants",nihon-architects-engineers-consultants,1,日本設計事務所,日本設計事務所,81
+92,坂倉建築研究所東京事務所,SAKAKURA ASSOCIATES ARCHITECTS AND ENGINEERS,sakakura-associates-architects-and-engineers-92,1,坂倉建築研究所東京事務所,坂倉建築研究所東京事務所,82
+93,井上武吉研究所,Takeyoshi inoue research institute,takeyoshi-inoue-research-institute,1,井上武吉研究所,井上武吉研究所,83
+96,岡田威海,"Okada, takekai",okada-takekai,1,岡田威海,岡田威海,84
+97,アトリエ・モルフ建築事務所,Atelier morph architects,atelier-morph-architects,1,アトリエ・モルフ建築事務所,atorie・morufu建築事務所,85
+98,鋤納忠治,Tadaharu sukinao,tadaharu-sukinao,1,鋤納忠治,鋤納忠治,86
+99,黒沢隆研究室,TAKASHI KUROSAWA Atelier,takashi-kurosawa-atelier,1,黒沢隆研究室,黒沢隆研究室,87
+100,氏家隆正設計事務所,Takamasa ujiie design office,takamasa-ujiie-design-office,1,氏家隆正設計事務所,氏家隆正設計事務所,88
+101,アーキブレーン,Archibrain,archibrain,1,アーキブレーン,aーkibureーn,89
+102,星島建築設計事務所,Hoshijima architects & engineers,hoshijima-architects-engineers,1,星島建築設計事務所,星島建築設計事務所,90
+105,小野建築・環境計画事務所,ONO ARCHITECT & ASSOCIATES,ono-architect-associates,1,小野建築・環境計画事務所,小野建築・環境計画事務所,91
+107,URBOT,Urbot,urbot,1,URBOT,URBOT,92
+108,藤井博巳建築研究室,"HIROMI FUJII, Architect and Associates",hiromi-fujii-architect-and-associates,1,藤井博巳建築研究室,藤井博巳建築研究室,93
+109,林雅子 林・山田・中原設計同人,MASAKO HAYASHI,masako-hayashi-109,1,林雅子 林・山田・中原設計同人,林雅子-林・山田・中原設計同人,94
+110,坂倉建築研究所大阪事務所,SAKAKURA ASSOCIATES,sakakura-associates-110,1,坂倉建築研究所大阪事務所,坂倉建築研究所大阪事務所,95
+112,デザインシステム,DESIGN SYSTEM INC.,design-system-inc,1,デザインシステム,dezainshisutemu,96
+113,清水建設,SHIMIZU CORPORATION,shimizu-corporation-113,1,清水建設,shimizu-kensetsu,97
+114,兵庫沖縄友愛運動推進協議会　小野建築設計事務所,"Hyogo okinawa friendship movement promotion council ono architects & engineers, inc.",hyogo-okinawa-friendship-movement-promotion-council-ono-architects-engineers-inc,2,兵庫沖縄友愛運動推進協議会 | 小野建築設計事務所,兵庫沖縄友愛運動推進協議会 | 小野建築設計事務所,98 | 99
+115,環境デザイン研究所,ENVIRONMENT DESIGN INSTITUTE,environment-design-institute,1,環境デザイン研究所,環境dezain研究所,100
+116,匠設計,TAKUMI ARCHITECTS & ENGINEERS,takumi-architects-engineers-116,1,匠設計,匠設計,101
+117,アトリエ・ナカソネ＋アトリエ・アイ,Atelier nakasone + atelier ai,atelier-nakasone-atelier-ai,1,アトリエ・ナカソネ＋アトリエ・アイ,atorie・nakasone＋atorie・ai,102
+119,国建設計,Kokken design,kokken-design,1,国建設計,国建設計,103
+120,池原謙一郎,Kenichiro ikehara,kenichiro-ikehara,1,池原謙一郎,池原謙一郎,104
+121,大林組,OBAYASHI CORPORATION,obayashi-corporation-121,1,大林組,obayashi-gumi,105
+122,福沢健次＋F設計計画事務所,Kenji fukuzawa + f design planning office,kenji-fukuzawa-f-design-planning-office,1,福沢健次＋F設計計画事務所,福沢健次＋F設計計画事務所,106
+123,日立建設設計,Hitachi construction design co.,hitachi-construction-design-co,1,日立建設設計,日立建設設計,107
+124,三菱地所,MITSUBISHI ESTATE ARCHITECTURAL & ENGINEERING OFFICE,mitsubishi-estate-architectural-engineering-office,1,三菱地所,mitsubishi-jisho,108
+125,集団住宅・建築研究所,Collective housing and building research institute,collective-housing-and-building-research-institute,1,集団住宅・建築研究所,集団住宅・建築研究所,109
+127,海洋博沖縄設計共同企業体,Ocean expo okinawa design joint venture,ocean-expo-okinawa-design-joint-venture,1,海洋博沖縄設計共同企業体,海洋博沖縄設計共同企業体,110
+130,船クラスター施設・展示設計共同企業体（環境設計研究所・谷口アトリエ・熊井建築設計事務所）,"Ship cluster facility and exhibition design joint venture (kankyo sekkei kenkyusho, taniguchi atelier, kumai architects & engineers)",ship-cluster-facility-and-exhibition-design-joint-venture,1,船クラスター施設・展示設計共同企業体（環境設計研究所・谷口アトリエ・熊井建築設計事務所）,船kurasutaー施設・展示設計共同企業体（環境設計研究所・谷口atorie・熊井建築設計事務所）,111
+131,村田豊建築事務所,Yutaka murata architects & engineers,yutaka-murata-architects-engineers,1,村田豊建築事務所,村田豊建築事務所,112
+132,環境設計研究所　谷口アトリエ　熊井建築設計事務所,"Environmental design institute, taniguchi atelier, kumai architects",environmental-design-institute-taniguchi-atelier-kumai-architects,3,環境設計研究所 | 谷口アトリエ | 熊井建築設計事務所,環境設計研究所 | 谷口atorie | 熊井建築設計事務所,113 | 114 | 115
+134,神谷宏治計画設計事務所,Koji kamiya planning and design office,koji-kamiya-planning-and-design-office,1,神谷宏治計画設計事務所,神谷宏治計画設計事務所,116
+135,山下和正建築研究所,KAZUMASA YAMASHITA ARCHITECT AND ASSOCIATES,kazumasa-yamashita-architect-and-associates,1,山下和正建築研究所,山下和正建築研究所,117
+136,白井晟一研究所,Shirai chenichi research institute,shirai-chenichi-research-institute,1,白井晟一研究所,白井晟一研究所,118
+137,建築計画研究所,Architectural planning institute,architectural-planning-institute,1,建築計画研究所,建築計画研究所,119
+139,AZ Institute　山崎泰孝,Az institute yasutaka yamazaki,az-institute-yasutaka-yamazaki,2,AZ Institute | 山崎泰孝,AZ-Institute | 山崎泰孝,120 | 121
+140,吉村設計事務所,Yoshimura design office,yoshimura-design-office,1,吉村設計事務所,吉村設計事務所,122
+141,村野藤吾,Togo murano,togo-murano,1,村野藤吾,村野藤吾,123
+145,日本電信電話公社建築,Nippon telegraph and telephone public corporation building,nippon-telegraph-and-telephone-public-corporation-building,1,日本電信電話公社建築,日本電信電話公社建築,124
+147,仙アートスタジオ＋戸田建設,Sen art studio + toda construction,sen-art-studio-toda-construction,1,仙アートスタジオ＋戸田建設,仙aーtosutajio＋戸田建設,125
+148,相田武文,Takefumi aida,takefumi-aida,1,相田武文,相田武文,126
+149,岡設計,OKA SEKKEI. ARCHITECTS AND ENGINEERS,oka-sekkei-architects-and-engineers,1,岡設計,岡設計,127
+152,日建設計,NIKKEN SEKKEI,nikken-sekkei-152,1,日建設計,nikken-sekkei,128
+154,大高建築設計事務所,MASATO ODAKA ARCHITECTS & ASSOCIATES,masato-odaka-architects-associates,1,大高建築設計事務所,大高建築設計事務所,129
+156,早稲田大学穂積研究室,"Hozumi Laboratory, Waseda University",hozumi-laboratory-waseda-university,1,早稲田大学穂積研究室,早稲田大学穂積研究室,130
+157,坂本一成,Kazunari sakamoto,kazunari-sakamoto,1,坂本一成,坂本一成,131
+158,伊東豊雄,"TOYO ITO & ASSOCIATES, ARCHITECTS",toyo-ito-associates-architects-158,1,伊東豊雄,toyo-ito,132
+160,シーザー・ペリ(グルーエン設計事務所),Cesar pelli (gruen design office),cesar-pelli,1,シーザー・ペリ(グルーエン設計事務所),shiーzaー・periguruーen設計事務所,133
+161,久米建築事務所,KUME ArchitectsーEngineers,kume-architectsーengineers,1,久米建築事務所,久米建築事務所,134
+162,象設計集団,ATELIER ZO,atelier-zo,1,象設計集団,象設計集団,135
+165,池田宮彦設計事務所,Miyahiko ikeda design office,miyahiko-ikeda-design-office,1,池田宮彦設計事務所,池田宮彦設計事務所,136
+166,神谷宏治計画・設計事務所,Koji kamiya planning & design office,koji-kamiya-planning-design-office,1,神谷宏治計画・設計事務所,神谷宏治計画・設計事務所,137
+167,日本大学生産工学部神谷研究室,"Kamiya laboratory, college of industrial engineering, nihon university",kamiya-laboratory-college-of-industrial-engineering-nihon-university,1,日本大学生産工学部神谷研究室,日本大学生産工学部神谷研究室,138
+168,大谷研究室,OTANI KENKYUSHITSU,otani-kenkyushitsu,1,大谷研究室,大谷研究室,139
+170,村野藤吾・大成建設設計部,"Togo murano, taisei corporation design department",togo-murano-taisei-corporation-design-department,1,村野藤吾・大成建設設計部,村野藤吾・大成建設設計部,140
+171,橋本文隆＋YAS都市研究所,Fumitaka hashimoto + yas urban research institute,fumitaka-hashimoto-yas-urban-research-institute-171,1,橋本文隆＋YAS都市研究所,橋本文隆＋YAS都市研究所,141
+172,長谷川逸子,ITSUKO HASEGAWA ATELIER,itsuko-hasegawa-atelier-172,1,長谷川逸子,長谷川逸子,142
+173,高木滋生建築設計事務所,S. TAKAGI ARCHITECT & ASSOCIATES,s-takagi-architect-associates,1,高木滋生建築設計事務所,高木滋生建築設計事務所,143
+176,SDAスペースデザインアソシエート,Sda space design associate,sda-space-design-associate-176,1,SDAスペースデザインアソシエート,SDAsupeーsudezainasoshieーto,144
+177,アルプ設計室,Alp design office,alp-design-office-177,1,アルプ設計室,arupu設計室,145
+178,武基雄＋武建築設計研究所,"Motoo take + take architects & engineers, inc.",motoo-take-take-architects-engineers-inc,1,武基雄＋武建築設計研究所,武基雄＋武建築設計研究所,146
+180,高須賀晋,Susumu Takasuga,susumu-takasuga,1,高須賀晋,高須賀晋,147
+181,出江寛,KAN IZUE ARCHITECT & ASSOCIATES,kan-izue-architect-associates-181,1,出江寛,出江寛,148
+184,相田武文設計研究所,TAKEFUMI AIDA ARCHITECT & ASSOCIATES,takefumi-aida-architect-associates,1,相田武文設計研究所,相田武文設計研究所,149
+185,樹生(JUNA),Juna,juna,1,樹生(JUNA),樹生JUNA,150
+186,木下建築設計事務所,"Kinoshita architects & engineers, inc.",kinoshita-architects-engineers-inc,1,木下建築設計事務所,木下建築設計事務所,151
+187,瀧光夫,MITSUO TAKI,mitsuo-taki,1,瀧光夫,瀧光夫,152
+188,坂倉竹之助,TAKENOSUKE SAKAKURA,takenosuke-sakakura,1,坂倉竹之助,坂倉竹之助,153
+189,大阪府企業局,Osaka prefectural enterprise bureau,osaka-prefectural-enterprise-bureau,1,大阪府企業局,大阪府企業局,154
+190,香川県土木部建築課,"Building division, department of public works, kagawa prefectural government",building-division-department-of-public-works-kagawa-prefectural-government,1,香川県土木部建築課,香川県土木部建築課,155
+191,毛利建築設計事務所,Mori architectural design office,mori-architectural-design-office,1,毛利建築設計事務所,毛利建築設計事務所,156
+192,遠藤剛生建築設計事務所,TAKAO ENDO ARCHITECT OFFICE,takao-endo-architect-office-192,1,遠藤剛生建築設計事務所,遠藤剛生建築設計事務所,157
+194,コンコード建築設計事務所,"Concord architects & engineers, inc.",concord-architects-engineers-inc,1,コンコード建築設計事務所,konkoーdo建築設計事務所,158
+195,前川国男建築設計事務所,Kunio Maekawa Architects & Engineers,kunio-maekawa-architects-engineers-195,1,前川国男建築設計事務所,前川国男建築設計事務所,159
+196,川崎清＋環境・建築研究所,KIYOSHI KAWASAKI+Design Institute of Landscape & Architecture,kiyoshi-kawasaki-design-institute-of-landscape-architecture-196,1,川崎清＋環境・建築研究所,川崎清＋環境・建築研究所,160
+205,丹下健三・都市・建築設計研究所,KENZO TANGE ASSOCIATES,kenzo-tange-associates-205,1,丹下健三・都市・建築設計研究所,丹下健三・都市・建築設計研究所,161
+223,創和設計,Souwa design,souwa-design,1,創和設計,創和設計,162
+225,野沢正光建築工房,MASAMITSU NOZAWA BUILDING WORKSHOP,masamitsu-nozawa-building-workshop,1,野沢正光建築工房,野沢正光建築工房,163
+226,三輪正弘環境造形研究所,Masahiro miwa environmental design institute,masahiro-miwa-environmental-design-institute,1,三輪正弘環境造形研究所,三輪正弘環境造形研究所,164
+227,佐藤武夫設計事務所,SATOW Architects & Engineers,satow-architects-engineers,1,佐藤武夫設計事務所,佐藤武夫設計事務所,165
+229,彦谷建築設計事務所,"Hikotani architects & engineers, inc.",hikotani-architects-engineers-inc,1,彦谷建築設計事務所,彦谷建築設計事務所,166
+233,計画・設計工房,Planning and Design Studio,planning-and-design-studio,1,計画・設計工房,計画・設計工房,167
+237,鬼頭梓建築設計事務所,Azusa Kito Architect & Associates,azusa-kito-architect-associates,1,鬼頭梓建築設計事務所,鬼頭梓建築設計事務所,168
+238,パンデコン建築設計研究所,PANDECON INSTITUTE OF ARCHITECTURE,pandecon-institute-of-architecture-238,1,パンデコン建築設計研究所,pandekon建築設計研究所,169
+240,小林美夫＋アトリエ・K　日本綜合建築事務所,Yoshio kobayashi + atelier k japan integrated architectural office,yoshio-kobayashi-atelier-k-japan-integrated-architectural-office,2,小林美夫＋アトリエ・K | 日本綜合建築事務所,小林美夫＋atorie・K | 日本綜合建築事務所,170 | 171
+242,松田平田坂本設計事務所,MATSUDA HIRATA SAKAMOTO Architects/Planners/Engineers,matsuda-hirata-sakamoto-architects-planners-engineers,1,松田平田坂本設計事務所,松田平田坂本設計事務所,172
+247,現代計画研究所,GENDAI KEIKAKU ARCHITECTURAL & PLANNING OFFICE,gendai-keikaku-architectural-planning-office,1,現代計画研究所,現代計画研究所,173
+250,石本建築事務所,ISHIMOTO ARCHITECTURAL & ENGINEERING FIRM,ishimoto-architectural-engineering-firm-250,1,石本建築事務所,石本建築事務所,174
+251,教育施設研究所・文部省工営課・岡野真,"Institute for educational facilities research, ministry of education, engineering division, makoto okano",institute-for-educational-facilities-research-ministry-of-education-engineering-division-makoto-okano,1,教育施設研究所・文部省工営課・岡野真,教育施設研究所・文部省工営課・岡野真,175
+253,杉建築設計事務所,Sugi architectural design office,sugi-architectural-design-office,1,杉建築設計事務所,杉建築設計事務所,176
+255,日本大学生産工学部宗研究室＋千代田建築研究所,"So laboratory, college of industrial engineering, nihon university + chiyoda architectural institute",so-laboratory-college-of-industrial-engineering-nihon-university-chiyoda-architectural-institute-255,1,日本大学生産工学部宗研究室＋千代田建築研究所,日本大学生産工学部宗研究室＋千代田建築研究所,177
+256,黒川哲郎＋臼田哲男,Tetsuro kurokawa + tetsuo usuda,tetsuro-kurokawa-tetsuo-usuda,1,黒川哲郎＋臼田哲男,黒川哲郎＋臼田哲男,178
+258,坂倉建築研究所,SAKAKURA ASSOCIATES,sakakura-associates-258,1,坂倉建築研究所,坂倉建築研究所,179
+261,宮脇檀建築研究室,MAYUMI MIYAWAKI ARCHITECT AND ASSOCIATES,mayumi-miyawaki-architect-and-associates,1,宮脇檀建築研究室,宮脇檀建築研究室,180
+263,中村一・瀧光夫,"Hajime nakamura, mitsuo taki",hajime-nakamura-mitsuo-taki,1,中村一・瀧光夫,中村一・瀧光夫,181
+265,独楽蔵,KOMAGURA,komagura,1,独楽蔵,独楽蔵,182
+266,渡辺武信設計室,TAKENOBU WATANABE ARCHITECT AND ASSOCIATES,takenobu-watanabe-architect-and-associates,1,渡辺武信設計室,渡辺武信設計室,183
+268,GRUPPE･KEN,"GRUPPE, KEN",gruppe-ken,1,GRUPPE･KEN,GRUPPE･KEN,184
+270,渡辺豊和建築工房,TOYOKAZU WATANABE ARCHITECT AND ASSOCIATES,toyokazu-watanabe-architect-and-associates,1,渡辺豊和建築工房,渡辺豊和建築工房,185
+271,アトリエR,Atelier R,atelier-r-271,1,アトリエR,atorieR,186
+272,清家清＋デザインシステム,Kiyoshi seike + design system,kiyoshi-seike-design-system,1,清家清＋デザインシステム,清家清＋dezainshisutemu,187
+275,アトリエ515A,Atelier 515a,atelier-515a,1,アトリエ515A,atorie515A,188
+278,竹山実建築綜合研究所,MINORU TAKEYAMA Architect & U/A,minoru-takeyama-architect-u-a-278,1,竹山実建築綜合研究所,竹山実建築綜合研究所,189
+280,東孝光建築研究所,Takamitsu Azuma Architects & Engineers,takamitsu-azuma-architects-engineers,1,東孝光建築研究所,東孝光建築研究所,190
+282,林・山田・中原設計同人,"Hayashi, yamada & nakahara design doujin",hayashi-yamada-nakahara-design-doujin,1,林・山田・中原設計同人,林・山田・中原設計同人,191
+285,石井和紘建築研究所,KAZUHIRO ISII ARCHITECT & ASSOCIATES,kazuhiro-isii-architect-associates,1,石井和紘建築研究所,石井和紘建築研究所,192
+288,谷口吉郎,Yoshiro taniguchi,yoshiro-taniguchi,1,谷口吉郎,谷口吉郎,193
+289,村野・森建築事務所,T. MURANO & MORI ASSOCIATED ARCHITECTS OFFICE,t-murano-mori-associated-architects-office-289,0,,,
+290,前川国男建築設計事務所＋横山建築構造設計事務所,Kunio maekawa architects + yokoyama architects & engineers,kunio-maekawa-architects-yokoyama-architects-engineers,1,前川国男建築設計事務所＋横山建築構造設計事務所,前川国男建築設計事務所＋横山建築構造設計事務所,194
+291,京都市住宅局営繕課・設備部／川崎清＋建築研究協会,"Kyoto city housing bureau, repair division and facilities department / kiyoshi kawasaki + building research institute",kyoto-city-housing-bureau-repair-division-and-facilities-department-kiyoshi-kawasaki-building-research-institute,1,京都市住宅局営繕課・設備部／川崎清＋建築研究協会,京都市住宅局営繕課・設備部／川崎清＋建築研究協会,195
+293,AZ institute・環境計画研究所,Az institute & environmental planning institute,az-institute-environmental-planning-institute,1,AZ institute・環境計画研究所,AZ-institute・環境計画研究所,196
+295,矢向建築事務所,Yamata architects office,yamata-architects-office,1,矢向建築事務所,矢向建築事務所,197
+296,山本公也＋日本総合建築事務所＋S.D.G.システムディベロッピンググループ,Kimiya yamamoto + japan sogo architectural office + s.d.g. system developing group,kimiya-yamamoto-japan-sogo-architectural-office-s-d-g-system-developing-group,1,山本公也＋日本総合建築事務所＋S.D.G.システムディベロッピンググループ,山本公也＋日本総合建築事務所＋SDGshisutemudeィberoッpinguguruーpu,198
+297,安東勝男＋建築計画連合,Katsuo ando + architectural planning union,katsuo-ando-architectural-planning-union,1,安東勝男＋建築計画連合,安東勝男＋建築計画連合,199
+298,第一工房,DAIICHI-KOBO ASSOCIATES,daiichi-kobo-associates-298,1,第一工房,第一工房,200
+299,富家建築事務所,Tomiya architects office,tomiya-architects-office,1,富家建築事務所,富家建築事務所,201
+304,清家清,clear and serene (as a polished mirror and still water),clear-and-serene,0,,,
+306,国建設計工務,National construction accountant,national-construction-accountant,1,国建設計工務,国建設計工務,202
+307,西野善介建築研究室,Yoshisuke nishino architecture laboratory,yoshisuke-nishino-architecture-laboratory,1,西野善介建築研究室,西野善介建築研究室,203
+309,戸田建設,TODA CORPORATION,toda-corporation-309,0,,,
+310,土岐新・建築総合計画事務所,Toki shin & architectural planning office,toki-shin-architectural-planning-office,1,土岐新・建築総合計画事務所,土岐新・建築総合計画事務所,204
+311,戸尾任宏／建築研究所アーキヴィジョン,Nobuhiro too / architectural institute archi-vision,nobuhiro-too-architectural-institute-archi-vision,1,戸尾任宏／建築研究所アーキヴィジョン,戸尾任宏／建築研究所aーkiヴィjiョn,205
+316,AZ institute PLUS計画設計事務所,"AZ institute, PLUS PLAN Design",az-institute-plus-plan-design,1,AZ institute PLUS計画設計事務所,AZ-institute-PLUS計画設計事務所,206
+317,象設計集団＋アトリエ・モビル,Zo design group + atelier mobile,zo-design-group-atelier-mobile,1,象設計集団＋アトリエ・モビル,象設計集団＋atorie・mobiru,207
+319,岸本建築設計事務所＋近藤侊三建築研究室,Kishimoto architects + kondo shinzo architectural laboratory,kishimoto-architects-kondo-shinzo-architectural-laboratory,1,岸本建築設計事務所＋近藤侊三建築研究室,岸本建築設計事務所＋近藤侊三建築研究室,208
+320,神谷・荘司計画設計事務所,Kamiya & soji planning and design office,kamiya-soji-planning-and-design-office,1,神谷・荘司計画設計事務所,神谷・荘司計画設計事務所,209
+321,光吉健次・茂木謙悟＋綜合建築設計研究所,"Kenji mitsuyoshi, kengo mogi + sogo kenchiku sekkei inc.",kenji-mitsuyoshi-kengo-mogi-sogo-kenchiku-sekkei-inc,1,光吉健次・茂木謙悟＋綜合建築設計研究所,光吉健次・茂木謙悟＋綜合建築設計研究所,210
+322,北九州市建築局営繕課，機械課，電気課／光吉健次・茂木謙悟＋綜合建築設計研究所,"Kenji mitsuyoshi, kengo mogi + sohgoh architectural design laboratory",kenji-mitsuyoshi-kengo-mogi-sohgoh-architectural-design-laboratory,1,北九州市建築局営繕課，機械課，電気課／光吉健次・茂木謙悟＋綜合建築設計研究所,北九州市建築局営繕課，機械課，電気課／光吉健次・茂木謙悟＋綜合建築設計研究所,211
+326,六角鬼丈計画工房,"KIJYO ROKKAKU,ARCHITECT & ASSOCIATES",kijyo-rokkaku-architect-associates,1,六角鬼丈計画工房,六角鬼丈計画工房,212
+327,武田光史,Mitsushi takeda,mitsushi-takeda,1,武田光史,武田光史,213
+328,浦田義久,Yoshihisa urata,yoshihisa-urata,1,浦田義久,浦田義久,214
+329,アトリエ74,Atelier 74,atelier-74,1,アトリエ74,atorie74,215
+330,本江謙次　保坂高,Kenji motoe takashi hosaka,kenji-motoe-takashi-hosaka,2,本江謙次 | 保坂高,本江謙次 | 保坂高,216 | 217
+331,辻隆司建築設計事務所,"Takashi tsuji architects & engineers, inc.",takashi-tsuji-architects-engineers-inc,1,辻隆司建築設計事務所,辻隆司建築設計事務所,218
+332,RE設計事務所,RE ARCHITECTURAL FIRM,re-architectural-firm,1,RE設計事務所,RE設計事務所,219
+333,林寛治,HAYASHI KANJI， JIA,hayashi-kanji-jia,1,林寛治,林寛治,220
+335,浅井建築設計事務所,Asai architectural design office,asai-architectural-design-office,1,浅井建築設計事務所,浅井建築設計事務所,221
+336,R．カイザー,R. kaiser.,r-kaiser,1,R．カイザー,R．kaizaー,222
+337,深谷俊則,Toshinori fukaya,toshinori-fukaya,1,深谷俊則,深谷俊則,223
+340,安藤忠雄建築研究所,TADAO ANDO ARCHITECT & ASSOCIATES,tadao-ando-architect-associates-340,1,安藤忠雄建築研究所,tadao-ando-architectural-institute,224
+345,武者英二研究室,Eiji musha laboratory,eiji-musha-laboratory,1,武者英二研究室,武者英二研究室,225
+347,柳建築設計事務所,Yanagi architects & engineers,yanagi-architects-engineers,1,柳建築設計事務所,柳建築設計事務所,226
+348,奥村昭雄,Akio okumura,akio-okumura,1,奥村昭雄,奥村昭雄,227
+355,都市環境・計画研究所,Urban environment and planning research institute,urban-environment-and-planning-research-institute,1,都市環境・計画研究所,都市環境・計画研究所,228
+356,六器建築設計事務所・浅野克彦,"Katsuhiko asano, rokki architects & engineers, inc.",katsuhiko-asano-rokki-architects-engineers-inc,1,六器建築設計事務所・浅野克彦,六器建築設計事務所・浅野克彦,229
+357,YAS都市研究所,Yas urban research institute,yas-urban-research-institute-357,1,YAS都市研究所,YAS都市研究所,230
+359,SDA：スペースデザインアソシエート,Sda: space design associate,sda-space-design-associate-359,1,SDA：スペースデザインアソシエート,SDA：supeーsudezainasoshieーto,231
+362,鹿島建設建築設計本部建築設計部,"Architectural design department, architectural design division, kajima corporation",architectural-design-department-architectural-design-division-kajima-corporation,1,鹿島建設建築設計本部建築設計部,鹿島建設建築設計本部建築設計部,232
+363,杉山隆建築設計事務所,TAKASHI SUGIYAMA ARCHITECT & ASSOCIATES,takashi-sugiyama-architect-associates-363,1,杉山隆建築設計事務所,杉山隆建築設計事務所,233
+365,由良滋,Yura shigeru,yura-shigeru,1,由良滋,由良滋,234
+367,竹中工務店東京支店,Takenaka corporation tokyo branch,takenaka-corporation-tokyo-branch,1,竹中工務店東京支店,竹中工務店東京支店,235
+368,建築設計工房TEAM RAP,Architectural design studio team rap,architectural-design-studio-team-rap,1,建築設計工房TEAM RAP,建築設計工房TEAM-RAP,236
+369,藤木忠善,Tadayoshi fujiki,tadayoshi-fujiki,1,藤木忠善,藤木忠善,237
+370,鈴木恂建築設計事務所,Suzuki yu architectural design office,suzuki-yu-architectural-design-office,1,鈴木恂建築設計事務所,鈴木恂建築設計事務所,238
+373,田中・西野設計事務所,Tanaka & nishino design office,tanaka-nishino-design-office,1,田中・西野設計事務所,田中・西野設計事務所,239
+377,岡田・的場設計事務所＋岡田威海,Okada & matoba design office + takekai okada,okada-matoba-design-office-takekai-okada,1,岡田・的場設計事務所＋岡田威海,岡田・的場設計事務所＋岡田威海,240
+379,古橋建築事務所,FURUHASHI ARCHITECT AND ASSOCIATES,furuhashi-architect-and-associates,1,古橋建築事務所,古橋建築事務所,241
+380,日建設計・東京／竹中工務店,"Nikken sekkei, tokyo / takenaka corporation",nikken-sekkei-tokyo-takenaka-corporation,1,日建設計・東京／竹中工務店,日建設計・東京／竹中工務店,242
+389,田中謙次建築研究所,Kenji Tanaka Architectural Institute,kenji-tanaka-architectural-institute,1,田中謙次建築研究所,田中謙次建築研究所,243
+392,観光企画設計社＋R.C.ガイテ＆アソシエイツ,Kanko kikaku sekkeisha + r.c. gaithe & associates,kanko-kikaku-sekkeisha-r-c-gaithe-associates,1,観光企画設計社＋R.C.ガイテ＆アソシエイツ,観光企画設計社＋RCgaite＆asoshieitsu,244
+393,設計事務所ジェネラルドラフティング,Design firm general drafting,design-firm-general-drafting,1,設計事務所ジェネラルドラフティング,設計事務所jiェnerarudorafuteィngu,245
+396,高口恭行＋近畿建築構造研究所,Yasuyuki takaguchi + kinki institute of building and structures,yasuyuki-takaguchi-kinki-institute-of-building-and-structures,1,高口恭行＋近畿建築構造研究所,高口恭行＋近畿建築構造研究所,246
+398,武蔵野美術大学造形学部学科建築学科研究室＋保坂陽一郎建築研究所,Musashino art university faculty of art and design department of architecture laboratory + hosaka yoichiro architectural institute,musashino-art-university-faculty-of-art-and-design-department-of-architecture-laboratory-hosaka-yoichiro-architectural-institute,1,武蔵野美術大学造形学部学科建築学科研究室＋保坂陽一郎建築研究所,武蔵野美術大学造形学部学科建築学科研究室＋保坂陽一郎建築研究所,247
+399,レーモンド建築設計事務所,"Raymond architects & engineers, inc.",raymond-architects-engineers-inc,1,レーモンド建築設計事務所,reーmondo建築設計事務所,248
+401,小川信子＋アトリエ・モビル＋湯本貞子・阿部祥子,"Nobuko ogawa + atelier mobile + sadako yumoto, shoko abe",nobuko-ogawa-atelier-mobile-sadako-yumoto-shoko-abe,1,小川信子＋アトリエ・モビル＋湯本貞子・阿部祥子,小川信子＋atorie・mobiru＋湯本貞子・阿部祥子,249
+402,小川信子＋アトリエ・モビル,Nobuko ogawa + atelier mobile,nobuko-ogawa-atelier-mobile,1,小川信子＋アトリエ・モビル,小川信子＋atorie・mobiru,250
+405,小川信子＋アトリエ・モビル＋阿部幸正,Nobuko ogawa + atelier mobile + yukimasa abe,nobuko-ogawa-atelier-mobile-yukimasa-abe,1,小川信子＋アトリエ・モビル＋阿部幸正,小川信子＋atorie・mobiru＋阿部幸正,251
+406,小川信子＋アトリエ・モビル＋赤井奈津子＋小笠原享,Nobuko ogawa + atelier mobile + natsuko akai + kyou ogasawara,nobuko-ogawa-atelier-mobile-natsuko-akai-kyou-ogasawara,1,小川信子＋アトリエ・モビル＋赤井奈津子＋小笠原享,小川信子＋atorie・mobiru＋赤井奈津子＋小笠原享,252
+410,日本設計事務所大阪支社,"Osaka branch office, nippon design office",osaka-branch-office-nippon-design-office,1,日本設計事務所大阪支社,日本設計事務所大阪支社,253
+412,漆原美代子事務所,Miyoko urushihara office,miyoko-urushihara-office,1,漆原美代子事務所,漆原美代子事務所,254
+413,小杉英男,Hideo kosugi,hideo-kosugi,1,小杉英男,小杉英男,255
+414,寺本文夫　寺本晰子,"Fumio teramoto, luciko teramoto",fumio-teramoto-luciko-teramoto,2,寺本文夫 | 寺本晰子,寺本文夫 | 寺本晰子,256 | 257
+415,小川守之,Moriyuki ogawa,moriyuki-ogawa,1,小川守之,小川守之,258
+416,石田信男,Nobuo ishida,nobuo-ishida,1,石田信男,石田信男,259
+417,SDA・スペースデザインアソシエート,"Sda, space design associate",sda-space-design-associate-417,1,SDA・スペースデザインアソシエート,SDA・supeーsudezainasoshieーto,260
+420,北島道生アトリエ,Michio kitajima atelier,michio-kitajima-atelier,1,北島道生アトリエ,北島道生atorie,261
+421,吉島忠男,Tadao yoshijima,tadao-yoshijima,1,吉島忠男,吉島忠男,262
+422,高松伸,SHIN TAKAMATSU ARCHITECT & ASSOCIATES,shin-takamatsu-architect-associates,1,高松伸,高松伸,263
+424,山下司建築研究室,Tsukasa yamashita architects laboratory,tsukasa-yamashita-architects-laboratory,1,山下司建築研究室,山下司建築研究室,264
+426,水谷頴介＋都市・計画・設計研究所,Mizutani keisuke + urban planning and design institute,mizutani-keisuke-urban-planning-and-design-institute,1,水谷頴介＋都市・計画・設計研究所,水谷頴介＋都市・計画・設計研究所,265
+429,阿部勤／アルテック建築研究所,"Tsutomu Abe/Altec Architects & Engineers, Inc.",tsutomu-abe-altec-architects-engineers-inc,1,阿部勤／アルテック建築研究所,阿部勤／aruteッku建築研究所,266
+430,長尾重武,Shigetake nagao,shigetake-nagao,1,長尾重武,長尾重武,267
+431,野田正治,Shoji noda,shoji-noda,1,野田正治,野田正治,268
+433,阿久井研究室,Akui laboratory,akui-laboratory,1,阿久井研究室,阿久井研究室,269
+435,神谷五男,ITSUO KAMIYA & ASSOCIATES,itsuo-kamiya-associates-435,1,神谷五男,神谷五男,270
+436,北海道建築設計監理・教育施設研究所共同企業体,Hokkaido architectural design & supervision and educational facilities research institute joint venture,hokkaido-architectural-design-supervision-and-educational-facilities-research-institute-joint-venture,1,北海道建築設計監理・教育施設研究所共同企業体,北海道建築設計監理・教育施設研究所共同企業体,271
+437,太田実,Ota minoru,ota-minoru,1,太田実,太田実,272
+438,門設計研究所,Kadon design laboratory,kadon-design-laboratory,1,門設計研究所,門設計研究所,273
+442,出江寛建築事務所,KAN IZUE architect & associates,kan-izue-architect-associates-442,1,出江寛建築事務所,出江寛建築事務所,274
+444,葉祥栄,SHOEI YOH,shoei-yoh,1,葉祥栄,葉祥栄,275
+446,川崎清十環境・建築研究所,Kawasaki seiju environmental & architectural research institute,kawasaki-seiju-environmental-architectural-research-institute,1,川崎清十環境・建築研究所,川崎清十環境・建築研究所,276
+449,現代計画・三上設計共同企業体,Hyundai planning & mikami sekkei joint venture,hyundai-planning-mikami-sekkei-joint-venture,1,現代計画・三上設計共同企業体,現代計画・三上設計共同企業体,277
+455,TRIAD建築設計事務所,TRIAD Architects & Associates,triad-architects-associates,1,TRIAD建築設計事務所,TRIAD建築設計事務所,278
+457,三浦紀之建築工房,NORIYUKI MIURA ARCHITECTURE DESIGN OFFICE,noriyuki-miura-architecture-design-office,1,三浦紀之建築工房,三浦紀之建築工房,279
+461,界工作舎,court ladies' residence (in the inner Heian Palace),court-ladies-residence,1,界工作舎,界工作舎,280
+466,宮本忠長建築設計事務所,TADANAGA MIYAMOTO ARCHITECT & ASSOCIATES,tadanaga-miyamoto-architect-associates-466,1,宮本忠長建築設計事務所,宮本忠長建築設計事務所,281
+467,現代計画研究所・柴建築設計事務所設計共同企業体,Gendai planning institute & shiba architectural design office design joint venture,gendai-planning-institute-shiba-architectural-design-office-design-joint-venture,1,現代計画研究所・柴建築設計事務所設計共同企業体,現代計画研究所・柴建築設計事務所設計共同企業体,282
+468,日本住宅公団関東支社・現代計画研究所,"Japan housing corporation kanto branch, gendai planning institute",japan-housing-corporation-kanto-branch-gendai-planning-institute,1,日本住宅公団関東支社・現代計画研究所,日本住宅公団関東支社・現代計画研究所,283
+476,沖種郎＋設計連合,Taneiro oki + design coalition,taneiro-oki-design-coalition,1,沖種郎＋設計連合,沖種郎＋設計連合,284
+481,後藤真理子,Mariko goto,mariko-goto,1,後藤真理子,後藤真理子,285
+482,吉田研介,Kensuke yoshida,kensuke-yoshida,1,吉田研介,吉田研介,286
+485,長島孝一,KOICHI NAGASHIMA+AUR,koichi-nagashima-aur-485,1,長島孝一,長島孝一,287
+486,木村傳建築設計事務所,Den kimura architects & engineers,den-kimura-architects-engineers,1,木村傳建築設計事務所,木村傳建築設計事務所,288
+487,遠藤楽建築創作所,Endo raku kenchiku sousakusho,endo-raku-kenchiku-sousakusho,1,遠藤楽建築創作所,遠藤楽建築創作所,289
+490,水澤工務店,MIZUSAWA KOUMUTEN,mizusawa-koumuten,1,水澤工務店,水澤工務店,290
+491,波多江健郎建築研究室,Kenro hatae architectural laboratory,kenro-hatae-architectural-laboratory,1,波多江健郎建築研究室,波多江健郎建築研究室,291
+492,畠山博茂,Hiroshige hatakeyama,hiroshige-hatakeyama,1,畠山博茂,畠山博茂,292
+493,建築環境研究所,Institute for built environment,institute-for-built-environment,1,建築環境研究所,建築環境研究所,293
+498,毛綱モン太建築工房,"Monta metsuna architects & engineers, inc.",monta-metsuna-architects-engineers-inc,1,毛綱モン太建築工房,毛綱mon太建築工房,294
+500,上遠野建築事務所,Kamitono architects office,kamitono-architects-office,1,上遠野建築事務所,上遠野建築事務所,295
+501,団建築設計事務所,Dan architectural design office,dan-architectural-design-office,1,団建築設計事務所,団建築設計事務所,296
+502,設計事務所ゲンプラン,Design firm genplan,design-firm-genplan,1,設計事務所ゲンプラン,設計事務所genpuran,297
+508,黒川雅之建築設計事務所,MASAYUKI KUROKAWA ARCHITECT & ASSOCIATES,masayuki-kurokawa-architect-associates-508,1,黒川雅之建築設計事務所,黒川雅之建築設計事務所,298
+517,横山公男・連合設計社,"Kimio yokoyama, rengo sekkeisha",kimio-yokoyama-rengo-sekkeisha,1,横山公男・連合設計社,横山公男・連合設計社,299
+519,U研究室,U laboratory,u-laboratory,1,U研究室,U研究室,300
+523,吉沢都市・建築設計事務所,Yoshizawa urban & architectural design office,yoshizawa-urban-architectural-design-office,1,吉沢都市・建築設計事務所,吉沢都市・建築設計事務所,301
+524,西村征一郎・建築環境研究所,"Seiichiro nishimura, institute for built environment",seiichiro-nishimura-institute-for-built-environment,1,西村征一郎・建築環境研究所,西村征一郎・建築環境研究所,302
+526,RIA建築綜合研究所,Ria architectural research institute,ria-architectural-research-institute,1,RIA建築綜合研究所,RIA建築綜合研究所,303
+527,斎藤裕建築研究室,Yutaka saito architectural laboratory,yutaka-saito-architectural-laboratory,1,斎藤裕建築研究室,斎藤裕建築研究室,304
+529,郵政大臣官房建築部,Minister of posts and telecommunications building department,minister-of-posts-and-telecommunications-building-department,1,郵政大臣官房建築部,郵政大臣官房建築部,305
+530,ALP設計室,Alp design office,alp-design-office-530,1,ALP設計室,ALP設計室,306
+532,DEN住宅研究室,Den housing laboratory,den-housing-laboratory,1,DEN住宅研究室,DEN住宅研究室,307
+536,三村翰＋計画研究所DAN,Han mimura + planning institute dan,han-mimura-planning-institute-dan,1,三村翰＋計画研究所DAN,三村翰＋計画研究所DAN,308
+540,富永讓＋フオルムシステム研究所,YUZURU TOMINAGA+FORM SYSTEM INSTITUE,yuzuru-tominaga-form-system-institue,1,富永讓＋フオルムシステム研究所,富永讓＋fuorumushisutemu研究所,309
+542,東京都都市防災本部／東京都住宅局／日建設計,Tokyo metropolitan government urban disaster prevention headquarters / tokyo metropolitan government housing bureau / nikken sekkei,tokyo-metropolitan-government-urban-disaster-prevention-headquarters-tokyo-metropolitan-government-housing-bureau-nikken-sekkei,1,東京都都市防災本部／東京都住宅局／日建設計,東京都都市防災本部／東京都住宅局／日建設計,310
+543,内田繁　三橋いく代,Shigeru uchida ikuyo mitsuhashi,shigeru-uchida-ikuyo-mitsuhashi-543,2,内田繁 | 三橋いく代,内田繁 | 三橋iku代,311 | 312
+548,PALインターナショナル,Pal international,pal-international,1,PALインターナショナル,PALintaーnashiョnaru,313
+549,都住創プロジェクトチーム,Metropolitan housing creation project team,metropolitan-housing-creation-project-team,1,都住創プロジェクトチーム,都住創purojiェkutochiーmu,314
+550,堀江武之＋アトリエRIX,Takeyuki horie + atelier rix,takeyuki-horie-atelier-rix,1,堀江武之＋アトリエRIX,堀江武之＋atorieRIX,315
+555,建築研究室DAP,ARCHITECTURAL ATELIER DIG AND PILE,architectural-atelier-dig-and-pile,1,建築研究室DAP,建築研究室DAP,316
+556,友常仁二,Jinji tomotsune,jinji-tomotsune,1,友常仁二,友常仁二,317
+559,難波俊作,Shunsaku namba,shunsaku-namba,1,難波俊作,難波俊作,318
+560,小宮山昭・ジェド建築設計研究所,"Akira komiyama jeddo architects & engineers, inc.",akira-komiyama-jeddo-architects-engineers-inc,1,小宮山昭・ジェド建築設計研究所,小宮山昭・jiェdo建築設計研究所,319
+561,石田設計事務所,Ishida design office,ishida-design-office,1,石田設計事務所,石田設計事務所,320
+562,園山高茂,Takashige sonoyama,takashige-sonoyama,1,園山高茂,園山高茂,321
+563,神谷五男＋都市環境建築設計所,ITSUO KAMIYA & ASSOCIATES,itsuo-kamiya-associates-563,1,神谷五男＋都市環境建築設計所,神谷五男＋都市環境建築設計所,322
+565,早川邦彦＋建築計画工房,Kunihiko hayakawa + architectural planning studio,kunihiko-hayakawa-architectural-planning-studio,1,早川邦彦＋建築計画工房,早川邦彦＋建築計画工房,323
+566,清田育男,Ikuo kiyota,ikuo-kiyota,1,清田育男,清田育男,324
+567,渡辺明次建築研究室,Akitsugu watanabe architectural laboratory,akitsugu-watanabe-architectural-laboratory,1,渡辺明次建築研究室,渡辺明次建築研究室,325
+568,三創建築都市設計,Sanso kenchiku toshi sekkei,sanso-kenchiku-toshi-sekkei,1,三創建築都市設計,三創建築都市設計,326
+569,大熊喜英,Yoshihide okuma,yoshihide-okuma,1,大熊喜英,大熊喜英,327
+570,田中清,Kiyoshi tanaka,kiyoshi-tanaka,1,田中清,田中清,328
+571,野村加根夫,Kaneo nomura,kaneo-nomura,1,野村加根夫,野村加根夫,329
+573,山本理顕設計工場,RIKEN YAMAMOTO & FIELD SHOP,riken-yamamoto-field-shop-573,1,山本理顕設計工場,山本理顕設計工場,330
+579,瀧光夫・三宅宣哉,"Mitsuo taki, nobuya miyake",mitsuo-taki-nobuya-miyake,1,瀧光夫・三宅宣哉,瀧光夫・三宅宣哉,331
+580,森義純建築設計室,YOSHINORI MORI + CORE ARCHITECTS & ASSOCIATES,yoshinori-mori-core-architects-associates-580,1,森義純建築設計室,森義純建築設計室,332
+582,日本大学理工学部理工学研究所,"Research Institute for Science and Engineering, College of Science and Technology, Nihon University",research-institute-for-science-and-engineering-college-of-science-and-technology-nihon-university,1,日本大学理工学部理工学研究所,日本大学理工学部理工学研究所,333
+604,早川邦彦建築研究室,KUNIHIKO HAYAKAWA ARCHITECT & ASSOCIATES,kunihiko-hayakawa-architect-associates,1,早川邦彦建築研究室,早川邦彦建築研究室,334
+606,富永譲＋フォルム・システム研究所,Yuzuru tominaga + form systems research institute,yuzuru-tominaga-form-systems-research-institute,1,富永譲＋フォルム・システム研究所,富永譲＋fuォrumu・shisutemu研究所,335
+615,椎名政夫建築設計事務所,"OSAKI CAMPUS REDEVELOPMENT PROJECT, RISSHO UNIVERSITY",osaki-campus-redevelopment-project-rissho-university,1,椎名政夫建築設計事務所,椎名政夫建築設計事務所,336
+617,電電公社関東電気通信局建築部,"Building department, kanto telecommunications bureau, nippon telegraph and telephone public corporation",building-department-kanto-telecommunications-bureau-nippon-telegraph-and-telephone-public-corporation,1,電電公社関東電気通信局建築部,電電公社関東電気通信局建築部,337
+618,電電公社建築局,Nippon telegraph and telephone public corporation building bureau,nippon-telegraph-and-telephone-public-corporation-building-bureau,1,電電公社建築局,電電公社建築局,338
+619,井上武吉,"SHIGERU BAN, ARCHITECT",shigeru-ban-architect,1,井上武吉,井上武吉,339
+624,石間工務店,Ishima corporation,ishima-corporation,1,石間工務店,石間工務店,340
+628,原広司＋アトリエφ,Hiroshi hara + atelier φ,hiroshi-hara-atelier-φ-628,1,原広司＋アトリエφ,原広司＋atorieφ,341
+629,ESTEC,Estec,estec,1,ESTEC,ESTEC,342
+630,松本光生建築設計事務所,Mitsuo matsumoto architects & engineers,mitsuo-matsumoto-architects-engineers,1,松本光生建築設計事務所,松本光生建築設計事務所,343
+632,ASTM企業連合,Astm corporate alliance,astm-corporate-alliance,1,ASTM企業連合,ASTM企業連合,344
+634,横川隆一,Ryuichi yokokawa,ryuichi-yokokawa,1,横川隆一,横川隆一,345
+635,大杉喜彦,Yoshihiko osugi,yoshihiko-osugi,1,大杉喜彦,大杉喜彦,346
+637,北川原温／北河原環境建築設計事務所,"Atsushi kitagawara / kitagawara environmental architects & engineers, inc.",atsushi-kitagawara-kitagawara-environmental-architects-engineers-inc,1,北川原温／北河原環境建築設計事務所,北川原温／北河原環境建築設計事務所,347
+638,八木こうじ,Yagi kouji,yagi-kouji,1,八木こうじ,八木kouji,348
+640,伊藤哲夫,Tetsuo ito,tetsuo-ito,1,伊藤哲夫,伊藤哲夫,349
+641,河原一郎建築設計事務所,arck. ICHIRO KAWAHARA & Associates,arck-ichiro-kawahara-associates,1,河原一郎建築設計事務所,河原一郎建築設計事務所,350
+645,AZ institute 環境計画研究所＋山崎泰孝研究室,Az institute environmental planning institute + yasutaka yamazaki laboratory,az-institute-environmental-planning-institute-yasutaka-yamazaki-laboratory,1,AZ institute 環境計画研究所＋山崎泰孝研究室,AZ-institute-環境計画研究所＋山崎泰孝研究室,351
+647,黒川哲郎＋ハードウェア,Tetsuro kurokawa + hardware,tetsuro-kurokawa-hardware,1,黒川哲郎＋ハードウェア,黒川哲郎＋haーdouェa,352
+650,池原研究室,IKEHARA Laboratory,ikehara-laboratory,1,池原研究室,池原研究室,353
+654,曽根幸一・環境設計研究所,KOICHI SONE & ENVIRONMENTAL DESIGN ASSOCIATES,koichi-sone-environmental-design-associates,1,曽根幸一・環境設計研究所,曽根幸一・環境設計研究所,354
+656,大阪府建築部営繕室＋東畑建築事務所,Osaka prefectural building department repair office + higashibata architects & engineers,osaka-prefectural-building-department-repair-office-higashibata-architects-engineers,1,大阪府建築部営繕室＋東畑建築事務所,大阪府建築部営繕室＋東畑建築事務所,355
+658,大江宏建築事務所,"HIROSHI OHE, ARCHITECT AND ASSOCIATES",hiroshi-ohe-architect-and-associates-658,1,大江宏建築事務所,大江宏建築事務所,356
+659,小杉建築研究室,Kosugi architectural laboratory,kosugi-architectural-laboratory,1,小杉建築研究室,小杉建築研究室,357
+661,高須賀晋1級建築士事務所,Susumu takasuga 1st class architect office,susumu-takasuga-1st-class-architect-office,1,高須賀晋1級建築士事務所,高須賀晋1級建築士事務所,358
+663,大成建設＋竹中工務店,Taisei corporation + takenaka corporation,taisei-corporation-takenaka-corporation,1,大成建設＋竹中工務店,大成建設＋竹中工務店,359
+664,戸田建設＋厳建築研究所＋三豊建築研究所,Toda corporation + itsuki kenchiku kenkyusho + mitutoyo kenchiku kenkyusho,toda-corporation-itsuki-kenchiku-kenkyusho-mitutoyo-kenchiku-kenkyusho,1,戸田建設＋厳建築研究所＋三豊建築研究所,戸田建設＋厳建築研究所＋三豊建築研究所,360
+665,萩原克彦設計事務所,Katsuhiko Hagiwara Design Office,katsuhiko-hagiwara-design-office,1,萩原克彦設計事務所,萩原克彦設計事務所,361
+667,森義純建築設計室(C.U.A.),Yoshizumi mori architectural design office (c.u.a.),yoshizumi-mori-architectural-design-office,1,森義純建築設計室(C.U.A.),森義純建築設計室CUA,362
+668,佐藤工業,SATO KOGYO,sato-kogyo,1,佐藤工業,佐藤工業,363
+669,柴田・高・設計プランニング事務所,"Shibata, taka & design planning office",shibata-taka-design-planning-office,1,柴田・高・設計プランニング事務所,柴田・高・設計puranningu事務所,364
+670,吉田五十八研究室,Yoshida 58 laboratory,yoshida-58-laboratory,1,吉田五十八研究室,吉田五十八研究室,365
+671,中山繁信設計室,SHIGENOBU NAKAYAMA Architects and Associates,shigenobu-nakayama-architects-and-associates,1,中山繁信設計室,中山繁信設計室,366
+672,YAS都市研究所（橋本文隆）,Yas urban research institute (fumitaka hashimoto),yas-urban-research-institute-672,1,YAS都市研究所（橋本文隆）,YAS都市研究所（橋本文隆）,367
+674,AUR建築・都市・研究コンサルタント,"Aur architectural, urban and research consultants",aur-architectural-urban-and-research-consultants,1,AUR建築・都市・研究コンサルタント,AUR建築・都市・研究konsarutanto,368
+675,神戸市住宅局営繕部＋坂倉建築研究所大阪事務所,Kobe city housing bureau repair department + sakakura architects & engineers osaka office,kobe-city-housing-bureau-repair-department-sakakura-architects-engineers-osaka-office,1,神戸市住宅局営繕部＋坂倉建築研究所大阪事務所,神戸市住宅局営繕部＋坂倉建築研究所大阪事務所,369
+679,天野・吉原設計事務所,Amano & yoshihara design office,amano-yoshihara-design-office,1,天野・吉原設計事務所,天野・吉原設計事務所,370
+682,パンデコン建築研究所,Pandekon architectural institute,pandekon-architectural-institute,1,パンデコン建築研究所,pandekon建築研究所,371
+683,横河健,KEN YOKOGAWA ARCHITECT & ASSOCIATES,ken-yokogawa-architect-associates-683,1,横河健,横河健,372
+691,美建．計事務所,Biken. accounting office,biken-accounting-office,1,美建．計事務所,美建．計事務所,373
+693,松本建築設計事務所,Matsumoto architects & engineers,matsumoto-architects-engineers,1,松本建築設計事務所,松本建築設計事務所,374
+708,川崎市＋神谷・荘司計画設計事務所,Kawasaki city + kamiya & soji planning and design office,kawasaki-city-kamiya-soji-planning-and-design-office,1,川崎市＋神谷・荘司計画設計事務所,川崎市＋神谷・荘司計画設計事務所,375
+709,大阪府企業局建設課＋坂倉建築研究所大阪事務所,"Construction division, osaka prefectural enterprise bureau + sakakura architects & engineers osaka office",construction-division-osaka-prefectural-enterprise-bureau-sakakura-architects-engineers-osaka-office,1,大阪府企業局建設課＋坂倉建築研究所大阪事務所,大阪府企業局建設課＋坂倉建築研究所大阪事務所,376
+711,前川建築設計事務所,MAEKAWA ASSOCIATES AND ENGINEERS,maekawa-associates-and-engineers,1,前川建築設計事務所,前川建築設計事務所,377
+712,谷口・五井設計共同体,Taniguchi-goi design joint venture,taniguchi-goi-design-joint-venture,1,谷口・五井設計共同体,谷口・五井設計共同体,378
+713,野田正治建築アトリエ,Shoji noda architects atelier,shoji-noda-architects-atelier,1,野田正治建築アトリエ,野田正治建築atorie,379
+716,山田初江,Hatsue yamada,hatsue-yamada,1,山田初江,山田初江,380
+718,A.L.P.設計室,A.l.p. design office,a-l-p-design-office,0,,,
+721,板垣元彬建築事務所,M.ITAGAKI ARCHITECT & ASSOCIATES,m-itagaki-architect-associates,1,板垣元彬建築事務所,板垣元彬建築事務所,382
+722,富岡伊都子,Itsuko tomioka,itsuko-tomioka,1,富岡伊都子,富岡伊都子,383
+726,林雅子,Masako hayashi,masako-hayashi-726,1,林雅子,林雅子,384
+733,アトリエOAK,Atelier oak,atelier-oak,1,アトリエOAK,atorieOAK,385
+737,毛綱モン太毅曠architects,Monta kihei ketsuna architects,monta-kihei-ketsuna-architects,1,毛綱モン太毅曠architects,毛綱mon太毅曠architects,386
+738,神谷五男＋都市環境・建築設計所,Itsuo kamiya + urban environment & architectural design office,itsuo-kamiya-urban-environment-architectural-design-office,1,神谷五男＋都市環境・建築設計所,神谷五男＋都市環境・建築設計所,387
+739,設計・計画工房　谷口吉生　高宮真介,Design and planning studio yoshio taniguchi shinsuke takamiya,design-and-planning-studio-yoshio-taniguchi-shinsuke-takamiya,3,設計・計画工房 | 谷口吉生 | 高宮真介,設計・計画工房 | yoshio-taniguchi | 高宮真介,388 | 389 | 390
+743,伊丹潤建築研究所,JUN ITAMI ARCHITECT A RESEARCH INSTITUTE,jun-itami-architect-a-research-institute,1,伊丹潤建築研究所,伊丹潤建築研究所,391
+745,fromnow建築計画事務所,Fromnow architectural planning office,fromnow-architectural-planning-office,1,fromnow建築計画事務所,fromnow建築計画事務所,392
+748,前川國男建築設計事務所,Kunio maekawa architects & engineers,kunio-maekawa-architects-engineers-748,1,前川國男建築設計事務所,前川國男建築設計事務所,393
+753,シヴィック・デザイン研究所,Civic design institute,civic-design-institute,1,シヴィック・デザイン研究所,shiヴィッku・dezain研究所,394
+758,西野善介建築研究所・ZENPLAN,"Yoshisuke nishino architects & engineers, zenplan",yoshisuke-nishino-architects-engineers-zenplan,1,西野善介建築研究所・ZENPLAN,西野善介建築研究所・ZENPLAN,395
+759,パシフィックコンサルタント＋坂倉建築研究所＋西野善介建築研究所,Pacific consultant + sakakura & associates + yoshisuke nishino & associates,pacific-consultant-sakakura-associates-yoshisuke-nishino-associates,1,パシフィックコンサルタント＋坂倉建築研究所＋西野善介建築研究所,pashifuィッkukonsarutanto＋坂倉建築研究所＋西野善介建築研究所,396
+760,井出一済建築設計事務所,"Ide kazuza architects & engineers, inc.",ide-kazuza-architects-engineers-inc,1,井出一済建築設計事務所,井出一済建築設計事務所,397
+762,港湾環境エンジニアリング・環境デザイン研究所,Port environmental engineering & environmental design laboratory,port-environmental-engineering-environmental-design-laboratory,1,港湾環境エンジニアリング・環境デザイン研究所,港湾環境enjiniaringu・環境dezain研究所,398
+764,美建・設計事務所．石井修,Biken design office. osamu ishii,biken-design-office-osamu-ishii-764,1,美建・設計事務所．石井修,美建・設計事務所．石井修,399
+767,黒川建築事務所,Kurokawa architectural office,kurokawa-architectural-office,1,黒川建築事務所,黒川建築事務所,400
+770,神戸市住宅局営繕部＋瀧光夫＋荒木造園設計事務所,Kobe city housing bureau repair department + mitsuo taki + araki landscape design office,kobe-city-housing-bureau-repair-department-mitsuo-taki-araki-landscape-design-office,1,神戸市住宅局営繕部＋瀧光夫＋荒木造園設計事務所,神戸市住宅局営繕部＋瀧光夫＋荒木造園設計事務所,401
+772,PALインターナショナルー級建築士事務所,Pal international - class a architect office,pal-international-class-a-architect-office,1,PALインターナショナルー級建築士事務所,PALintaーnashiョnaruー級建築士事務所,402
+773,相田武文設計研究所＋中島建築事務所,Takefumi aida design institute + nakajima architects office,takefumi-aida-design-institute-nakajima-architects-office,1,相田武文設計研究所＋中島建築事務所,相田武文設計研究所＋中島建築事務所,403
+774,日本住宅公団関西支社＋環境・建築研究所,Japan housing corporation kansai branch + environment & building research institute,japan-housing-corporation-kansai-branch-environment-building-research-institute,1,日本住宅公団関西支社＋環境・建築研究所,日本住宅公団関西支社＋環境・建築研究所,404
+775,現代計画研究所＋山下和正建築研究所,Gendai planning institute + kazumasa yamashita architectural institute,gendai-planning-institute-kazumasa-yamashita-architectural-institute,1,現代計画研究所＋山下和正建築研究所,現代計画研究所＋山下和正建築研究所,405
+777,神戸市住宅局＋坂倉建築研究所大阪事務所,Kobe city housing bureau + sakakura architectural institute osaka office,kobe-city-housing-bureau-sakakura-architectural-institute-osaka-office,1,神戸市住宅局＋坂倉建築研究所大阪事務所,神戸市住宅局＋坂倉建築研究所大阪事務所,406
+779,大阪府住宅供給公社＋坂倉建築研究所大阪事務所,Osaka prefectural housing supply corporation + sakakura architectural institute osaka office,osaka-prefectural-housing-supply-corporation-sakakura-architectural-institute-osaka-office,1,大阪府住宅供給公社＋坂倉建築研究所大阪事務所,大阪府住宅供給公社＋坂倉建築研究所大阪事務所,407
+780,日本住宅公団関西支社＋坂倉建築研究所大阪事務所＋昭和事務所,Japan housing corporation kansai branch + sakakura architects & engineers osaka office + showa office,japan-housing-corporation-kansai-branch-sakakura-architects-engineers-osaka-office-showa-office,1,日本住宅公団関西支社＋坂倉建築研究所大阪事務所＋昭和事務所,日本住宅公団関西支社＋坂倉建築研究所大阪事務所＋昭和事務所,408
+781,日本住宅公団関西支社＋坂倉建築研究所大阪事務所,Japan housing corporation kansai branch + sakakura architects & engineers osaka office,japan-housing-corporation-kansai-branch-sakakura-architects-engineers-osaka-office,1,日本住宅公団関西支社＋坂倉建築研究所大阪事務所,日本住宅公団関西支社＋坂倉建築研究所大阪事務所,409
+789,北川原環境建築設計事務所／ILCD,Kitagawara environmental architects / ilcd,kitagawara-environmental-architects-ilcd,1,北川原環境建築設計事務所／ILCD,北川原環境建築設計事務所／ILCD,410
+792,Team Zoo　象設計集団,Team zoo elephant design group,team-zoo-elephant-design-group,1,Team Zoo,Team-Zoo,411
+795,能勢次郎,Jiro nose,jiro-nose,1,能勢次郎,能勢次郎,412
+796,翔アトリエ,Sho atelier,sho-atelier,1,翔アトリエ,翔atorie,413
+797,小野辺均　内木政治,Hitoshi onobe uchiki politics,hitoshi-onobe-uchiki-politics,2,小野辺均 | 内木政治,小野辺均 | 内木政治,414 | 415
+798,竹中左右平,Takenaka Left and Right,takenaka-left-and-right,1,竹中左右平,竹中左右平,416
+800,前島晴夫,Haruo maejima,haruo-maejima,1,前島晴夫,前島晴夫,417
+801,三橋いく代,Ikuyo mitsuhashi,ikuyo-mitsuhashi,0,,,
+804,村上徹建築設計事務所,TORU MURAKAMI ARCHITECT & ASSOCIATES,toru-murakami-architect-associates,1,村上徹建築設計事務所,村上徹建築設計事務所,418
+807,吉村順三設計事務所,JUNZO YOSHIMURA ARCHITECT,junzo-yoshimura-architect,1,吉村順三設計事務所,吉村順三設計事務所,419
+809,小島孜,Assiduously,assiduously,1,小島孜,小島孜,420
+810,佐賀和光,Saga wako,saga-wako,1,佐賀和光,佐賀和光,421
+814,筑波大学中央図書館設計小委員会＋岡田新一設計事務所,University of tsukuba central library design subcommittee + shinichi okada design office,university-of-tsukuba-central-library-design-subcommittee-shinichi-okada-design-office,1,筑波大学中央図書館設計小委員会＋岡田新一設計事務所,筑波大学中央図書館設計小委員会＋岡田新一設計事務所,422
+815,山下設計,YAMASHITA SEKKEI,yamashita-sekkei-815,1,山下設計,山下設計,423
+824,坪井善正,Yoshimasa tsuboi,yoshimasa-tsuboi,1,坪井善正,坪井善正,424
+825,電々公社建築局,Electric company building department,electric-company-building-department,1,電々公社建築局,電公社建築局,425
+829,小林英嗣,Eiji kobayashi,eiji-kobayashi,1,小林英嗣,小林英嗣,426
+830,環境設計21,Environmental design 21,environmental-design-21,1,環境設計21,環境設計21,427
+831,倉本たつひこ建築計画室,TATSUHIKO G. KURAMOTO ARCHITECT,tatsuhiko-g-kuramoto-architect,1,倉本たつひこ建築計画室,倉本tatsuhiko建築計画室,428
+832,宮下勇,Isamu miyashita,isamu-miyashita,1,宮下勇,宮下勇,429
+835,香山アトリエ＋環境造形研究所,KOYAMA ATELIER,koyama-atelier-835,1,香山アトリエ＋環境造形研究所,香山atorie＋環境造形研究所,430
+843,丸川建築設計事務所,Marukawa architectural design office,marukawa-architectural-design-office,1,丸川建築設計事務所,丸川建築設計事務所,431
+845,指宿真智雄・建築デザイン,"Machio ibusuki, architectural design",machio-ibusuki-architectural-design,1,指宿真智雄・建築デザイン,指宿真智雄・建築dezain,432
+846,武蔵野建築事務所,Musashino architectural office,musashino-architectural-office,1,武蔵野建築事務所,武蔵野建築事務所,433
+848,工学院大学建築学科大学施設委員会,"University facilities committee, department of architecture, kogakuin university",university-facilities-committee-department-of-architecture-kogakuin-university,1,工学院大学建築学科大学施設委員会,工学院大学建築学科大学施設委員会,434
+849,葛西みさ子,Misako kasai,misako-kasai,1,葛西みさ子,葛西misa子,435
+850,大杉喜彦建築綜合研究所,YOSHIHIKO OHSUGI ASSOCIATES ARCHITECT & ENGINEERS,yoshihiko-ohsugi-associates-architect-engineers,1,大杉喜彦建築綜合研究所,大杉喜彦建築綜合研究所,436
+853,長島建築研究所＋土岐新建築総合計画事務所,Nagashima architects + toki shin architectural planning office,nagashima-architects-toki-shin-architectural-planning-office,1,長島建築研究所＋土岐新建築総合計画事務所,長島建築研究所＋土岐新建築総合計画事務所,437
+854,長島建築研究所,Nagashima architects & engineers,nagashima-architects-engineers,1,長島建築研究所,長島建築研究所,438
+858,辰建設一級建築士事務所,Tatsu construction first-class architect office,tatsu-construction-first-class-architect-office,1,辰建設一級建築士事務所,辰建設一級建築士事務所,439
+868,佐藤秀工務店,Sato shu corporation,sato-shu-corporation,1,佐藤秀工務店,佐藤秀工務店,440
+869,吉岡設計事務所,Yoshioka design office,yoshioka-design-office,1,吉岡設計事務所,吉岡設計事務所,441
+871,長谷川紘都市・建築研究室,Hiroshi hasegawa laboratory of urbanism and architecture,hiroshi-hasegawa-laboratory-of-urbanism-and-architecture,1,長谷川紘都市・建築研究室,長谷川紘都市・建築研究室,442
+873,都市環境開発センター,Urban environment development center,urban-environment-development-center,1,都市環境開発センター,都市環境開発sentaー,443
+874,西原研究所,Nishihara research institute,nishihara-research-institute,1,西原研究所,西原研究所,444
+875,日建設計・東京＋環境デザイン研究所,"Nikken sekkei, tokyo + environmental design institute",nikken-sekkei-tokyo-environmental-design-institute,1,日建設計・東京＋環境デザイン研究所,日建設計・東京＋環境dezain研究所,445
+877,葉デザイン事務所,SHOEI YOH + ARCHITECTS,shoei-yoh-architects-877,1,葉デザイン事務所,葉dezain事務所,446
+882,緒方理一郎建築研究所,RIICHIRO OGATA ARCHITECTS & ASSOCIATES,riichiro-ogata-architects-associates,1,緒方理一郎建築研究所,緒方理一郎建築研究所,447
+883,TEAM ZOO　いるかグループ,Team zoo the dolphin group,team-zoo-the-dolphin-group,2,TEAM ZOO | いるかグループ,TEAM-ZOO | irukaguruーpu,448 | 449
+886,本間利雄設計事務所＋地域環境計画研究室,TOSHIO HOMMA & ASSOCIATES,toshio-homma-associates-886,1,本間利雄設計事務所＋地域環境計画研究室,本間利雄設計事務所＋地域環境計画研究室,450
+888,アトリエR　斎藤義,Atelier r saito yoshi,atelier-r-saito-yoshi,1,斎藤義,斎藤義,451
+890,北川原温／ILCD,Atsushi kitagawahara/ilcd,atsushi-kitagawahara-ilcd,1,北川原温／ILCD,北川原温／ILCD,452
+892,毛綱モン太毅曠建築事務所,"Kezuna monta kikaku architects, inc.",kezuna-monta-kikaku-architects-inc,1,毛綱モン太毅曠建築事務所,毛綱mon太毅曠建築事務所,453
+894,浅井浩之,Hiroyuki asai,hiroyuki-asai,1,浅井浩之,浅井浩之,454
+895,伊東豊雄建築設計事務所,"TOYO ITO & ASSOCIATES, ARCHITECTS",toyo-ito-associates-architects-895,1,伊東豊雄建築設計事務所,toyo-ito-associates,455
+897,美建・設計事務所,Biken & design office,biken-design-office-897,1,美建・設計事務所,美建・設計事務所,456
+907,アトリエ・アイ,Atelier eye,atelier-eye,1,アトリエ・アイ,atorie・ai,457
+908,観光企画設計社,KANKO KIKAKU SEKKEISHA,kanko-kikaku-sekkeisha,1,観光企画設計社,観光企画設計社,458
+909,長島孝一＋AUR,KOICHI NAGASHIMA+AUR,koichi-nagashima-aur-909,1,長島孝一＋AUR,長島孝一＋AUR,459
+912,計画・設計工房　谷口吉生・高宮真介,"Planning and design studio yoshio taniguchi, shinsuke takamiya",planning-and-design-studio-yoshio-taniguchi-shinsuke-takamiya,1,谷口吉生・高宮真介,谷口吉生・高宮真介,460
+915,安井建築設計事務所＋坂倉建築研究所＋パシフィックコンサルタンツ,Yasui architects + sakakura architectural institute + pacific consultants,yasui-architects-sakakura-architectural-institute-pacific-consultants,1,安井建築設計事務所＋坂倉建築研究所＋パシフィックコンサルタンツ,安井建築設計事務所＋坂倉建築研究所＋pashifuィッkukonsarutantsu,461
+917,戸尾任宏・建築研究所アーキヴィジョン,TADAHIRO TOH， ARCHIVISION ARCHITECT AND ASSOCIATES,tadahiro-toh-archivision-architect-and-associates-917,1,戸尾任宏・建築研究所アーキヴィジョン,戸尾任宏・建築研究所aーkiヴィjiョn,462
+918,内田祥哉＋アルセッド建築研究所,YOSHICHIKA UCHIDA+ALSED,yoshichika-uchida-alsed,1,内田祥哉＋アルセッド建築研究所,内田祥哉＋aruseッdo建築研究所,463
+920,大江宏建築事務所・梅沢安恵設計事務所,"Hiroshi oe architects & associates, yasue umezawa design office",hiroshi-oe-architects-associates-yasue-umezawa-design-office,1,大江宏建築事務所・梅沢安恵設計事務所,大江宏建築事務所・梅沢安恵設計事務所,464
+928,娑羅建築工房,Sala architecture studio,sala-architecture-studio,1,娑羅建築工房,娑羅建築工房,465
+929,長建設計事務所,CHOKEN SEKKEI,choken-sekkei,1,長建設計事務所,長建設計事務所,466
+930,創設計事務所,SO ARCHITECT OFFICE,so-architect-office,1,創設計事務所,創設計事務所,467
+932,鈴木エドワード建築設計事務所,EDWARD SUZUKI ASSOCIATES,edward-suzuki-associates-932,1,鈴木エドワード建築設計事務所,鈴木edowaーdo建築設計事務所,468
+934,雨宮建築設計事務所,RYOHEI AMEMIYA ARCHITECT & ASSOCIATES,ryohei-amemiya-architect-associates,1,雨宮建築設計事務所,雨宮建築設計事務所,469
+935,増沢建築設計事務所,Masuzawa architects & engineers,masuzawa-architects-engineers,1,増沢建築設計事務所,増沢建築設計事務所,470
+940,熊谷義信＋SD企画設計研究所,Yoshinobu kumagai + sd planning and design institute,yoshinobu-kumagai-sd-planning-and-design-institute,1,熊谷義信＋SD企画設計研究所,熊谷義信＋SD企画設計研究所,471
+941,F設計計画事務所,F design planning office,f-design-planning-office,1,F設計計画事務所,F設計計画事務所,472
+945,アトリエR　斎藤義建築設計事務所,Atelier r saito yoshi architects & engineers,atelier-r-saito-yoshi-architects-engineers,1,斎藤義建築設計事務所,斎藤義建築設計事務所,473
+946,入江三宅設計事務所,Irie Miyake Design Office,irie-miyake-design-office,1,入江三宅設計事務所,入江三宅設計事務所,474
+947,山崎泰孝・山内陸平＋AZ institute,"Yasutaka yamazaki, rikuhei yamauchi + az institute",yasutaka-yamazaki-rikuhei-yamauchi-az-institute,1,山崎泰孝・山内陸平＋AZ institute,山崎泰孝・山内陸平＋AZ-institute,475
+954,大関徹建築設計事務所,"Toru ozeki architects & engineers, inc.",toru-ozeki-architects-engineers-inc,1,大関徹建築設計事務所,大関徹建築設計事務所,476
+956,飯倉開発プロジェクトチーム,Iikura development project team,iikura-development-project-team,1,飯倉開発プロジェクトチーム,飯倉開発purojiェkutochiーmu,477
+957,東急設計コンサルタント,TOKYU ARCHITECTS & ENGINEERS,tokyu-architects-engineers,1,東急設計コンサルタント,東急設計konsarutanto,478
+959,現代計画・環境デザイン設計共同企業体,Hyundai planning & environmental design design joint venture,hyundai-planning-environmental-design-design-joint-venture,1,現代計画・環境デザイン設計共同企業体,現代計画・環境dezain設計共同企業体,479
+961,建築計画　元倉真琴　飯田善彦,Architectural planning makoto motokura yoshihiko iida,architectural-planning-makoto-motokura-yoshihiko-iida,3,建築計画 | 元倉真琴 | 飯田善彦,建築計画 | 元倉真琴 | 飯田善彦,480 | 481 | 482
+962,若山滋,Shigeru wakayama,shigeru-wakayama,1,若山滋,若山滋,483
+963,エンドウプランニング,ENDO PLANNING Architects,endo-planning-architects,1,エンドウプランニング,endoupuranningu,484
+964,エンドウプランニング・空間構造研究所,Pea planning and space structure laboratory,pea-planning-and-space-structure-laboratory,1,エンドウプランニング・空間構造研究所,endoupuranningu・空間構造研究所,485
+965,岡田建築・環境設計研究所,Okada architectural & environmental design institute,okada-architectural-environmental-design-institute,1,岡田建築・環境設計研究所,岡田建築・環境設計研究所,486
+967,苅谷武郎,Takero kariya,takero-kariya,1,苅谷武郎,苅谷武郎,487
+968,入江経一,KEIICHI IRIE,keiichi-irie,1,入江経一,入江経一,488
+969,藍設計室,Ai design office,ai-design-office,1,藍設計室,藍設計室,489
+976,西沢文隆,Fumitaka nishizawa,fumitaka-nishizawa,1,西沢文隆,西沢文隆,490
+977,林昌二・林雅子,"Shoji hayashi, masako hayashi",shoji-hayashi-masako-hayashi,1,林昌二・林雅子,林昌二・林雅子,491
+979,瀬尾武志＋トータルアーキプロジェック,Takeshi seo + total archiprojek,takeshi-seo-total-archiprojek,1,瀬尾武志＋トータルアーキプロジェック,瀬尾武志＋toーtaruaーkipurojiェッku,492
+980,アトリエ・K,ATELIER･K ARCHITECT&ASSOCIATES,atelier-k-architect-associates-980,1,アトリエ・K,atorie・K,493
+981,葛飾区建築部営繕課＋日本設計事務所,Katsushika city building department repair division + nippon design office,katsushika-city-building-department-repair-division-nippon-design-office,1,葛飾区建築部営繕課＋日本設計事務所,葛飾区建築部営繕課＋日本設計事務所,494
+982,東京設計事務所,Tokyo design office,tokyo-design-office,1,東京設計事務所,東京設計事務所,495
+984,竹中工務店九州1級建築士事務所,Takenaka corporation kyushu 1st class registered architect office,takenaka-corporation-kyushu-1st-class-registered-architect-office,1,竹中工務店九州1級建築士事務所,竹中工務店九州1級建築士事務所,496
+985,高口恭行＋造家研究室,YASUYUKI TAKAGUCHI+Atelier Zohka,yasuyuki-takaguchi-atelier-zohka-985,1,高口恭行＋造家研究室,高口恭行＋造家研究室,497
+987,長谷川逸子建築計画工房,Itsuko hasegawa architectural planning studio,itsuko-hasegawa-architectural-planning-studio,1,長谷川逸子建築計画工房,長谷川逸子建築計画工房,498
+993,柴田・高・松永・設計プランニング事務所,"Shibata, taka & matsunaga design planning office",shibata-taka-matsunaga-design-planning-office,1,柴田・高・松永・設計プランニング事務所,柴田・高・松永・設計puranningu事務所,499
+996,斎藤裕建築研究所,YUTAKA SAITO Architect & Associates,yutaka-saito-architect-associates,1,斎藤裕建築研究所,斎藤裕建築研究所,500
+998,室伏次郎／アルテック建築研究所,Jiro murobushi / altec architects & associates,jiro-murobushi-altec-architects-associates,1,室伏次郎／アルテック建築研究所,室伏次郎／aruteッku建築研究所,501
+1001,中森紫光建築工房,Nakamori shikou architects studio,nakamori-shikou-architects-studio,1,中森紫光建築工房,中森紫光建築工房,502
+1002,小宮山昭＋アトリエR,Akira komiyama + atelier r,akira-komiyama-atelier-r,1,小宮山昭＋アトリエR,小宮山昭＋atorieR,503
+1003,吉田研介建築設計室,"KENSUKE YOSHIDA, Architect & Associates",kensuke-yoshida-architect-associates-1003,1,吉田研介建築設計室,吉田研介建築設計室,504
+1004,石井和紘建築研究所＋SUM建築設計事務所,Kazuhiro ishii architects + sum architects,kazuhiro-ishii-architects-sum-architects,1,石井和紘建築研究所＋SUM建築設計事務所,石井和紘建築研究所＋SUM建築設計事務所,505
+1005,梓設計,AZUSA SEKKEI,azusa-sekkei-1005,1,梓設計,梓設計,506
+1009,美建・設計事務所　石井修,Biken design office osamu ishii,biken-design-office-osamu-ishii-1009,1,石井修,石井修,507
+1010,神戸市＋日建設計・大阪,"Kobe city + nikken sekkei, osaka",kobe-city-nikken-sekkei-osaka,1,神戸市＋日建設計・大阪,神戸市＋日建設計・大阪,508
+1011,上田篤＋神戸市＋日建設計・大阪,"Atsushi ueda + kobe city + nikken sekkei, osaka",atsushi-ueda-kobe-city-nikken-sekkei-osaka,1,上田篤＋神戸市＋日建設計・大阪,上田篤＋神戸市＋日建設計・大阪,509
+1013,早田保博設計工場＋西野善介建築研究所,Yasuhiro hayata design factory + yoshisuke nishino architects & engineers,yasuhiro-hayata-design-factory-yoshisuke-nishino-architects-engineers,1,早田保博設計工場＋西野善介建築研究所,早田保博設計工場＋西野善介建築研究所,510
+1015,川島建築設計研究所,Kawashima architects & engineers,kawashima-architects-engineers,1,川島建築設計研究所,川島建築設計研究所,511
+1017,内田繁＋保科孝之,Shigeru uchida + takayuki hoshina,shigeru-uchida-takayuki-hoshina,1,内田繁＋保科孝之,内田繁＋保科孝之,512
+1027,志木正弘・林公子（名城大学）,"Masahiro shiki, kimiko hayashi (meijo university)",masahiro-shiki-kimiko-hayashi,1,志木正弘・林公子（名城大学）,志木正弘・林公子（名城大学）,513
+1028,海藤建築事務所,Kaito architectural office,kaito-architectural-office,1,海藤建築事務所,海藤建築事務所,514
+1031,松本陽一設計事務所,Matsumoto yoichi design office,matsumoto-yoichi-design-office,1,松本陽一設計事務所,松本陽一設計事務所,515
+1034,現代建築研究所,GKK ARCHITECTS &  ENGINEERS,gkk-architects-engineers-1034,1,現代建築研究所,現代建築研究所,516
+1035,埼玉県＋坂倉建築研究所東京事務所,Saitama prefecture + sakakura architects & engineers tokyo office,saitama-prefecture-sakakura-architects-engineers-tokyo-office,1,埼玉県＋坂倉建築研究所東京事務所,埼玉県＋坂倉建築研究所東京事務所,517
+1036,高松伸建築設計事務所,SHIN TAKAMATSU ARCHITECT AND ASSOCIATES,shin-takamatsu-architect-and-associates,1,高松伸建築設計事務所,高松伸建築設計事務所,518
+1037,竹山実建築総合研究所,Minoru takeyama architectural research institute,minoru-takeyama-architectural-research-institute,1,竹山実建築総合研究所,竹山実建築総合研究所,519
+1039,進藤繁,Shindo shigeru,shindo-shigeru,1,進藤繁,進藤繁,520
+1044,黒川哲郎＋デザインリーグ,TETSURO KUROKAWA＋DESIGN LEAGUE,tetsuro-kurokawa-design-league,1,黒川哲郎＋デザインリーグ,黒川哲郎＋dezainriーgu,521
+1050,都市建築設計事務所　Kアトリエ,"K atelier, urban architectural design office",k-atelier-urban-architectural-design-office-1050,2,都市建築設計事務所 | Kアトリエ,都市建築設計事務所 | Katorie,522 | 523
+1051,東京工業大学茶谷研究室,"Chatani laboratory, tokyo institute of technology",chatani-laboratory-tokyo-institute-of-technology,1,東京工業大学茶谷研究室,東京工業大学茶谷研究室,524
+1052,石井修／美建・設計事務所,"OSAMU ISHII, Biken Architectural Design Office",osamu-ishii-biken-architectural-design-office-1052,1,石井修／美建・設計事務所,石井修／美建・設計事務所,525
+1056,海老原建築設計事務所,I.EBIHARA Architect & Associates,i-ebihara-architect-associates,1,海老原建築設計事務所,海老原建築設計事務所,526
+1059,愛知県建築部営繕課＋豊田市建設部住宅営繕部＋RIA建築綜合研究所,Aichi prefecture building department repair division + toyota city construction department housing repair division + ria building research institute,aichi-prefecture-building-department-repair-division-toyota-city-construction-department-housing-repair-division-ria-building-research-institute,1,愛知県建築部営繕課＋豊田市建設部住宅営繕部＋RIA建築綜合研究所,愛知県建築部営繕課＋豊田市建設部住宅営繕部＋RIA建築綜合研究所,527
+1060,美川淳而＋環・設計工房,Junji mikawa + kan design studio,junji-mikawa-kan-design-studio-1060,1,美川淳而＋環・設計工房,美川淳而＋環・設計工房,528
+1062,TAKE－9計画設計研究所,Take-9 planning and design institute,take-9-planning-and-design-institute,1,TAKE－9計画設計研究所,TAKE－9計画設計研究所,529
+1071,富山県立美術館建設準備室＋富山県土木部営繕課＋日本総合建築事務所,Toyama prefectural museum of art construction preparation office + toyama prefectural public works department repair division + japan general building office,toyama-prefectural-museum-of-art-construction-preparation-office-toyama-prefectural-public-works-department-repair-division-japan-general-building-office,1,富山県立美術館建設準備室＋富山県土木部営繕課＋日本総合建築事務所,富山県立美術館建設準備室＋富山県土木部営繕課＋日本総合建築事務所,530
+1072,EPI,Epi,epi,1,EPI,EPI,531
+1074,椎名英三建築設計事務所,EIZO SHINA ARCHITECT & ASSOCIATES,eizo-shina-architect-associates,1,椎名英三建築設計事務所,椎名英三建築設計事務所,532
+1075,石山修武＋小須田広利・山崎洋二（ダムダン空間工作所）,"Shubu ishiyama + hirotoshi kosuda, yoji yamazaki (damdan space workshop)",shubu-ishiyama-hirotoshi-kosuda-yoji-yamazaki,1,石山修武＋小須田広利・山崎洋二（ダムダン空間工作所）,石山修武＋小須田広利・山崎洋二（damudan空間工作所）,533
+1076,原廣司＋アトリエ・ファイ,Hiroshi hara + atelier phi,hiroshi-hara-atelier-phi-1076,1,原廣司＋アトリエ・ファイ,原廣司＋atorie・fuァi,534
+1079,Team ZOO　象設計集団＋アトリエ・モビル,Team zoo elephant design group + atelier mobile,team-zoo-elephant-design-group-atelier-mobile,1,Team ZOO,Team-ZOO,535
+1081,増田友也　京都大学増田研究室＋生活環境研究所,"Tomoya masuda masuda laboratory, kyoto university + institute for living environment",tomoya-masuda-masuda-laboratory-kyoto-university-institute-for-living-environment,2,増田友也 | 京都大学増田研究室＋生活環境研究所,増田友也 | 京都大学増田研究室＋生活環境研究所,536 | 537
+1083,埼玉県住宅都市部営繕課＋坂倉建築研究所東京事務所,"Saitama prefectural housing and urban development department, repair division + sakakura architects & engineers tokyo office",saitama-prefectural-housing-and-urban-development-department-repair-division-sakakura-architects-engineers-tokyo-office,1,埼玉県住宅都市部営繕課＋坂倉建築研究所東京事務所,埼玉県住宅都市部営繕課＋坂倉建築研究所東京事務所,538
+1084,AZ Institute環境計画研究所,AZ Institute for Environmental Planning,az-institute-for-environmental-planning,1,AZ Institute環境計画研究所,AZ-Institute環境計画研究所,539
+1086,北川原温＋ILCD,ATSUSHI KITAGAWA+ILCD,atsushi-kitagawa-ilcd,1,北川原温＋ILCD,北川原温＋ILCD,540
+1087,毛綱毅曠建築事務所,MOZUNA KIKOO ARCHITECTS & ASSOCIATES,mozuna-kikoo-architects-associates,1,毛綱毅曠建築事務所,毛綱毅曠建築事務所,541
+1088,大谷幸夫・大谷研究室,SACHIO OHTANI & ASSOCIATES,sachio-ohtani-associates,1,大谷幸夫・大谷研究室,大谷幸夫・大谷研究室,542
+1091,建設省筑波研究学園都市営繕建設本部　日本設計・坂倉・第一工房設計監理共同企業体,"Ministry of construction, tsukuba science city repair and construction headquarters nippon sekkei, sakakura & dai-ichi kobo design and supervision joint venture",ministry-of-construction-tsukuba-science-city-repair-and-construction-headquarters-nippon-sekkei-sakakura-dai-ichi-kobo-design-and-supervision-joint-venture,2,建設省筑波研究学園都市営繕建設本部 | 日本設計・坂倉・第一工房設計監理共同企業体,建設省筑波研究学園都市営繕建設本部 | 日本設計・坂倉・第一工房設計監理共同企業体,543 | 544
+1093,甲南こもん基本設計ワーキンググループ,Konan komon basic design working group,konan-komon-basic-design-working-group,1,甲南こもん基本設計ワーキンググループ,甲南komon基本設計waーkinguguruーpu,545
+1095,竜野松山設計事務所,Tatsuno matsuyama design office,tatsuno-matsuyama-design-office,1,竜野松山設計事務所,竜野松山設計事務所,546
+1101,和設計事務所,Wa design office,wa-design-office,1,和設計事務所,和設計事務所,547
+1103,高松伸＋匠設計・渡辺勝美,"Shin takamatsu + katsumi watanabe, takumi design",shin-takamatsu-katsumi-watanabe-takumi-design,1,高松伸＋匠設計・渡辺勝美,高松伸＋匠設計・渡辺勝美,548
+1104,鈴木アソシエイツ,"Suzuki associates, inc.",suzuki-associates-inc,1,鈴木アソシエイツ,鈴木asoshieitsu,549
+1105,埼玉県住宅都市部＋設計事務所洋洋社,Saitama housing and urban development department + design office yoyosha,saitama-housing-and-urban-development-department-design-office-yoyosha,1,埼玉県住宅都市部＋設計事務所洋洋社,埼玉県住宅都市部＋設計事務所洋洋社,550
+1106,高松市建築課＋山本坦設計事務所,Takamatsu city building division + yamamoto tan design office,takamatsu-city-building-division-yamamoto-tan-design-office,1,高松市建築課＋山本坦設計事務所,高松市建築課＋山本坦設計事務所,551
+1112,黒沢隆研究室＋早見プラザ一級建築士事務所,Takashi kurosawa laboratory + hayami plaza first class architect office,takashi-kurosawa-laboratory-hayami-plaza-first-class-architect-office,1,黒沢隆研究室＋早見プラザ一級建築士事務所,黒沢隆研究室＋早見puraza一級建築士事務所,552
+1118,大成建設大阪支店,Taisei corporation osaka branch,taisei-corporation-osaka-branch,1,大成建設大阪支店,大成建設大阪支店,553
+1123,ARCOM,ARCOM R&D,arcom-r-d,1,ARCOM,ARCOM,554
+1126,香田由美子,Yumiko kada,yumiko-kada,1,香田由美子,香田由美子,555
+1128,木村丈夫,Tough kimura,tough-kimura,1,木村丈夫,木村丈夫,556
+1129,ワークショップ,WORKSHOP,workshop,1,ワークショップ,waーkushiョッpu,557
+1132,渡辺明設計事務所,AKIRA WATANABE ARCHITECT AND ASSOCIATES,akira-watanabe-architect-and-associates-1132,1,渡辺明設計事務所,渡辺明設計事務所,558
+1134,設計同人GAN,Design doujin gan,design-doujin-gan,1,設計同人GAN,設計同人GAN,559
+1136,早川邦彦建築研究所,KUNIHIKO HAYAKAWA ARCHITECTS & ASSOCIATES,kunihiko-hayakawa-architects-associates,1,早川邦彦建築研究所,早川邦彦建築研究所,560
+1139,日建設計・名古屋,"Nikken sekkei, nagoya",nikken-sekkei-nagoya,1,日建設計・名古屋,日建設計・名古屋,561
+1140,武澤秀一・用美強建築設計研究所,"Shuichi takezawa, youmi qiang architects & engineers, inc.",shuichi-takezawa-youmi-qiang-architects-engineers-inc,1,武澤秀一・用美強建築設計研究所,武澤秀一・用美強建築設計研究所,562
+1141,松本直高・建築設計事務所,"Naotaka matsumoto, architectural design office",naotaka-matsumoto-architectural-design-office,1,松本直高・建築設計事務所,松本直高・建築設計事務所,563
+1142,竹内武弘,Takehiro takeuchi,takehiro-takeuchi,1,竹内武弘,竹内武弘,564
+1148,石井修＋東建築設計事務所,Osamu ishii + azuma architects,osamu-ishii-azuma-architects,1,石井修＋東建築設計事務所,石井修＋東建築設計事務所,565
+1149,香山アトリエ／環境造形研究所,KOHYAMA ATELIER,kohyama-atelier-1149,1,香山アトリエ／環境造形研究所,香山atorie／環境造形研究所,566
+1150,山下司建築研究所,Tsukasa yamashita architects & engineers,tsukasa-yamashita-architects-engineers,1,山下司建築研究所,山下司建築研究所,567
+1152,レーモンド設計事務所・田邊博司,"Raymond design office, hiroshi tanabe",raymond-design-office-hiroshi-tanabe,1,レーモンド設計事務所・田邊博司,reーmondo設計事務所・田邊博司,568
+1154,寺田秀夫＋竹山実（武蔵野美術大学造形学部建築学科研究室）　竹山実建築綜合研究所,Hideo terada + minoru takeyama (musashino art university faculty of art and design department of architecture laboratory) minoru takeyama architectural research institute,hideo-terada-minoru-takeyama,1,寺田秀夫＋竹山実（武蔵野美術大学造形学部建築学科研究室）,寺田秀夫＋竹山実（武蔵野美術大学造形学部建築学科研究室）,569
+1155,日建設計・東京＋SOM・シカゴ,"Nikken sekkei, tokyo + som, chicago",nikken-sekkei-tokyo-som-chicago,1,日建設計・東京＋SOM・シカゴ,日建設計・東京＋SOM・shikago,570
+1156,石山修武＋小松田弘一（ダムダン空間工作所）,Shubu ishiyama + koichi komatsuda (damdan space workshop),shubu-ishiyama-koichi-komatsuda,1,石山修武＋小松田弘一（ダムダン空間工作所）,石山修武＋小松田弘一（damudan空間工作所）,571
+1158,YAS都市研究所・橋本文隆,"Fumitaka hashimoto, yas urban research institute",fumitaka-hashimoto-yas-urban-research-institute-1158,1,YAS都市研究所・橋本文隆,YAS都市研究所・橋本文隆,572
+1159,越後島研一,Kenichi echigo-jima,kenichi-echigo-jima,1,越後島研一,越後島研一,573
+1161,LAND建築事務所,Land architectural office,land-architectural-office,1,LAND建築事務所,LAND建築事務所,574
+1162,永田祐三　中地幹往,Yuzo nagata mikio nakachi,yuzo-nagata-mikio-nakachi,2,永田祐三 | 中地幹往,永田祐三 | 中地幹往,575 | 576
+1165,若林廣幸＋都市空間研究所,Hiroyuki wakabayashi + urban space research institute,hiroyuki-wakabayashi-urban-space-research-institute,1,若林廣幸＋都市空間研究所,若林廣幸＋都市空間研究所,577
+1170,設計組織アモルフ,AMORPHE TAKEYAMA & ASSOCIATES,amorphe-takeyama-associates,1,設計組織アモルフ,設計組織amorufu,578
+1174,渡辺明設計事務所＋G．パルフィ,Akira watanabe design office + g. palfi,akira-watanabe-design-office-g-palfi,1,渡辺明設計事務所＋G．パルフィ,渡辺明設計事務所＋G．parufuィ,579
+1177,神戸市住宅供給公社・坂倉建築研究所大阪事務所,"Kobe city housing supply corporation, sakakura architectural institute osaka office",kobe-city-housing-supply-corporation-sakakura-architectural-institute-osaka-office-1177,1,神戸市住宅供給公社・坂倉建築研究所大阪事務所,神戸市住宅供給公社・坂倉建築研究所大阪事務所,580
+1180,鈴木恂建築研究所,Suzuki Yu Architectural Research Institute,suzuki-yu-architectural-research-institute,1,鈴木恂建築研究所,鈴木恂建築研究所,581
+1184,ファイブ・ステージ設計事務所,Five stage design office,five-stage-design-office,1,ファイブ・ステージ設計事務所,fuァibu・suteーji設計事務所,582
+1187,岩田隆＋設計計画研究所,Takashi iwata + design planning institute,takashi-iwata-design-planning-institute,1,岩田隆＋設計計画研究所,岩田隆＋設計計画研究所,583
+1188,天藤建築設計事務所,Tento architectural design office,tento-architectural-design-office,1,天藤建築設計事務所,天藤建築設計事務所,584
+1196,京都市　富家建築事務所,"Tomiya architects, kyoto, japan",tomiya-architects-kyoto-japan,1,京都市,京都市,585
+1198,内田祥哉＋TAKE-9計画設計研究所・アルセッド建築研究所・綜建築研究所,"Shoya uchida + take-9 planning and design institute, arsed architectural institute, so architectural institute",shoya-uchida-take-9-planning-and-design-institute-arsed-architectural-institute-so-architectural-institute,1,内田祥哉＋TAKE-9計画設計研究所・アルセッド建築研究所・綜建築研究所,内田祥哉＋TAKE-9計画設計研究所・aruseッdo建築研究所・綜建築研究所,586
+1199,アーキスタジオ,Archistudio,archistudio,1,アーキスタジオ,aーkisutajio,587
+1203,栃木県土木部建築課　川崎清＋環境建築研究所,"Kiyoshi kawasaki, building division, public works department, tochigi prefecture + environmental building research institute",kiyoshi-kawasaki-building-division-public-works-department-tochigi-prefecture-environmental-building-research-institute,2,栃木県土木部建築課 | 川崎清＋環境建築研究所,栃木県土木部建築課 | 川崎清＋環境建築研究所,588 | 589
+1205,環境設計工房,Environmental design studio,environmental-design-studio,1,環境設計工房,環境設計工房,590
+1206,森谷重雄＋計画工房U,Shigeo moriya + planning studio u,shigeo-moriya-planning-studio-u-1206,1,森谷重雄＋計画工房U,森谷重雄＋計画工房U,591
+1207,早川建築設計事務所,Hayakawa architects & engineers,hayakawa-architects-engineers,1,早川建築設計事務所,早川建築設計事務所,592
+1208,小林恒建築研究所,KOBAYASHI Koh Architects & Engineers,kobayashi-koh-architects-engineers,1,小林恒建築研究所,小林恒建築研究所,593
+1210,長谷川清之,Kiyoyuki hasegawa,kiyoyuki-hasegawa,1,長谷川清之,長谷川清之,594
+1211,野老設計事務所,MASAAKI TOKORO Architects & Associates,masaaki-tokoro-architects-associates,1,野老設計事務所,野老設計事務所,595
+1218,畠山博茂建築設計事務所,Hiroshige hatakeyama architects & engineers,hiroshige-hatakeyama-architects-engineers,1,畠山博茂建築設計事務所,畠山博茂建築設計事務所,596
+1219,板垣元彬,Motobira itagaki,motobira-itagaki,1,板垣元彬,板垣元彬,597
+1222,PALインターナショナル一級建築士事務所,Pal international first class architect office,pal-international-first-class-architect-office,1,PALインターナショナル一級建築士事務所,PALintaーnashiョnaru一級建築士事務所,598
+1229,芝浦工業大学高等学校建設委員会　アルセッド建築研究所,Shibaura institute of technology high school construction committee alced architectural institute,shibaura-institute-of-technology-high-school-construction-committee-alced-architectural-institute,2,芝浦工業大学高等学校建設委員会 | アルセッド建築研究所,芝浦工業大学高等学校建設委員会 | aruseッdo建築研究所,599 | 600
+1230,山下司研究室＋宅地開発研究所,Tsukasa yamashita laboratory + housing land development institute,tsukasa-yamashita-laboratory-housing-land-development-institute,1,山下司研究室＋宅地開発研究所,山下司研究室＋宅地開発研究所,601
+1232,現代計画研究所＋広島市,Gendai planning institute + hiroshima city,gendai-planning-institute-hiroshima-city,1,現代計画研究所＋広島市,現代計画研究所＋広島市,602
+1233,住宅・都市整備公団東京支社　坂倉建築研究所東京事務所,Housing and urban development corporation tokyo branch office sakakura architects & engineers tokyo office,housing-and-urban-development-corporation-tokyo-branch-office-sakakura-architects-engineers-tokyo-office,1,住宅・都市整備公団東京支社,住宅・都市整備公団東京支社,603
+1234,槇総合計画事務所＋東京大学槇研究室,"Maki and associates + maki laboratory, the university of tokyo",maki-and-associates-maki-laboratory-the-university-of-tokyo,1,槇総合計画事務所＋東京大学槇研究室,槇総合計画事務所＋東京大学槇研究室,604
+1238,原広司＋アトリエ・ファイ,Hiroshi hara + atelier phi,hiroshi-hara-atelier-phi-1238,1,原広司＋アトリエ・ファイ,原広司＋atorie・fuァi,605
+1239,渡辺豊和建築工房 ; 西脇市,Toyokazu watanabe architect studio; nishiwaki city,toyokazu-watanabe-architect-studio-nishiwaki-city,1,渡辺豊和建築工房 ; 西脇市,渡辺豊和建築工房-;-西脇市,606
+1243,伊丹潤,Jun itami,jun-itami,1,伊丹潤,伊丹潤,607
+1245,日建設計・名古屋＋岐阜県,"Nikken sekkei, nagoya + gifu prefecture",nikken-sekkei-nagoya-gifu-prefecture,1,日建設計・名古屋＋岐阜県,日建設計・名古屋＋岐阜県,608
+1248,高橋志保彦建築設計事務所,Takahashi Shihohiko Architects & Engineers,takahashi-shihohiko-architects-engineers,1,高橋志保彦建築設計事務所,高橋志保彦建築設計事務所,609
+1251,中込清,Kiyoshi nakagomi,kiyoshi-nakagomi,1,中込清,中込清,610
+1253,野田俊太郎＋建築環境計画,Shuntaro noda + architectural environment planning,shuntaro-noda-architectural-environment-planning,1,野田俊太郎＋建築環境計画,野田俊太郎＋建築環境計画,611
+1255,芦原・谷口建築設計共同企業体,Ashihara-taniguchi architectural design joint venture,ashihara-taniguchi-architectural-design-joint-venture,1,芦原・谷口建築設計共同企業体,芦原・谷口建築設計共同企業体,612
+1257,群馬県＋坂倉建築研究所東京事務所,Gunma prefecture + sakakura architects & engineers tokyo office,gunma-prefecture-sakakura-architects-engineers-tokyo-office,1,群馬県＋坂倉建築研究所東京事務所,群馬県＋坂倉建築研究所東京事務所,613
+1259,建築企画設計社　PALインターナショナル一級建築士事務所,Architectural planning and design company pal international first class architect office,architectural-planning-and-design-company-pal-international-first-class-architect-office,1,建築企画設計社,建築企画設計社,614
+1260,荒木正彦設計事務所,ARAKI ARCHITECT & ASSOCIATES,araki-architect-associates,1,荒木正彦設計事務所,荒木正彦設計事務所,615
+1261,広瀬鎌二,KENJI HIROSE + PLANNING INSTITUTE FOR THE CONSERVATION OF CULTURAL PROPERTIES,kenji-hirose-planning-institute-for-the-conservation-of-cultural-properties-1261,1,広瀬鎌二,広瀬鎌二,616
+1263,林哲也設計事務所,Tetsuya hayashi design office,tetsuya-hayashi-design-office,1,林哲也設計事務所,林哲也設計事務所,617
+1266,SKM設計計画事務所,SKM Architects & Planners,skm-architects-planners,1,SKM設計計画事務所,SKM設計計画事務所,618
+1268,竹中工務店大阪本店,Takenaka Corporation Osaka Head Office,takenaka-corporation-osaka-head-office,1,竹中工務店大阪本店,竹中工務店大阪本店,619
+1269,北海道岡田新一設計事務所,"HOKKAIDO, OKADA & Associates",hokkaido-okada-associates,1,北海道岡田新一設計事務所,北海道岡田新一設計事務所,620
+1273,山崎建築設計事務所,Yamazaki architectural design office,yamazaki-architectural-design-office,1,山崎建築設計事務所,山崎建築設計事務所,621
+1275,青島設計,Qingdao design,qingdao-design,1,青島設計,青島設計,622
+1276,神戸市住宅供給公社＋坂倉建築研究所大阪事務所,Kobe city housing supply corporation + sakakura architectural institute osaka office,kobe-city-housing-supply-corporation-sakakura-architectural-institute-osaka-office-1276,1,神戸市住宅供給公社＋坂倉建築研究所大阪事務所,神戸市住宅供給公社＋坂倉建築研究所大阪事務所,623
+1277,フジタ工業＋ルイ・オータケ,Fujita kogyo + louis otake,fujita-kogyo-louis-otake,1,フジタ工業＋ルイ・オータケ,fujita工業＋rui・oーtake,624
+1278,竹中工務店＋戸田建設＋ルイ・オータケ,Takenaka corporation + toda corporation + louis otake,takenaka-corporation-toda-corporation-louis-otake,1,竹中工務店＋戸田建設＋ルイ・オータケ,竹中工務店＋戸田建設＋rui・oーtake,625
+1279,スイス国連邦建設局＋ロルフ・カイザー事務所,Swiss federal office of construction + rolf kaiser office,swiss-federal-office-of-construction-rolf-kaiser-office,1,スイス国連邦建設局＋ロルフ・カイザー事務所,suisu国連邦建設局＋rorufu・kaizaー事務所,626
+1280,B･B･D＋設計事務所ゲンプラン,"B, b, d + design office gen plan",b-b-d-design-office-gen-plan,1,B･B･D＋設計事務所ゲンプラン,B･B･D＋設計事務所genpuran,627
+1281,瀬戸市文化センター建設室　愛知県建築部営繕課＋安井建築設計事務所名古屋事務所,Seto city cultural center construction office aichi prefecture building department repair division + yasui architects & engineers nagoya office,seto-city-cultural-center-construction-office-aichi-prefecture-building-department-repair-division-yasui-architects-engineers-nagoya-office,2,瀬戸市文化センター建設室 | 愛知県建築部営繕課＋安井建築設計事務所名古屋事務所,瀬戸市文化sentaー建設室 | 愛知県建築部営繕課＋安井建築設計事務所名古屋事務所,628 | 629
+1282,末吉栄三計画研究室＋屋比久建築設計室＋泉建築設計事務所,Eizo sueyoshi planning laboratory + yahiku architects + izumi architects,eizo-sueyoshi-planning-laboratory-yahiku-architects-izumi-architects,1,末吉栄三計画研究室＋屋比久建築設計室＋泉建築設計事務所,末吉栄三計画研究室＋屋比久建築設計室＋泉建築設計事務所,630
+1284,横河健／横河設計工房,KEN YOKOGAWA / KEN YOKOGAWA ARCHITECT & ASSOCIATES,ken-yokogawa-ken-yokogawa-architect-associates,1,横河健／横河設計工房,横河健／横河設計工房,631
+1288,石山修武＋鈴木隆行（ダムダン空間工作所）,Shubu ishiyama + takayuki suzuki (damdan space workshop),shubu-ishiyama-takayuki-suzuki,1,石山修武＋鈴木隆行（ダムダン空間工作所）,石山修武＋鈴木隆行（damudan空間工作所）,632
+1294,アトリエ・モビル,Atelier mobile,atelier-mobile,1,アトリエ・モビル,atorie・mobiru,633
+1297,谷口建築設計研究所,TANIGUCHI AND ASSOCIATES,taniguchi-and-associates-1297,1,谷口建築設計研究所,谷口建築設計研究所,634
+1298,中川綜合設計事務所,Nakagawa sogo sekkei office,nakagawa-sogo-sekkei-office,1,中川綜合設計事務所,中川綜合設計事務所,635
+1299,GA設計,Ga design,ga-design,1,GA設計,GA設計,636
+1300,大河原実／晶空間工房,Minoru okawara / sho kukan kobo,minoru-okawara-sho-kukan-kobo,1,大河原実／晶空間工房,大河原実／晶空間工房,637
+1301,水野一郎＋金沢計画研究所,ICHIRO MIZUNO＋KANAZAWA PLANNING RESEARCH,ichiro-mizuno-kanazawa-planning-research-1301,1,水野一郎＋金沢計画研究所,水野一郎＋金沢計画研究所,638
+1305,中村弘道,"HIROMICHI NAKAMURA & Associates, Architects & Planners",hiromichi-nakamura-associates-architects-planners,1,中村弘道,中村弘道,639
+1306,ヘキサ 小島孜,Hexa kojimazu,hexa-kojimazu,1,ヘキサ 小島孜,hekisa-小島孜,640
+1308,G.O.A.建築企画室 平倉直子,"Naoko hirakura, g.o.a. architectural planning office",naoko-hirakura-g-o-a-architectural-planning-office,1,G.O.A.建築企画室 平倉直子,GOA建築企画室-平倉直子,641
+1310,建築研究室セクションR,Architectural laboratory section r,architectural-laboratory-section-r,1,建築研究室セクションR,建築研究室sekushiョnR,642
+1312,ESPA・栗山正也＋安藤正雄,"Masaya kuriyama, espa + masao ando",masaya-kuriyama-espa-masao-ando,1,ESPA・栗山正也＋安藤正雄,ESPA・栗山正也＋安藤正雄,643
+1314,鉾之原建築設計研究室,Hokonohara architectural design laboratory,hokonohara-architectural-design-laboratory,1,鉾之原建築設計研究室,鉾之原建築設計研究室,644
+1315,SEC,Sec,sec,1,SEC,SEC,645
+1316,岳建築設計事務所,Dake architectural design office,dake-architectural-design-office,1,岳建築設計事務所,岳建築設計事務所,646
+1318,伊藤哲夫建築計画研究室,Tetsuo ito architectural planning laboratory,tetsuo-ito-architectural-planning-laboratory,1,伊藤哲夫建築計画研究室,伊藤哲夫建築計画研究室,647
+1319,近藤春司・mu造家工房,"Harushi kondo, mu zouke studio",harushi-kondo-mu-zouke-studio,1,近藤春司・mu造家工房,近藤春司・mu造家工房,648
+1322,AUR建築・都市・研究・コンサルタント,"Aur architecture, urbanism, research & consultancy",aur-architecture-urbanism-research-consultancy,1,AUR建築・都市・研究・コンサルタント,AUR建築・都市・研究・konsarutanto,649
+1323,吉村篤一／建築環境研究所,Atsuichi yoshimura / institute for built environment,atsuichi-yoshimura-institute-for-built-environment,1,吉村篤一／建築環境研究所,吉村篤一／建築環境研究所,650
+1324,三菱地所　日本設計事務所,"Mitsubishi estate, nippon design office",mitsubishi-estate-nippon-design-office,0,,,
+1326,乃村工藝社　創設計事務所,Nomura co.,nomura-co,1,乃村工藝社,乃村工藝社,651
+1327,川崎清＋環境・建築研究所　住宅都市整備公団関西支社,Kiyoshi kawasaki + environment & building research institute housing and urban development corporation kansai branch,kiyoshi-kawasaki-environment-building-research-institute-housing-and-urban-development-corporation-kansai-branch,1,住宅都市整備公団関西支社,住宅都市整備公団関西支社,652
+1331,坂倉建築研究所東京事務所＋群馬県建築設計センター,Sakakura architects & engineers tokyo office + gunma architectural design center,sakakura-architects-engineers-tokyo-office-gunma-architectural-design-center,1,坂倉建築研究所東京事務所＋群馬県建築設計センター,坂倉建築研究所東京事務所＋群馬県建築設計sentaー,653
+1333,秋元和雄設計事務所,KAZUO AKIMOTO & Partners,kazuo-akimoto-partners,1,秋元和雄設計事務所,秋元和雄設計事務所,654
+1334,林寛治設計事務所,Kanji hayashi design office,kanji-hayashi-design-office,1,林寛治設計事務所,林寛治設計事務所,655
+1337,共同制作,Joint production,joint-production,1,共同制作,共同制作,656
+1338,石山修武＋小須田広利（ダムダン空間工作所）,Shubu ishiyama + hirotoshi kosuda (damdan space workshop),shubu-ishiyama-hirotoshi-kosuda,1,石山修武＋小須田広利（ダムダン空間工作所）,石山修武＋小須田広利（damudan空間工作所）,657
+1341,佐藤康治／クレヨンアンドアソシエイツ,Koji sato / crayon & associates,koji-sato-crayon-associates,1,佐藤康治／クレヨンアンドアソシエイツ,佐藤康治／kureyonandoasoshieitsu,658
+1342,大石義一・岸和郎＋都市デザイン研究所,"Yoshikazu oishi, kazuro kishi + urban design institute",yoshikazu-oishi-kazuro-kishi-urban-design-institute,1,大石義一・岸和郎＋都市デザイン研究所,大石義一・岸和郎＋都市dezain研究所,659
+1343,北村建築設計室,Kitamura architects & engineers,kitamura-architects-engineers,1,北村建築設計室,北村建築設計室,660
+1347,村田政真建築設計事務所,Masamasa murata architectural design office,masamasa-murata-architectural-design-office,1,村田政真建築設計事務所,村田政真建築設計事務所,661
+1348,梅沢安恵設計事務所,Yasue umezawa design office,yasue-umezawa-design-office,1,梅沢安恵設計事務所,梅沢安恵設計事務所,662
+1349,藤建築事務所＋二村和幸,Fuji architectural office + kazuyuki futamura,fuji-architectural-office-kazuyuki-futamura,1,藤建築事務所＋二村和幸,藤建築事務所＋二村和幸,663
+1350,出江寛建築事務所・新井組一級建築士事務所,"Dee hiroshi architects & engineers, araigumi first class registered architect office",dee-hiroshi-architects-engineers-araigumi-first-class-registered-architect-office,1,出江寛建築事務所・新井組一級建築士事務所,出江寛建築事務所・新井組一級建築士事務所,664
+1353,山本西原建築設計事務所,Yamamoto nishihara architects & engineers,yamamoto-nishihara-architects-engineers,1,山本西原建築設計事務所,山本西原建築設計事務所,665
+1354,野村加根夫設計事務所,KANEO NOMURA ARCHITECT & ASSOCIATES,kaneo-nomura-architect-associates,1,野村加根夫設計事務所,野村加根夫設計事務所,666
+1356,ヘキサ,HEXA,hexa-1356,1,ヘキサ,hekisa,667
+1358,中島龍彦建築事務所＋建築設計工房,Tatsuhiko nakajima architects + architectural design studio,tatsuhiko-nakajima-architects-architectural-design-studio,1,中島龍彦建築事務所＋建築設計工房,中島龍彦建築事務所＋建築設計工房,668
+1361,土屋巌建築設計事務所,Iwao Tsuchiya Architects & Engineers,iwao-tsuchiya-architects-engineers,1,土屋巌建築設計事務所,土屋巌建築設計事務所,669
+1362,田設計,Rice field design,rice-field-design,1,田設計,田設計,670
+1363,岡山県　現代計画研究所,"Gendai planning institute, okayama",gendai-planning-institute-okayama,1,岡山県,岡山県,671
+1365,羽深隆雄／栴工房,Takao habuka / genius studio,takao-habuka-genius-studio,1,羽深隆雄／栴工房,羽深隆雄／栴工房,672
+1368,上田篤＋都市工房,Atsushi ueda + urban studio,atsushi-ueda-urban-studio,1,上田篤＋都市工房,上田篤＋都市工房,673
+1371,ウォルト・ディズニー・プロダクションズ＋梓設計,Walt Disney Productions + Azusa Sekkei,walt-disney-productions-azusa-sekkei,1,ウォルト・ディズニー・プロダクションズ＋梓設計,uォruto・deィzuniー・purodakushiョnzu＋梓設計,674
+1372,ミノル・ヤマサキ＆アソシエイツ,Minoru yamasaki & associates,minoru-yamasaki-associates,1,ミノル・ヤマサキ＆アソシエイツ,minoru・yamasaki＆asoshieitsu,675
+1373,ハリー・ウィーズ＆アソシエイツ,"Harry weese & associates, inc.",harry-weese-associates-inc,1,ハリー・ウィーズ＆アソシエイツ,hariー・uィーzu＆asoshieitsu,676
+1377,ISS総合計画事務所,Iss general planning office,iss-general-planning-office,1,ISS総合計画事務所,ISS総合計画事務所,677
+1379,岩手県公共建築設計監理協会＋久慈・一戸建築事務所,Iwate public building design and supervision association + kuji & ichinohe architectural office,iwate-public-building-design-and-supervision-association-kuji-ichinohe-architectural-office,1,岩手県公共建築設計監理協会＋久慈・一戸建築事務所,岩手県公共建築設計監理協会＋久慈・一戸建築事務所,678
+1381,岡野真＋佐世保市都市計画部＋岡野設計監理事務所,Makoto okano + sasebo city urban planning department + okano design & management office,makoto-okano-sasebo-city-urban-planning-department-okano-design-management-office,1,岡野真＋佐世保市都市計画部＋岡野設計監理事務所,岡野真＋佐世保市都市計画部＋岡野設計監理事務所,679
+1382,文化財保存計画協会,Association for cultural heritage preservation planning,association-for-cultural-heritage-preservation-planning,1,文化財保存計画協会,文化財保存計画協会,680
+1387,宮川浩,Hiroshi miyagawa,hiroshi-miyagawa,1,宮川浩,宮川浩,681
+1388,鈴木克彦建築研究所,Katsuhiko suzuki architectural institute,katsuhiko-suzuki-architectural-institute,1,鈴木克彦建築研究所,鈴木克彦建築研究所,682
+1389,中建築設計事務所,Naka architectural design office,naka-architectural-design-office,1,中建築設計事務所,中建築設計事務所,683
+1390,高原生樹建築設計事務所,Takahara seiki architects & engineers,takahara-seiki-architects-engineers,1,高原生樹建築設計事務所,高原生樹建築設計事務所,684
+1394,TAU設計房・藤島喬,"Takashi fujishima, tau design studio",takashi-fujishima-tau-design-studio,1,TAU設計房・藤島喬,TAU設計房・藤島喬,685
+1395,高山正実,Masami takayama,masami-takayama,1,高山正実,高山正実,686
+1396,PAO設計／吉田勝＋寺本文夫,Pao design / masaru yoshida + fumio teramoto,pao-design-masaru-yoshida-fumio-teramoto,1,PAO設計／吉田勝＋寺本文夫,PAO設計／吉田勝＋寺本文夫,687
+1400,小林英治建築研究所,Eiji kobayashi architectural institute,eiji-kobayashi-architectural-institute,1,小林英治建築研究所,小林英治建築研究所,688
+1401,紫冨田啓一／設計室オリゾン,Keiichi murata / design office orizon,keiichi-murata-design-office-orizon,1,紫冨田啓一／設計室オリゾン,紫冨田啓一／設計室orizon,689
+1402,高橋真,Shin takahashi,shin-takahashi,1,高橋真,高橋真,690
+1403,大沢良二／ESTEC,Ryoji osawa/estec,ryoji-osawa-estec,1,大沢良二／ESTEC,大沢良二／ESTEC,691
+1404,寺井徹設計事務所,Toru terai design office,toru-terai-design-office,1,寺井徹設計事務所,寺井徹設計事務所,692
+1405,田中敏溥建築設計事務所,Toshihiro tanaka architects & engineers,toshihiro-tanaka-architects-engineers,1,田中敏溥建築設計事務所,田中敏溥建築設計事務所,693
+1408,西本圭敦,Kei atsushi nishimoto,kei-atsushi-nishimoto,1,西本圭敦,西本圭敦,694
+1422,日建設計 大阪本社,Nikken sekkei osaka head office,nikken-sekkei-osaka-head-office,1,日建設計 大阪本社,日建設計-大阪本社,695
+1423,富山県設計監理協同組合,Toyama design and supervision cooperative,toyama-design-and-supervision-cooperative,1,富山県設計監理協同組合,富山県設計監理協同組合,696
+1428,第一工房＋冨井建築設計研究室,Dai-ichi kobo + tomii architectural design laboratory,dai-ichi-kobo-tomii-architectural-design-laboratory,1,第一工房＋冨井建築設計研究室,第一工房＋冨井建築設計研究室,697
+1433,長谷雄聖建築設計事務所,"Yusei hase architects & engineers, inc.",yusei-hase-architects-engineers-inc,1,長谷雄聖建築設計事務所,長谷雄聖建築設計事務所,698
+1440,伊藤造園設計事務所,Ito landscape design office,ito-landscape-design-office,1,伊藤造園設計事務所,伊藤造園設計事務所,699
+1441,観光企画設計社・建築企画設計社,"Kanko kikaku sekkeisha, kenchiku kikaku sekkeisha",kanko-kikaku-sekkeisha-kenchiku-kikaku-sekkeisha-1441,1,観光企画設計社・建築企画設計社,観光企画設計社・建築企画設計社,700
+1445,YKK50プロジェクトチーム,Ykk50 project team,ykk50-project-team,1,YKK50プロジェクトチーム,YKK50purojiェkutochiーmu,701
+1448,堀池秀人都市建築研究所,Hideto horiike urban architecture laboratory,hideto-horiike-urban-architecture-laboratory,1,堀池秀人都市建築研究所,堀池秀人都市建築研究所,702
+1452,静岡設計連合,Shizuoka design federation,shizuoka-design-federation,1,静岡設計連合,静岡設計連合,703
+1456,安藤忠雄建築研究所＋国建,Tadao ando architects + kokken,tadao-ando-architects-kokken,1,安藤忠雄建築研究所＋国建,安藤忠雄建築研究所＋国建,704
+1457,藤沢市建設局　槇文彦＋槇総合計画事務所,Fujisawa city construction bureau fumihiko maki + maki & associates,fujisawa-city-construction-bureau-fumihiko-maki-maki-associates,2,藤沢市建設局 | 槇文彦＋槇総合計画事務所,藤沢市建設局 | 槇文彦＋槇総合計画事務所,705 | 706
+1458,中日友好病院設計共同体（伊藤喜三郎建築研究所＋日建設計・東京）,"China-japan friendship hospital design consortium (kisaburo ito architects + nikken sekkei, tokyo)",china-japan-friendship-hospital-design-consortium,1,中日友好病院設計共同体（伊藤喜三郎建築研究所＋日建設計・東京）,中日友好病院設計共同体（伊藤喜三郎建築研究所＋日建設計・東京）,707
+1459,農村計画・建築研究所,Institute for rural planning and architecture,institute-for-rural-planning-and-architecture,1,農村計画・建築研究所,農村計画・建築研究所,708
+1460,蓮田修吾郎・鈴木昌道,Shugoro hasuda and masamichi suzuki,shugoro-hasuda-and-masamichi-suzuki,1,蓮田修吾郎・鈴木昌道,蓮田修吾郎・鈴木昌道,709
+1464,秩父治征環境計画研究所,Chichibu haruyuki environmental planning institute,chichibu-haruyuki-environmental-planning-institute,1,秩父治征環境計画研究所,秩父治征環境計画研究所,710
+1467,環境デザイン研究所＋スタジオA,Environmental design institute + studio a,environmental-design-institute-studio-a,1,環境デザイン研究所＋スタジオA,環境dezain研究所＋sutajioA,711
+1470,石本建築事務所・久米建築事務所,"Ishimoto architects & engineers, kume & associates",ishimoto-architects-engineers-kume-associates,1,石本建築事務所・久米建築事務所,石本建築事務所・久米建築事務所,712
+1474,奥村設計所,Okumura design office,okumura-design-office,1,奥村設計所,奥村設計所,713
+1477,佐藤親英　飯田郷介,Chikahide sato gosuke iida,chikahide-sato-gosuke-iida,2,佐藤親英 | 飯田郷介,佐藤親英 | 飯田郷介,714 | 715
+1478,川村正士・建築設計事務所,Masashi kawamura architects & engineers,masashi-kawamura-architects-engineers,1,川村正士・建築設計事務所,川村正士・建築設計事務所,716
+1479,YAS都市研究所-橋本文隆,Yas urban research institute-fumitaka hashimoto,yas-urban-research-institute-fumitaka-hashimoto,1,YAS都市研究所-橋本文隆,YAS都市研究所-橋本文隆,717
+1480,小沢明建築研究室,OZAWA ATELIER,ozawa-atelier,1,小沢明建築研究室,小沢明建築研究室,718
+1481,工学院大学南迫研究室,"Minamisako laboratory, kogakuin university",minamisako-laboratory-kogakuin-university,1,工学院大学南迫研究室,工学院大学南迫研究室,719
+1482,佐賀和光　栄孝志,Saga wako takashi sakae,saga-wako-takashi-sakae,1,栄孝志,栄孝志,720
+1484,山上建築設計事務所,Yamagami architects & engineers,yamagami-architects-engineers,1,山上建築設計事務所,山上建築設計事務所,721
+1485,後藤眞理子／現代設計研究所,Mariko goto / gendai design institute,mariko-goto-gendai-design-institute,1,後藤眞理子／現代設計研究所,後藤眞理子／現代設計研究所,722
+1486,梅田節郎／立体工房,Setsuro umeda / 3d studio,setsuro-umeda-3d-studio,1,梅田節郎／立体工房,梅田節郎／立体工房,723
+1488,湯澤正信,Masanobu yuzawa,masanobu-yuzawa,1,湯澤正信,湯澤正信,724
+1489,鈴木了二建築計画事務所,RYOJI SUZUKI ARCHITECT AND PARTNERS,ryoji-suzuki-architect-and-partners,1,鈴木了二建築計画事務所,鈴木了二建築計画事務所,725
+1496,高須賀晋・持井定城,"Susumu takasuga, sadaki mochii",susumu-takasuga-sadaki-mochii,1,高須賀晋・持井定城,高須賀晋・持井定城,726
+1498,工学院大学　谷口宗彦,"Munehiko taniguchi, kogakuin university",munehiko-taniguchi-kogakuin-university,2,工学院大学 | 谷口宗彦,工学院大学 | 谷口宗彦,727 | 728
+1512,小宮山昭,"AKIRA KOMIYAMA+UNITES, ARCHITECTS AND PLANNERS",akira-komiyama-unites-architects-and-planners-1512,1,小宮山昭,小宮山昭,729
+1515,愛知県・豊川市・青島設計,"Aoshima design, toyokawa, aichi, japan",aoshima-design-toyokawa-aichi-japan,1,愛知県・豊川市・青島設計,愛知県・豊川市・青島設計,730
+1516,浦辺建築事務所，松村慶三,"Keizo matsumura, urabe architects & engineers",keizo-matsumura-urabe-architects-engineers,1,浦辺建築事務所，松村慶三,浦辺建築事務所，松村慶三,731
+1517,現代計画研究所・倉森建築設計事務所,"Gendai planning institute, kuramori architects & engineers",gendai-planning-institute-kuramori-architects-engineers,1,現代計画研究所・倉森建築設計事務所,現代計画研究所・倉森建築設計事務所,732
+1518,真鍋一伸,Kazunobu manabe,kazunobu-manabe,1,真鍋一伸,真鍋一伸,733
+1520,名古屋市・黒川紀章建築都市設計事務所・シンワ設備設計事務所,"City of nagoya, kisho kurokawa architects & associates, shinwa setsubi sekkei sekkei office",city-of-nagoya-kisho-kurokawa-architects-associates-shinwa-setsubi-sekkei-sekkei-office,1,名古屋市・黒川紀章建築都市設計事務所・シンワ設備設計事務所,名古屋市・黒川紀章建築都市設計事務所・shinwa設備設計事務所,734
+1523,大阪府住宅供給公社＋中島龍彦建築事務所,Osaka prefectural housing supply corporation + tatsuhiko nakajima architects,osaka-prefectural-housing-supply-corporation-tatsuhiko-nakajima-architects,1,大阪府住宅供給公社＋中島龍彦建築事務所,大阪府住宅供給公社＋中島龍彦建築事務所,735
+1525,大阪府住宅供給公社＋上田篤／都市工房,Osaka prefectural housing supply corporation + atsushi ueda / urban studio,osaka-prefectural-housing-supply-corporation-atsushi-ueda-urban-studio,1,大阪府住宅供給公社＋上田篤／都市工房,大阪府住宅供給公社＋上田篤／都市工房,736
+1527,八木幸二,Kouji yagi,kouji-yagi,1,八木幸二,八木幸二,737
+1537,濱口オサミ＋松井淳,Osami hamaguchi + jun matsui,osami-hamaguchi-jun-matsui,1,濱口オサミ＋松井淳,濱口osami＋松井淳,738
+1542,大阪府建築部営繕室,OSAKA PREFECTURAL GOVERNMENT,osaka-prefectural-government,1,大阪府建築部営繕室,大阪府建築部営繕室,739
+1544,秋田県土木建築課　原広司　地域設計研究所　アトリエ・ファイ建築研究所,Akita prefectural civil engineering and architecture division hiroshi hara regional design institute atelier phi architectural institute,akita-prefectural-civil-engineering-and-architecture-division-hiroshi-hara-regional-design-institute-atelier-phi-architectural-institute,4,秋田県土木建築課 | 原広司 | 地域設計研究所 | アトリエ・ファイ建築研究所,秋田県土木建築課 | hiroshi-hara | 地域設計研究所 | atorie・fuァi建築研究所,740 | 741 | 742 | 743
+1550,京都大学加藤研究室　深田建築事務所,"Kato laboratory, kyoto university fukada architectural office",kato-laboratory-kyoto-university-fukada-architectural-office,2,京都大学加藤研究室 | 深田建築事務所,京都大学加藤研究室 | 深田建築事務所,744 | 745
+1551,環境デザイン研究所　日建設計・東京,"Environmental design institute nikken sekkei, tokyo",environmental-design-institute-nikken-sekkei-tokyo,0,,,
+1554,内藤廣建築設計事務所,NAITO ARCHITECT & ASSOCIATES,naito-architect-associates-1554,1,内藤廣建築設計事務所,内藤廣建築設計事務所,746
+1556,前川國男建築設計事務所，ミド同人　原田和雄,"Kunio maekawa architects & engineers, mido doujin kazuo harada",kunio-maekawa-architects-engineers-mido-doujin-kazuo-harada,2,前川國男建築設計事務所，ミド同人 | 原田和雄,前川國男建築設計事務所，mido同人 | 原田和雄,747 | 748
+1557,前川建築設計事務所，ミド同人　仲邑孔一,"Maekawa architects & engineers, koichi nakamura, mido co.",maekawa-architects-engineers-koichi-nakamura-mido-co,2,前川建築設計事務所，ミド同人 | 仲邑孔一,前川建築設計事務所，mido同人 | 仲邑孔一,749 | 750
+1565,佐藤康治／クレヨン アンド アソシエイツ,Koji sato / crayon and associates,koji-sato-crayon-and-associates,1,佐藤康治／クレヨン アンド アソシエイツ,佐藤康治／kureyon-ando-asoshieitsu,751
+1567,丹羽建築設計事務所,HIDEKI NIWA ARCHITECTS & ASSOCIATES,hideki-niwa-architects-associates,1,丹羽建築設計事務所,丹羽建築設計事務所,752
+1568,Team ZOO いるか設計集団,TEAMZOO ATELIER IRUKA,teamzoo-atelier-iruka,1,Team ZOO いるか設計集団,Team-ZOO-iruka設計集団,753
+1569,リシャール・ブリア＋SEC,RICHARD BLIAH+SEC,richard-bliah-sec-1569,1,リシャール・ブリア＋SEC,rishiャーru・buria＋SEC,754
+1576,原口修一級建築士事務所,Osamu haraguchi first-class architect office,osamu-haraguchi-first-class-architect-office,1,原口修一級建築士事務所,原口修一級建築士事務所,755
+1578,石橋利彦・徳川宜子,Toshihiko ishibashi and noriko tokugawa,toshihiko-ishibashi-and-noriko-tokugawa,1,石橋利彦・徳川宜子,石橋利彦・徳川宜子,756
+1579,葛西秀一郎,Shuichiro kasai,shuichiro-kasai,1,葛西秀一郎,葛西秀一郎,757
+1580,森島清太,Seita morishima,seita-morishima,1,森島清太,森島清太,758
+1582,富永讓＋フォルムシステム設計研究所,YUZURU TOMINAGA ＋ FORM SYSTEM INSTITUTE,yuzuru-tominaga-form-system-institute-1582,1,富永讓＋フォルムシステム設計研究所,富永讓＋fuォrumushisutemu設計研究所,759
+1586,高須賀晋・大野正博,Susumu takasuga and masahiro ohno,susumu-takasuga-and-masahiro-ohno,1,高須賀晋・大野正博,高須賀晋・大野正博,760
+1591,石井勉＋TIME計画研究所,Tsutomu ishii + time planning institute,tsutomu-ishii-time-planning-institute,1,石井勉＋TIME計画研究所,石井勉＋TIME計画研究所,761
+1592,赤尾建築研究所,Akao architectural institute,akao-architectural-institute,1,赤尾建築研究所,赤尾建築研究所,762
+1593,環境設計　下村・矢尾板都市建築研究所,Environmental design shimomura-yaoita urban architecture institute,environmental-design-shimomura-yaoita-urban-architecture-institute,2,環境設計 | 下村・矢尾板都市建築研究所,環境設計 | 下村・矢尾板都市建築研究所,763 | 764
+1594,小田襄＋大脇建築設計事務所,"Oda jo + owaki architects & engineers, inc.",oda-jo-owaki-architects-engineers-inc,1,小田襄＋大脇建築設計事務所,小田襄＋大脇建築設計事務所,765
+1596,日本電信電話公社建築局特殊建築工事事務所,"Nippon telegraph and telephone public corporation, building bureau, special building construction office",nippon-telegraph-and-telephone-public-corporation-building-bureau-special-building-construction-office,1,日本電信電話公社建築局特殊建築工事事務所,日本電信電話公社建築局特殊建築工事事務所,766
+1597,東京都住宅局　槇総合計画事務所,"Maki general planning office, bureau of housing, tokyo metropolitan government",maki-general-planning-office-bureau-of-housing-tokyo-metropolitan-government,1,東京都住宅局,東京都住宅局,767
+1598,山添建築設計事務所,Yamazoe architects & engineers,yamazoe-architects-engineers,1,山添建築設計事務所,山添建築設計事務所,768
+1600,Team ZOO アトリエ・モビル,Team Zoo ATELIER MOBILE,team-zoo-atelier-mobile-1600,1,Team ZOO アトリエ・モビル,Team-ZOO-atorie・mobiru,769
+1602,石山修武＋ダムダン空間工作所,Shubu ishiyama + damdan space workshop,shubu-ishiyama-damdan-space-workshop,1,石山修武＋ダムダン空間工作所,石山修武＋damudan空間工作所,770
+1603,山崎敏男,Toshio Yamazaki,toshio-yamazaki,1,山崎敏男,山崎敏男,771
+1604,山中デザイン研究所,Yamanaka Design Laboratory,yamanaka-design-laboratory,1,山中デザイン研究所,山中dezain研究所,772
+1605,村松基安,Kiyoan Muramatsu,kiyoan-muramatsu,1,村松基安,村松基安,773
+1606,竹中工務店九州支店,Takenaka Corporation Kyushu Branch,takenaka-corporation-kyushu-branch,1,竹中工務店九州支店,竹中工務店九州支店,774
+1607,三上祐三,Yuzo Mikami,yuzo-mikami,1,三上祐三,三上祐三,775
+1610,アルセッド建築研究所,ALSED ARCHITECTURAL LABORATORY,alsed-architectural-laboratory,0,,,
+1612,吉田五十八研究室（第1期）　野村加根夫設計事務所（第2期）,Isoya Yoshida Laboratory (Phase 1) Nomura Kaneeo Design Office (Phase 2),isoya-yoshida-laboratory,2,吉田五十八研究室（第1期） | 野村加根夫設計事務所（第2期）,吉田五十八研究室（第1期） | 野村加根夫設計事務所（第2期）,776 | 777
+1619,日本大学理工学研究所,"Research Institute for Science and Technology, Nihon University",research-institute-for-science-and-technology-nihon-university,1,日本大学理工学研究所,日本大学理工学研究所,778
+1620,NTT東海総支社建築部,NTT Tokai General Branch Building Department,ntt-tokai-general-branch-building-department,1,NTT東海総支社建築部,NTT東海総支社建築部,779
+1621,キタムラ・アソシエイツ,KITAMURA ASSOCIATES,kitamura-associates-1621,1,キタムラ・アソシエイツ,kitamura・asoshieitsu,780
+1622,多田善昭建築設計事務所,YOSHIAKI TADA ARCHITECT & ASSOCIATES,yoshiaki-tada-architect-associates,1,多田善昭建築設計事務所,多田善昭建築設計事務所,781
+1624,神戸市住宅局住宅部建設課　坂倉建築研究所大阪事務所,"Construction Division, Housing Department, Housing Bureau, Kobe City Sakakura Architectural Institute Osaka Office",construction-division-housing-department-housing-bureau-kobe-city-sakakura-architectural-institute-osaka-office,1,神戸市住宅局住宅部建設課,神戸市住宅局住宅部建設課,782
+1625,大阪府建築部営繕課　坂倉建築研究所大阪事務所,"Osaka Office, Sakakura Architects & Engineers, Osaka Prefectural Government, Building Department, Repair Division",osaka-office-sakakura-architects-engineers-osaka-prefectural-government-building-department-repair-division,1,大阪府建築部営繕課,大阪府建築部営繕課,783
+1626,東綜合設計事務所,Higashi Sogo Design Office,higashi-sogo-design-office,1,東綜合設計事務所,東綜合設計事務所,784
+1628,村瀬夘市　プロジェクトチーム,Murase P.O.S. Project Team,murase-p-o-s-project-team,2,村瀬夘市 | プロジェクトチーム,村瀬夘市 | purojiェkutochiーmu,785 | 786
+1636,新田正樹建築設計工房,MASAKI NITTA ARCHITECTS STUDIO,masaki-nitta-architects-studio,1,新田正樹建築設計工房,新田正樹建築設計工房,787
+1638,水谷研究室,Mizutani Laboratory,mizutani-laboratory,1,水谷研究室,水谷研究室,788
+1641,椎名政夫建築設計事務所　石本建築事務所　間組一級建築士事務所,"Masao Shiina Architectural Design Office, Ishimoto Architectural Office, Hazama First Class Architect Office",masao-shiina-architectural-design-office-ishimoto-architectural-office-hazama-first-class-architect-office,1,間組一級建築士事務所,間組一級建築士事務所,789
+1642,川崎市建築局　山下司建築研究所,"Tsukasa Yamashita Architectural Institute, Kawasaki City Building Bureau",tsukasa-yamashita-architectural-institute-kawasaki-city-building-bureau,1,川崎市建築局,川崎市建築局,790
+1643,川崎市建築局　神谷・荘司計画設計事務所,"Kamiya & Soji Planning and Design Office, Kawasaki City Building Department",kamiya-soji-planning-and-design-office-kawasaki-city-building-department,0,,,
+1645,竹中工務店大阪本店設計部,Takenaka Corporation Osaka Head Office Design Department,takenaka-corporation-osaka-head-office-design-department,1,竹中工務店大阪本店設計部,竹中工務店大阪本店設計部,791
+1648,浦辺建築事務所　松村慶三,"Keizo Matsumura, Urabe Architects Office",keizo-matsumura-urabe-architects-office,1,松村慶三,松村慶三,792
+1654,大成建設建築本部設計部,"Design Department, Taisei Corporation Building Division",design-department-taisei-corporation-building-division,1,大成建設建築本部設計部,大成建設建築本部設計部,793
+1655,浜野商品研究所,Hamano Institute of Commodity Research,hamano-institute-of-commodity-research,1,浜野商品研究所,浜野商品研究所,794
+1656,大林組東京本社設計部,"Design Department, Obayashi Corporation Tokyo Head Office",design-department-obayashi-corporation-tokyo-head-office,1,大林組東京本社設計部,大林組東京本社設計部,795
+1657,大倉建築設計事務所,OKURA Architect Consultants Int'l,okura-architect-consultants-int-l,1,大倉建築設計事務所,大倉建築設計事務所,796
+1660,横浜市,City of Yokohama,city-of-yokohama,1,横浜市,横浜市,797
+1661,関口直史　竹山聖,Naofumi Sekiguchi Sei Takeyama,naofumi-sekiguchi-sei-takeyama,2,関口直史 | 竹山聖,関口直史 | 竹山聖,798 | 799
+1662,能勢修治　永井久美,Shuji Nose Kumi Nagai,shuji-nose-kumi-nagai,2,能勢修治 | 永井久美,能勢修治 | 永井久美,800 | 801
+1663,白井晟一研究所　白井昱磨,Shirai Chenichi Research Institute Shirai Kuma,shirai-chenichi-research-institute-shirai-kuma,1,白井昱磨,白井昱磨,802
+1664,三島設計事務所,Mishima Design Office,mishima-design-office,1,三島設計事務所,mishima-design,803
+1665,戸尾任宏,TADAHIRO TOH/ARCHIVISION ARCHITECT AND ASSOCIATES,tadahiro-toh-archivision-architect-and-associates-1665,1,戸尾任宏,戸尾任宏,804
+1666,GK設計,Gk design,gk-design,1,GK設計,GK設計,805
+1667,木立工房,woodworking studio,woodworking-studio,1,木立工房,木立工房,806
+1668,Team Zooいるか設計集団,TEAM ZOO ATELIER IRUKA,team-zoo-atelier-iruka-1668,1,Team Zooいるか設計集団,Team-Zooiruka設計集団,807
+1670,石黒哲郎　久米建築事務所,Tetsuro Ishiguro Kume Architects,tetsuro-ishiguro-kume-architects,1,石黒哲郎,石黒哲郎,808
+1673,末松設計事務所,M. Suematsu + Associates,m-suematsu-associates,1,末松設計事務所,末松設計事務所,809
+1674,張忠信,C. H. CHANO ARCHITECTS AND ENGINEERS,c-h-chano-architects-and-engineers-1674,1,張忠信,張忠信,810
+1675,岐阜市＋坂倉建築研究所大阪事務所,Gifu City + Sakakura Architects Osaka Office,gifu-city-sakakura-architects-osaka-office,1,岐阜市＋坂倉建築研究所大阪事務所,岐阜市＋坂倉建築研究所大阪事務所,811
+1676,後藤伸一,Shinichi Goto,shinichi-goto,1,後藤伸一,後藤伸一,812
+1678,北川原温,"ATSUSHI KITAGAWARA + ILCD, YU ARCHITECTS ASSOCIATION",atsushi-kitagawara-ilcd-yu-architects-association,1,北川原温,北川原温,813
+1679,江守奈比古　永田浩,Nahiko Emori Hiroshi Nagata,nahiko-emori-hiroshi-nagata,2,江守奈比古 | 永田浩,江守奈比古 | 永田浩,814 | 815
+1681,白井晟一,Chenichi Shirai,chenichi-shirai,1,白井晟一,白井晟一,816
+1684,東京都多摩動物公園工事課　日本設計事務所,Tokyo Metropolitan Tama Zoological Park Construction Division Nippon Design Office,tokyo-metropolitan-tama-zoological-park-construction-division-nippon-design-office,1,東京都多摩動物公園工事課,東京都多摩動物公園工事課,817
+1686,秋元和雄,Kazuo Akimoto,kazuo-akimoto,1,秋元和雄,秋元和雄,818
+1688,鹿島建設　杉山隆建築設計事務所,Kajima Corporation Takashi Sugiyama Architects & Engineers,kajima-corporation-takashi-sugiyama-architects-engineers,0,,,
+1690,松村慶三,Keizo Matsumura,keizo-matsumura,0,,,
+1693,森谷重雄・計画工房U,"Shigeo Moriya, Planning Studio U",shigeo-moriya-planning-studio-u-1693,1,森谷重雄・計画工房U,森谷重雄・計画工房U,819
+1694,長谷川逸子・建築計画工房,ITSUKO HASEGAWA ATELIER,itsuko-hasegawa-atelier-1694,1,長谷川逸子・建築計画工房,長谷川逸子・建築計画工房,820
+1696,石井修　美建・設計事務所,"OSAMU ISHII, Biken Architectural Design Office",osamu-ishii-biken-architectural-design-office-1696,0,,,
+1700,アール・アイ・エー建築綜合研究所,R.I.A. Architectural Research Institute,r-i-a-architectural-research-institute,1,アール・アイ・エー建築綜合研究所,aーru・ai・eー建築綜合研究所,821
+1702,徳岡昌克建築設計事務所,MASAKATSU TOKUOKA ARCHITECTS,masakatsu-tokuoka-architects,1,徳岡昌克建築設計事務所,徳岡昌克建築設計事務所,822
+1703,橋本文隆,Fumitaka Hashimoto,fumitaka-hashimoto,1,橋本文隆,橋本文隆,823
+1705,西村征一郎,"SEIICHIRO NISHIMURA/KYOTO INSTITUTE OF TECHNOLOGY, SHOWA SEKKEI",seiichiro-nishimura-kyoto-institute-of-technology-showa-sekkei,1,西村征一郎,西村征一郎,824
+1706,大阪府建築部営繕室　出江寛建築事務所,"Osaka Prefectural Government, Building Department, Repair Office, Dejiang Hiroshi Architects & Engineers, Inc.",osaka-prefectural-government-building-department-repair-office-dejiang-hiroshi-architects-engineers-inc,0,,,
+1707,高口恭行,YASUYUKI TAKAGUCHI + Atelier Zohka,yasuyuki-takaguchi-atelier-zohka-1707,1,高口恭行,高口恭行,825
+1710,沖縄総合事務局開発建設部　日本設計事務所,"Development and Construction Department, Okinawa General Bureau, Japan Design Office",development-and-construction-department-okinawa-general-bureau-japan-design-office,1,沖縄総合事務局開発建設部,沖縄総合事務局開発建設部,826
+1712,三井所清典,Kiyonori MITSUJO,kiyonori-mitsujo,1,三井所清典,三井所清典,827
+1713,宮下計画所,Miyashita Planning Office,miyashita-planning-office,1,宮下計画所,宮下計画所,828
+1714,Team ZOOアトリエ・モビル,Team Zoo ATELIER MOBILE,team-zoo-atelier-mobile-1714,1,Team ZOOアトリエ・モビル,Team-ZOOatorie・mobiru,829
+1715,the air 沖健次　渡辺妃佐子,the air Kenji Oki Hisako Watanabe,the-air-kenji-oki-hisako-watanabe,2,the air 沖健次 | 渡辺妃佐子,the-air-沖健次 | 渡辺妃佐子,830 | 831
+1716,山本勝建築設計室,Masaru Yamamoto Architects & Engineers,masaru-yamamoto-architects-engineers,1,山本勝建築設計室,山本勝建築設計室,832
+1717,香山アトリエ／環境造形研究所 フジタ工業,KOHYAMA Atelier,kohyama-atelier-1717,1,香山アトリエ／環境造形研究所 フジタ工業,香山atorie／環境造形研究所-fujita工業,833
+1719,住宅・都市整備公団／坂倉建築研究所東京事務所,Japan Housing and Urban Development Corporation / Sakakura Architects & Engineers Tokyo Office,japan-housing-and-urban-development-corporation-sakakura-architects-engineers-tokyo-office,1,住宅・都市整備公団／坂倉建築研究所東京事務所,住宅・都市整備公団／坂倉建築研究所東京事務所,834
+1720,建設大臣官房官庁営繕部／日本設計・佐藤武夫設計設計JV,"Government Office Repair Department, Construction Minister's Secretariat / Nippon Sekkei, Takeo Sato Sekkei JV",government-office-repair-department-construction-minister-s-secretariat-nippon-sekkei-takeo-sato-sekkei-jv,1,建設大臣官房官庁営繕部／日本設計・佐藤武夫設計設計JV,建設大臣官房官庁営繕部／日本設計・佐藤武夫設計設計JV,835
+1722,福沢健次・小宮山昭＋ユニテ設計・計画,"Kenji Fukuzawa, Akira Komiyama + Unite Design & Planning",kenji-fukuzawa-akira-komiyama-unite-design-planning,1,福沢健次・小宮山昭＋ユニテ設計・計画,福沢健次・小宮山昭＋yunite設計・計画,836
+1723,東京ランドスケープ研究所,TOKYO LANDSCAPE lab.,tokyo-landscape-lab,1,東京ランドスケープ研究所,東京randosukeーpu研究所,837
+1724,I.I.E国際環境研究所,I.I.E. International Institute for Environmental Studies,i-i-e-international-institute-for-environmental-studies,1,I.I.E国際環境研究所,IIE国際環境研究所,838
+1730,NTT建築部,NTT Building Engineering Department,ntt-building-engineering-department,1,NTT建築部,NTT建築部,839
+1733,槇文彦＋槇総合計画事務所,MAKI & ASSOCIATES,maki-associates,0,,,
+1734,環境デザイン研究所　設計工房　博報堂　東京ランドスケープ研究所,Environmental Design Institute Design Studio Hakuhodo Tokyo Landscape Research Institute,environmental-design-institute-design-studio-hakuhodo-tokyo-landscape-research-institute,2,設計工房 | 博報堂,設計工房 | 博報堂,840 | 841
+1735,日建・久米・安井設計監理JV,"Nikken, Kume, Yasui Design & Supervision JV",nikken-kume-yasui-design-supervision-jv,1,日建・久米・安井設計監理JV,日建・久米・安井設計監理JV,842
+1743,日建設計　三菱地所,Nikken Sekkei Mitsubishi Estate,nikken-sekkei-mitsubishi-estate-1743,0,,,
+1746,日本建築学会学校建築に関する委員会　アルコム,"Committee on School Architecture, Architectural Institute of Japan ALCOM",committee-on-school-architecture-architectural-institute-of-japan-alcom,2,日本建築学会学校建築に関する委員会 | アルコム,日本建築学会学校建築ni関suru委員会 | arukomu,843 | 844
+1748,環境構造センター　クリストファー・アレギザンダー,"Christopher Allegizander, Center for Environmental Structure",christopher-allegizander-center-for-environmental-structure,2,環境構造センター | クリストファー・アレギザンダー,環境構造sentaー | kurisutofuァー・aregizandaー,845 | 846
+1749,久米建築事務所　オオバ設計共同企業体,Kume Architectural Office Ooba Design Joint Venture,kume-architectural-office-ooba-design-joint-venture,1,オオバ設計共同企業体,ooba設計共同企業体,847
+1750,都市建築設計事務所Kアトリエ,"K Atelier, Urban Architectural Design Office",k-atelier-urban-architectural-design-office-1750,1,都市建築設計事務所Kアトリエ,都市建築設計事務所Katorie,848
+1751,鹿島建設建築設計本部,Kajima Corporation Architectural Design Division,kajima-corporation-architectural-design-division,1,鹿島建設建築設計本部,鹿島建設建築設計本部,849
+1752,伊藤陸川設計室,Ito Rikugawa Design Office,ito-rikugawa-design-office,1,伊藤陸川設計室,伊藤陸川設計室,850
+1754,北村陸夫,Rikuo Kitamura,rikuo-kitamura,1,北村陸夫,北村陸夫,851
+1755,竹中工務店東京本店設計部,TAKENAKA CORPORATION,takenaka-corporation-1755,1,竹中工務店東京本店設計部,竹中工務店東京本店設計部,852
+1759,佐賀県土木部建築課　アルセッド建築研究所,"Alced Architectural Research Institute, Building Division, Public Works Department, Saga Prefectural Government",alced-architectural-research-institute-building-division-public-works-department-saga-prefectural-government,1,佐賀県土木部建築課,佐賀県土木部建築課,853
+1764,戸田建設建築設計統轄部,Toda Corporation Architectural Design Supervisory Department,toda-corporation-architectural-design-supervisory-department,1,戸田建設建築設計統轄部,戸田建設建築設計統轄部,854
+1767,象設計集団・地井昭夫,"Akio Jii, Zo Design Group",akio-jii-zo-design-group,1,象設計集団・地井昭夫,象設計集団・地井昭夫,855
+1769,アルプ　ダニエル・アルノー　アラン・ガブリエリ,Alpes Daniel Arnaud Alain Gabrieli,alpes-daniel-arnaud-alain-gabrieli,3,アルプ | ダニエル・アルノー | アラン・ガブリエリ,arupu | danieru・arunoー | aran・gaburieri,856 | 857 | 858
+1770,青木茂建築工房,SHIGERU AOKI ARCHITECT & ASSOCIATES,shigeru-aoki-architect-associates,1,青木茂建築工房,青木茂建築工房,859
+1772,住宅・都市整備公団　SKM設計計画事務所,Housing and Urban Development Corporation SKM Design Planning Office,housing-and-urban-development-corporation-skm-design-planning-office,1,住宅・都市整備公団,住宅・都市整備公団,860
+1773,富永讓　フォルムシステム設計研究所,YUZURU TOMINAGA + FORM SYSTEM INSTITUTE,yuzuru-tominaga-form-system-institute-1773,2,富永讓 | フォルムシステム設計研究所,富永讓 | fuォrumushisutemu設計研究所,861 | 862
+1774,上田建築事務所,TAKAYO AGETA & ASSOCIATES,takayo-ageta-associates,1,上田建築事務所,上田建築事務所,863
+1779,田邊博司,Hiroshi Tanabe,hiroshi-tanabe,1,田邊博司,田邊博司,864
+1780,竹中工務店東京本店,Takenaka Corporation Tokyo Head Office,takenaka-corporation-tokyo-head-office,1,竹中工務店東京本店,竹中工務店東京本店,865
+1781,日本総合建築事務所,NIPPON SOGO Architects and Engineers,nippon-sogo-architects-and-engineers-1781,1,日本総合建築事務所,日本総合建築事務所,866
+1783,戸田一郎設計室,ICHIRO TODA.Architect and Associates,ichiro-toda-architect-and-associates-1783,1,戸田一郎設計室,戸田一郎設計室,867
+1784,田中謙次建築研究所　針谷建築事務所,"Kenji Tanaka Architectural Institute, Hariya Architects Office",kenji-tanaka-architectural-institute-hariya-architects-office,1,針谷建築事務所,針谷建築事務所,868
+1787,内井昭蔵建築設計事務所　東設計工房設計共同企業体,S.UCHII Architect and Associates,s-uchii-architect-and-associates,1,東設計工房設計共同企業体,東設計工房設計共同企業体,869
+1789,二基建築設計室,Niki Architectural Design Office,niki-architectural-design-office,1,二基建築設計室,二基建築設計室,870
+1793,黒川紀章建築　都市設計事務所,Kisho Kurokawa Architects & Urban Design Office,kisho-kurokawa-architects-urban-design-office,2,黒川紀章建築 | 都市設計事務所,黒川紀章建築 | 都市設計事務所,871 | 872
+1794,丹下健三　稲塚二郎,KENZO TANGE Associates,kenzo-tange-associates-1794,2,丹下健三 | 稲塚二郎,kenzo-tange | 稲塚二郎,873 | 874
+1798,野村不動産一級建築士事務所,Nomura Real Estate First Class Registered Architect Office,nomura-real-estate-first-class-registered-architect-office,1,野村不動産一級建築士事務所,野村不動産一級建築士事務所,875
+1799,緒方四郎建築設計室,Shiro Ogata Architects,shiro-ogata-architects,1,緒方四郎建築設計室,緒方四郎建築設計室,876
+1800,仙アートスタヂオ,Sen Art Studio,sen-art-studio,1,仙アートスタヂオ,仙aーtosutajio,877
+1803,石山修武　ダムダン空間工作所,Shubu Ishiyama Damdan Spatial Workshop,shubu-ishiyama-damdan-spatial-workshop,2,石山修武 | ダムダン空間工作所,石山修武 | damudan空間工作所,878 | 879
+1804,新居千秋都市建築設計,CHIAKI ARAI URBAN AND ARCHITECTURE DESIGN,chiaki-arai-urban-and-architecture-design,1,新居千秋都市建築設計,新居千秋都市建築設計,880
+1805,岩村和夫　都市デザイン,Kazuo Iwamura Urban Design,kazuo-iwamura-urban-design,2,岩村和夫 | 都市デザイン,岩村和夫 | 都市dezain,881 | 882
+1812,アルコム,ALCOM,alcom,0,,,
+1813,ヱノキ建築事務所,Enoki Architectural Office,enoki-architectural-office,1,ヱノキ建築事務所,ヱnoki建築事務所,883
+1815,鹿島建設九州支店,Kajima Corporation Kyushu Branch,kajima-corporation-kyushu-branch,1,鹿島建設九州支店,鹿島建設九州支店,884
+1816,小栗廣正　建築計画工房MA-TRICKS,Hiromasa Oguri Architectural Planning Studio MA-TRICKS,hiromasa-oguri-architectural-planning-studio-ma-tricks,2,小栗廣正 | 建築計画工房MA-TRICKS,小栗廣正 | 建築計画工房MA-TRICKS,885 | 886
+1821,會田雄亮研究所　SINF,Yusuke Aida Institute SINF,yusuke-aida-institute-sinf,2,會田雄亮研究所 | SINF,會田雄亮研究所 | SINF,887 | 888
+1825,穴吹工務店,Anabuki Corporation,anabuki-corporation,1,穴吹工務店,穴吹工務店,889
+1828,神戸大学重村研究室　Team Zooいるか設計集団,Kobe University Shigemura Laboratory Team Zoo Iruka Design Group,kobe-university-shigemura-laboratory-team-zoo-iruka-design-group,1,神戸大学重村研究室,神戸大学重村研究室,890
+1831,細木建築研究所,HOSOGI ARCHITECT & ASSOCIATE,hosogi-architect-associate,1,細木建築研究所,細木建築研究所,891
+1832,三輪環境計画,Miwa Environmental Planning,miwa-environmental-planning,1,三輪環境計画,三輪環境計画,892
+1834,小谷設計,Kotani Design,kotani-design,1,小谷設計,小谷設計,893
+1836,SAGA　エーアート建築設計事務所,SAGA A-Art Architects,saga-a-art-architects,2,SAGA | エーアート建築設計事務所,SAGA | eーaーto建築設計事務所,894 | 895
+1839,日建設計　大阪,Nikken Sekkei Osaka,nikken-sekkei-osaka-1839,1,大阪,大阪,896
+1841,今井裕夫設計所,Hiroo Imai Design Office,hiroo-imai-design-office,1,今井裕夫設計所,今井裕夫設計所,897
+1843,前川国男建築設計事務所　MIDO同人・中田準一,"Kunio Maekawa Architects & Engineers, MIDO Doujin, Junichi Nakata",kunio-maekawa-architects-engineers-mido-doujin-junichi-nakata,1,MIDO同人・中田準一,MIDO同人・中田準一,898
+1846,林雅子　林　山田　中原,Masako Hayashi Hayashi Yamada Nakahara,masako-hayashi-hayashi-yamada-nakahara,3,林 | 山田 | 中原,林 | 山田 | 中原,899 | 900 | 901
+1847,谷口建築設計研究所　鹿島建設,Taniguchi Architects & Engineers Kajima Corporation,taniguchi-architects-engineers-kajima-corporation,0,,,
+1852,堀池秀人都市・建築研究所,HAJIME YATSUKA+UPM (Urban Project Machine),hajime-yatsuka-upm-1852,1,堀池秀人都市・建築研究所,堀池秀人都市・建築研究所,902
+1855,田邊博司・レーモンド設計事務所,Hiroshi Tanabe Raymond Design Office,hiroshi-tanabe-raymond-design-office,1,田邊博司・レーモンド設計事務所,田邊博司・reーmondo設計事務所,903
+1857,大谷幸夫,SACHIO OTANI & ASSOCIATES,sachio-otani-associates,1,大谷幸夫,大谷幸夫,904
+1858,住宅・都市整備公団　第一工房,"Housing and Urban Development Corporation, First Workshop",housing-and-urban-development-corporation-first-workshop,0,,,
+1861,環境事業計画研究所,Environmental Business Planning Institute,environmental-business-planning-institute,1,環境事業計画研究所,環境事業計画研究所,905
+1863,稲塚二郎　都市建築設計事務所,"Jiro Inazuka, Urban Architectural Design Office",jiro-inazuka-urban-architectural-design-office,0,,,
+1865,建築計画設計室・平口研究室,"Architectural Planning and Design Office, Hiraguchi Laboratory",architectural-planning-and-design-office-hiraguchi-laboratory,1,建築計画設計室・平口研究室,建築計画設計室・平口研究室,906
+1867,小室雅伸／北海道建築工房,Masanobu Komuro/Hokkaido Architectural Workshop,masanobu-komuro-hokkaido-architectural-workshop,1,小室雅伸／北海道建築工房,小室雅伸／北海道建築工房,907
+1868,北海道造園設計　小室雅伸／北海道建築工房,Hokkaido Landscaping Design Masanobu Komuro/Hokkaido Architectural Workshop,hokkaido-landscaping-design-masanobu-komuro-hokkaido-architectural-workshop,1,北海道造園設計,北海道造園設計,908
+1869,太田賓＋都市設計研究所,Ota Bin + Urban Design Institute,ota-bin-urban-design-institute,1,太田賓＋都市設計研究所,太田賓＋都市設計研究所,909
+1871,村田政真建築設計事務所　鈴木エドワード建築設計事務所,Masamasa Murata Architects Suzuki Edward Architects,masamasa-murata-architects-suzuki-edward-architects,0,,,
+1874,テッド・イトウ アーキテクト＆アソシエイツ,"Ted Ito Architect & Associates, Inc.",ted-ito-architect-associates-inc,1,テッド・イトウ アーキテクト＆アソシエイツ,teッdo・itou-aーkitekuto＆asoshieitsu,910
+1879,藤井博巳(芝浦工業大学建築工学科建築委員会),"Hiromi Fujii (Architectural Committee, Department of Architectural Engineering, Shibaura Institute of Technology)",hiromi-fujii,1,藤井博巳(芝浦工業大学建築工学科建築委員会),藤井博巳芝浦工業大学建築工学科建築委員会,911
+1881,京の家創り会設計集団 洛西コーポプロジェクトチーム,Kyo no Ie Souzoukai Design Group Rakusai Corp. Project Team,kyo-no-ie-souzoukai-design-group-rakusai-corp-project-team,1,京の家創り会設計集団 洛西コーポプロジェクトチーム,京no家創ri会設計集団-洛西koーpopurojiェkutochiーmu,912
+1882,羽深隆雄=栴工房設計事務所,Takao Habuka=Genius Studio Design Office,takao-habuka-genius-studio-design-office,1,羽深隆雄=栴工房設計事務所,羽深隆雄=栴工房設計事務所,913
+1883,ペリー・キング　サンチャゴ・ミランダ　カザテック,Perry King Santiago Miranda Cazatec,perry-king-santiago-miranda-cazatec,3,ペリー・キング | サンチャゴ・ミランダ | カザテック,periー・kingu | sanchiャgo・miranda | kazateッku,914 | 915 | 916
+1884,林賢次郎・建築設計事務所,"Kenjiro Hayashi Architects & Engineers, Inc.",kenjiro-hayashi-architects-engineers-inc,1,林賢次郎・建築設計事務所,林賢次郎・建築設計事務所,917
+1885,建築設計室セクションR,Architectural Design Office Section R,architectural-design-office-section-r,1,建築設計室セクションR,建築設計室sekushiョnR,918
+1887,SEN建築環境設計,SEN Architectural & Environmental Design,sen-architectural-environmental-design,1,SEN建築環境設計,SEN建築環境設計,919
+1889,吉岡直樹建築設計事務所,"Naoki Yoshioka Architects & Engineers, Inc.",naoki-yoshioka-architects-engineers-inc,1,吉岡直樹建築設計事務所,吉岡直樹建築設計事務所,920
+1893,東畑建築事務所,TOHATA ARCHITECTS & ENGINEERS,tohata-architects-engineers,1,東畑建築事務所,東畑建築事務所,921
+1894,群建築研究所,Gunchiku Kenchiku Kenkyusho,gunchiku-kenchiku-kenkyusho,1,群建築研究所,群建築研究所,922
+1896,山本忠司　イサム・ノグチ,Tadashi Yamamoto Isamu Noguchi,tadashi-yamamoto-isamu-noguchi,2,山本忠司 | イサム・ノグチ,山本忠司 | isamu・noguchi,923 | 924
+1900,観光企画設計社　建築企画設計社,Kanko Kikaku Sekkeisha Kenchiku Kikaku Sekkeisha,kanko-kikaku-sekkeisha-kenchiku-kikaku-sekkeisha-1900,0,,,
+1906,嶋田宮城建築設計事務所,Shimada Miyagi Architects & Engineers,shimada-miyagi-architects-engineers,1,嶋田宮城建築設計事務所,嶋田宮城建築設計事務所,925
+1911,北川原温　ILCD,A. KITAGAWARA+ILCD,a-kitagawara-ilcd,1,ILCD,ILCD,926
+1912,西岡弘建築工房,NISHIOKA HIROSHI ARCHITECTURAL OFFICE,nishioka-hiroshi-architectural-office,1,西岡弘建築工房,西岡弘建築工房,927
+1922,関口雄三建築設計事務所,Yuzo Sekiguchi Architects & Engineers,yuzo-sekiguchi-architects-engineers,1,関口雄三建築設計事務所,関口雄三建築設計事務所,928
+1923,武澤秀一,SHUICHI TAKEZAWA & YO-BI-KYO ASSOCIATES,shuichi-takezawa-yo-bi-kyo-associates,1,武澤秀一,武澤秀一,929
+1924,内田繁　保科孝之　スタジオ80,Shigeru Uchida Takayuki Hoshina Studio 80,shigeru-uchida-takayuki-hoshina-studio-80,2,保科孝之 | スタジオ80,保科孝之 | sutajio80,930 | 931
+1927,東京消防庁総務部施設課　曽根幸一　環境設計研究所,"Koichi Sone, Facility Division, General Affairs Department, Tokyo Fire Department, Environmental Design Institute",koichi-sone-facility-division-general-affairs-department-tokyo-fire-department-environmental-design-institute,2,東京消防庁総務部施設課 | 曽根幸一,東京消防庁総務部施設課 | 曽根幸一,932 | 933
+1928,丹下健三,KENZO TANGE ASSOCIATES URBANISTS-ARCHITECTS,kenzo-tange-associates-urbanists-architects-1928,0,,,
+1932,日建設計東京本社,Nikken Sekkei Tokyo Head Office,nikken-sekkei-tokyo-head-office,1,日建設計東京本社,日建設計東京本社,934
+1933,安井建築設計事務所東京事務所,Yasui Architects & Engineers Tokyo Office,yasui-architects-engineers-tokyo-office,1,安井建築設計事務所東京事務所,安井建築設計事務所東京事務所,935
+1939,丹下健三・都市・建築設計研究所(実施案),Kenzo Tange Urban and Architectural Design Institute (draft),kenzo-tange-urban-and-architectural-design-institute,1,丹下健三・都市・建築設計研究所(実施案),丹下健三・都市・建築設計研究所実施案,936
+1942,NTT東京総支社建築センター　SUR都市建築事務所,NTT Tokyo General Branch Architecture Center SUR Urban Architecture Office,ntt-tokyo-general-branch-architecture-center-sur-urban-architecture-office,2,NTT東京総支社建築センター | SUR都市建築事務所,NTT東京総支社建築sentaー | SUR都市建築事務所,937 | 938
+1943,木村丈夫　野田俊太郎　建築環境計画　TAO,Takeru Kimura Shuntaro Noda Architectural Environment Planning TAO,takeru-kimura-shuntaro-noda-architectural-environment-planning-tao,3,野田俊太郎 | 建築環境計画 | TAO,野田俊太郎 | 建築環境計画 | TAO,939 | 940 | 941
+1944,小宮山昭　ユニテ設計・計画,AKIRA KOMIYAMA + UNITES Architects & Planners,akira-komiyama-unites-architects-planners,1,ユニテ設計・計画,yunite設計・計画,942
+1947,大阪市都市整備局　日建設計・大阪,"Osaka City Urban Development Bureau Nikken Sekkei, Osaka",osaka-city-urban-development-bureau-nikken-sekkei-osaka,1,大阪市都市整備局,大阪市都市整備局,943
+1948,塩入健史,Takeshi Shioiri,takeshi-shioiri,1,塩入健史,塩入健史,944
+1949,設計共同企業体　静岡設計連合,Design Joint Venture Shizuoka Sekkei Rengo,design-joint-venture-shizuoka-sekkei-rengo,1,設計共同企業体,設計共同企業体,945
+1955,リシャール・ブリア　SEC,RICHARD BLIAH + SEC,richard-bliah-sec-1955,1,リシャール・ブリア,rishiャーru・buria,946
+1956,ミド同人後藤伸一　前川國男建築設計事務所,Mido Doujin Shinichi Goto Maekawa Kunio Architects & Engineers,mido-doujin-shinichi-goto-maekawa-kunio-architects-engineers,1,ミド同人後藤伸一,mido同人後藤伸一,947
+1958,宮本眞建築設計研究所,Makoto Miyamoto Architects & Engineers,makoto-miyamoto-architects-engineers,1,宮本眞建築設計研究所,宮本眞建築設計研究所,948
+1963,山崎泰孝　柳川正尚　AZ環境計画研究所,Yasutaka Yamazaki Masanao Yanagawa AZ Environmental Planning Institute,yasutaka-yamazaki-masanao-yanagawa-az-environmental-planning-institute,2,柳川正尚 | AZ環境計画研究所,柳川正尚 | AZ環境計画研究所,949 | 950
+1966,永田・北野建築研究所,YUZO NAGATA・SHUNJI KITANO & ASSOCIATES,yuzo-nagata-shunji-kitano-associates,1,永田・北野建築研究所,永田・北野建築研究所,951
+1967,内井昭蔵　内井昭蔵建築設計事務所,S.UCHII ARCHITECTS,s-uchii-architects,1,内井昭蔵,内井昭蔵,952
+1970,出江寛　ピーター・アイゼンマン　藤木忠善　成瀬嘉一　由利知久　奥川洋一,Hiroshi Dee Hiroshi Peter Eisenman Tadayoshi Fujiki Yoshikazu Naruse Tomohisa Yuri Yoichi Okugawa,hiroshi-dee-hiroshi-peter-eisenman-tadayoshi-fujiki-yoshikazu-naruse-tomohisa-yuri-yoichi-okugawa,4,ピーター・アイゼンマン | 成瀬嘉一 | 由利知久 | 奥川洋一,piーtaー・aizenman | 成瀬嘉一 | 由利知久 | 奥川洋一,953 | 954 | 955 | 956
+1971,若松久男(鹿島建設)／ハンス・ホライン(オーストリア)／ベルナルド・チュミ(フランス)／小笠原攻(清水建設),Hisao Wakamatsu (Kajima Corporation)／Hans Hollein (Austria)／Bernard Tumi (France)／Go Ogasawara (Shimizu Corporation),hisao-wakamatsu,1,若松久男(鹿島建設)／ハンス・ホライン(オーストリア)／ベルナルド・チュミ(フランス)／小笠原攻(清水建設),若松久男鹿島建設／hansu・horainoーsutoria／berunarudo・chiュmifuransu／小笠原攻清水建設,957
+1972,柳沢孝彦(竹中工務店),Takahiko Yanagisawa (Takenaka Corporation),takahiko-yanagisawa,1,柳沢孝彦(竹中工務店),柳沢孝彦竹中工務店,958
+1973,デザインリサーチ,design research,design-research,1,デザインリサーチ,dezainrisaーchi,959
+1975,大沼巖設計事務所,Iwao Onuma Design Office,iwao-onuma-design-office,1,大沼巖設計事務所,大沼巖設計事務所,960
+1976,山本公也,Kimiya Yamamoto,kimiya-yamamoto,1,山本公也,山本公也,961
+1977,沖種郎,"Okinawan yellow cucumber salad, finely sliced, fermented, dried or preserved in soy sauce, etc.",okinawan-yellow-cucumber-salad-finely-sliced-fermented-dried-or-preserved-in-soy-sauce-etc,1,沖種郎,沖種郎,962
+1980,柴田いづみ建築設計,IZUMI SHIBATA Architect's Atelier,izumi-shibata-architect-s-atelier,1,柴田いづみ建築設計,柴田izumi建築設計,963
+1982,西野建築研究所＋ZENPLAN ASSOCIATES,Nishino Architectural Institute + ZENPLAN ASSOCIATES,nishino-architectural-institute-zenplan-associates,1,西野建築研究所＋ZENPLAN ASSOCIATES,西野建築研究所＋ZENPLAN-ASSOCIATES,964
+1985,仙田満,MITSURU MAN SENDA AND ENVIRONMENT DESIGN INSTITUTE,mitsuru-man-senda-and-environment-design-institute,1,仙田満,仙田満,965
+1988,原広司　都市・建築計画センター・ベーシック アトリエ・ファイ建築研究所,HIROSHI HARA＋Atelier φ,hiroshi-hara-atelier-φ-1988,1,都市・建築計画センター・ベーシック アトリエ・ファイ建築研究所,都市・建築計画sentaー・beーshiッku-atorie・fuァi建築研究所,966
+1990,木島安史　YAS都市研究所,YASUFUMI KIJIMA,yasufumi-kijima,1,木島安史,木島安史,967
+1994,ホール・グッドヒュー・ヘイズレイ　パーカー　アルプ設計室,"Hall, Goodhue, Hazeley, Parker, Alp Design Office.",hall-goodhue-hazeley-parker-alp-design-office,2,ホール・グッドヒュー・ヘイズレイ | パーカー,hoーru・guッdohiュー・heizurei | paーkaー,968 | 969
+1996,木原千利建築設計事務所,"Chitoshi Kihara Architects & Engineers, Inc.",chitoshi-kihara-architects-engineers-inc,1,木原千利建築設計事務所,木原千利建築設計事務所,970
+1997,秋元敏雄　建築設計工房,Toshio Akimoto Architectural Design Studio,toshio-akimoto-architectural-design-studio,2,秋元敏雄 | 建築設計工房,秋元敏雄 | 建築設計工房,971 | 972
+1998,武建築設計研究所,Take Architectural Design Institute,take-architectural-design-institute,1,武建築設計研究所,武建築設計研究所,973
+2004,森幹雄,Mikio Mori,mikio-mori,1,森幹雄,森幹雄,974
+2006,長島孝一　AUR,KOICHI NAGASHIMA + AUR,koichi-nagashima-aur-2006,1,AUR,AUR,975
+2008,若林広幸建築研究所,STUDIO ARCH HIROYUKI WAKABAYASHI,studio-arch-hiroyuki-wakabayashi,1,若林広幸建築研究所,若林広幸建築研究所,976
+2010,長島孝一　中村勉　AUR,Koichi Nagashima Tsutomu Nakamura AUR,koichi-nagashima-tsutomu-nakamura-aur,1,中村勉,中村勉,977
+2012,建築計画設計室　平口研究室,"Hiraguchi Laboratory, Architectural Planning and Design Office",hiraguchi-laboratory-architectural-planning-and-design-office,2,建築計画設計室 | 平口研究室,建築計画設計室 | 平口研究室,978 | 979
+2013,東京郵政局建築部,"Building Department, Tokyo Post Office",building-department-tokyo-post-office,1,東京郵政局建築部,東京郵政局建築部,980
+2016,長谷川逸子　建築計画工房,ITSUKO HASEGAWA-ARCHITECTURAL DESIGN STUDIO,itsuko-hasegawa-architectural-design-studio,1,建築計画工房,建築計画工房,981
+2020,丹下健三　都市・建築設計研究所,Kenzo Tange Institute of Urban and Architectural Design,kenzo-tange-institute-of-urban-and-architectural-design,1,都市・建築設計研究所,都市・建築設計研究所,982
+2025,鸞建築事務所,luan architecture office,luan-architecture-office,1,鸞建築事務所,鸞建築事務所,983
+2028,日建設計　大坂,Nikken Sekkei Osaka,nikken-sekkei-osaka-2028,1,大坂,大坂,984
+2029,アーキテクト,architect,architect,1,アーキテクト,aーkitekuto,985
+2040,国建,national construction,national-construction,1,国建,国建,986
+2041,第一工房　エー・アール・ジー,Dai-Ichi Kobo A.R.G.,dai-ichi-kobo-a-r-g,1,エー・アール・ジー,eー・aーru・jiー,987
+2043,久野和作　環境設計綜合建築事務所,Kazusaku Kuno Environmental Design General Architects Office,kazusaku-kuno-environmental-design-general-architects-office,2,久野和作 | 環境設計綜合建築事務所,久野和作 | 環境設計綜合建築事務所,988 | 989
+2045,環匠社,KANSHOSHA Architects,kanshosha-architects,1,環匠社,環匠社,990
+2046,アルキービ建築・造形・計画事務所,"Arkivi Architecture, Modeling and Planning Office",arkivi-architecture-modeling-and-planning-office,1,アルキービ建築・造形・計画事務所,arukiーbi建築・造形・計画事務所,991
+2050,安井秀夫アトリエ,HIDEO YASUI & associates,hideo-yasui-associates,1,安井秀夫アトリエ,安井秀夫atorie,992
+2051,八代高専桂研究室＋設計計画　石丸事務所,"Katsura Laboratory, Yatsushiro National College of Technology + Design Planning Ishimaru Office",katsura-laboratory-yatsushiro-national-college-of-technology-design-planning-ishimaru-office,2,八代高専桂研究室＋設計計画 | 石丸事務所,八代高専桂研究室＋設計計画 | 石丸事務所,993 | 994
+2052,名古屋東急ホテル設計監理室(大林組・新井組),"Nagoya Tokyu Hotel Design and Supervision Office (Obayashi Corporation, Arai Corporation)",nagoya-tokyu-hotel-design-and-supervision-office,1,名古屋東急ホテル設計監理室(大林組・新井組),名古屋東急hoteru設計監理室大林組・新井組,995
+2055,原広司　アトリエ・ファイ建築研究所,HIROSHI HARA+Atelier φ,hiroshi-hara-atelier-φ-2055,0,,,
+2056,大谷幸夫　大谷研究室・国建,"Yukio Otani Otani Laboratory, Kokken",yukio-otani-otani-laboratory-kokken,1,大谷研究室・国建,大谷研究室・国建,996
+2058,矢吹昭良建築設計事務所　佐藤商業建築研究所,Akiyoshi Yabuki Architects & Associates Sato Commercial Architecture Institute,akiyoshi-yabuki-architects-associates-sato-commercial-architecture-institute,2,矢吹昭良建築設計事務所 | 佐藤商業建築研究所,矢吹昭良建築設計事務所 | 佐藤商業建築研究所,997 | 998
+2059,堀池秀人都市　建築研究所,HIDETO HORIIKE & URTOPIA,hideto-horiike-urtopia-2059,2,堀池秀人都市 | 建築研究所,堀池秀人都市 | 建築研究所,999 | 1000
+2060,松田平田坂本設計事務所大阪事務所,Matsuda Hirata Sakamoto Design Office Osaka Office,matsuda-hirata-sakamoto-design-office-osaka-office,1,松田平田坂本設計事務所大阪事務所,松田平田坂本設計事務所大阪事務所,1001
+2061,プランテック総合計画事務所　大江匡,"Tadashi Oe, Plantech General Planning Office",tadashi-oe-plantech-general-planning-office,0,,,
+2062,デザインショップ121　染谷正弘,Design Shop 121 Masahiro Someya,design-shop-121-masahiro-someya,0,,,
+2065,笠嶋建築工房,Kasajima Architectural Workshop,kasajima-architectural-workshop,0,,,
+2072,北海道建築工房,Hokkaido Architectural Workshop,hokkaido-architectural-workshop,0,,,
+2082,環境開発研究所,ENVIRONMENTAL DEVEROPMENT RESEARCH INC.,environmental-deveropment-research-inc,0,,,
+2092,神谷五男　都市環境建築設計所,ITSUO KAMIYA & Associates,itsuo-kamiya-associates-2092,0,,,
+2096,三井建設,Mitsui Construction,mitsui-construction,0,,,
+2097,石山雅史　ソシアル・プランニング,Masashi Ishiyama Social Planning,masashi-ishiyama-social-planning,0,,,
+2099,日立建設設計　麻生勝典設計事務所,Hitachi Construction Design Katsunori Aso Design Office,hitachi-construction-design-katsunori-aso-design-office,0,,,
+2101,環・設計工房　美川淳而,"Junji Mikawa, KAN Design Studio",junji-mikawa-kan-design-studio-2101,0,,,
+2102,本間利雄設計事務所　地域環境計画研究室,TOSHIO HOMMA & Associates,toshio-homma-associates-2102,0,,,
+2103,大石雅昭,CHIAKI ARAI Architect & Associates,chiaki-arai-architect-associates-2103,0,,,
+2105,蔵王建築設計事務所,ZAO ARCHITECTS & ASSOCIATES,zao-architects-associates,0,,,
+2107,指宿真智雄,MACHIO IBUSUKI & KENCHIKU DESIGN Architects,machio-ibusuki-kenchiku-design-architects,0,,,
+2114,早川正夫建築設計事務所,Masao Hayakawa Architects & Engineers,masao-hayakawa-architects-engineers,0,,,
+2116,張忠信　信設計事務所,C. H. CHANO ARCHITECTS AND ENGINEERS,c-h-chano-architects-and-engineers-2116,0,,,
+2118,村重保典　現代建築設計事務所,"Yasunori Murashige, Gendai Architects & Engineers, Inc.",yasunori-murashige-gendai-architects-engineers-inc,0,,,
+2127,アトリエR　アカデメイア建築研究所,"Atelier R, Academia Baccalaureate Institute of Architecture",atelier-r-academia-baccalaureate-institute-of-architecture,0,,,
+2129,室伏次郎　アルテック建築研究所,"Jiro Murofushi, Altec Architects & Engineers, Inc.",jiro-murofushi-altec-architects-engineers-inc,0,,,
+2131,久米建築事務所　メディア・ファイブ・アーキテクツ,"Kume Architects, Media Five Architects",kume-architects-media-five-architects,0,,,
+2135,コープ・ヒンメルブラウ,Coop Himmelblau,coop-himmelblau,0,,,
+2137,墨田区産業経済課　GK設計,Sumida City Industry and Economy Division GK Design,sumida-city-industry-and-economy-division-gk-design,0,,,
+2139,厚木市環境部　キタムラ・アソシエイツ,"Atsugi City Environmental Department Kitamura Associates, Inc.",atsugi-city-environmental-department-kitamura-associates-inc,0,,,
+2140,高口恭行　造家研究室,YASUYUKI TAKAGUCHI＋Atelier Zohka,yasuyuki-takaguchi-atelier-zohka-2140,0,,,
+2141,無有建築工房,MOO ARCHITECT WORKSHOP,moo-architect-workshop-2141,0,,,
+2142,貴志雅樹,Masaki Kishi,masaki-kishi,0,,,
+2143,船越徹　ARCOM,TOHRU FUNAKOSHI + ARCOM R&D.,tohru-funakoshi-arcom-r-d,0,,,
+2144,下山眞司　増田建築構造事務所,Shinji Shimoyama Masuda Architects & Engineers,shinji-shimoyama-masuda-architects-engineers,0,,,
+2148,大林組東京本社,Obayashi Corporation Tokyo Head Office,obayashi-corporation-tokyo-head-office,0,,,
+2151,川崎清,KIYOSHI KAWASAKI + Design Institute of Landscape & Architecture,kiyoshi-kawasaki-design-institute-of-landscape-architecture-2151,0,,,
+2153,都市デザイン　ダムダン空間工作所　岩村アトリエ　日本設計事務所,Urban Design Damdan Space Workshop Iwamura Atelier Japan Design Office,urban-design-damdan-space-workshop-iwamura-atelier-japan-design-office,0,,,
+2154,木村優　アートステーション,ART STATION,art-station-2154,0,,,
+2163,出江寛建築事務所　村田相互設計事務所,"Dee Kan Architects, Murata Mutual Design Office",dee-kan-architects-murata-mutual-design-office,0,,,
+2165,フランク・O・ゲーリー,Frank O. Gehry,frank-o-gehry,0,,,
+2170,東孝光＋東環境・建築研究所,Takamitsu Azuma + Azuma Environmental & Architectural Institute,takamitsu-azuma-azuma-environmental-architectural-institute,0,,,
+2171,西野建築研究所,Nishino Architectural Institute,nishino-architectural-institute,0,,,
+2172,竹山聖,AMORPHE Architects & Associates,amorphe-architects-associates-2172,0,,,
+2175,大宇根・江平建築事務所,OHUNE/EHIRA Architects & Associates,ohune-ehira-architects-associates-2175,0,,,
+2176,石山修武,"OSAMU ISHIYAMA Lab.DEPARTMENT OF ARCHITECTURE, WASEDA UNIVERSITY.",osamu-ishiyama-lab-department-of-architecture-waseda-university-2176,0,,,
+2177,アンドレ・ヴォジャンスキー　長谷川紘都市建築研究室,Andre Wojanski Hiro Hasegawa Urban Architecture Laboratory,andre-wojanski-hiro-hasegawa-urban-architecture-laboratory,0,,,
+2179,團・青島建築設計事務所,DAN+AOSHIMA ASSOCIATES,dan-aoshima-associates-2179,0,,,
+2181,北海道開発コンサルタント,HOKKAIDO ENGINEERING CONSULTANTS,hokkaido-engineering-consultants,0,,,
+2182,時野谷茂　池田博文,Shigeru Tokinoya Hirofumi Ikeda,shigeru-tokinoya-hirofumi-ikeda,0,,,
+2185,福島建築設計事務所,Fukushima Architectural Design Office,fukushima-architectural-design-office,0,,,
+2190,文化環境計画研究所,Institute for Cultural and Environmental Planning,institute-for-cultural-and-environmental-planning,0,,,
+2191,志水正弘　林公子,Masahiro Shimizu Kimiko Hayashi,masahiro-shimizu-kimiko-hayashi,0,,,
+2192,海老沢宏環境工房,Hiroshi Ebisawa Environmental Workshop,hiroshi-ebisawa-environmental-workshop,0,,,
+2194,TAUDL・田附尚建築都市デザイン研究所,"TAUDL, Hisashi Tazuke Architectural & Urban Design Laboratory",taudl-hisashi-tazuke-architectural-urban-design-laboratory,0,,,
+2197,住宅都市整備公団・三浦紀之建築工房・環境開発研究所,"Housing and Urban Development Corporation, Noriyuki Miura Architectural Studio, Environmental Development Institute",housing-and-urban-development-corporation-noriyuki-miura-architectural-studio-environmental-development-institute,0,,,
+2202,本杉治郎,Jiro Hongsugi,jiro-hongsugi,0,,,
+2203,石井修,Osamu Ishii,osamu-ishii,0,,,
+2205,圓山彬雄　ワーキンググループ,Akio Maruyama Working Group,akio-maruyama-working-group,0,,,

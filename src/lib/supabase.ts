@@ -191,6 +191,46 @@ export type Database = {
           url?: string
           thumbnail_url?: string
           likes?: number
+          created_at: string
+        }
+      }
+      architect_names: {
+        Row: {
+          name_id: number
+          architect_name: string
+          slug: string
+          created_at: string
+        }
+        Insert: {
+          name_id?: number
+          architect_name: string
+          slug: string
+          created_at?: string
+        }
+        Update: {
+          name_id?: number
+          architect_name?: string
+          slug?: string
+          created_at?: string
+        }
+      }
+      architect_name_relations: {
+        Row: {
+          relation_id: number
+          architect_id: number
+          name_id: number
+          created_at: string
+        }
+        Insert: {
+          relation_id?: number
+          architect_id: number
+          name_id: number
+          created_at?: string
+        }
+        Update: {
+          relation_id?: number
+          architect_id?: number
+          name_id?: number
           created_at?: string
         }
       }
