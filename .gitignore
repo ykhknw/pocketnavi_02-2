@@ -90,3 +90,10 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+
+# データメンテナンス・出力ファイル
+scripts/check-*.cjs
+scripts/output/
+*.xlsm
+*.xlsx
+
