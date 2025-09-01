@@ -8,7 +8,8 @@ class DebugSupabaseApiClient {
       .select(`
         *,
         building_architects!inner(
-          architects_table(*)
+          architect_id,
+          architect_order
         )
       `, { count: 'exact' })
       .not('lat', 'is', null)

@@ -33,6 +33,15 @@ export function ArchitectPage() {
     setCurrentBuildings(buildings.slice(startIndex, endIndex));
   };
 
+  // ページ変更時のuseEffect
+  useEffect(() => {
+    if (buildings.length > 0) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      setCurrentBuildings(buildings.slice(startIndex, endIndex));
+    }
+  }, [currentPage, itemsPerPage, buildings]);
+
   // ページャー範囲計算
   const getPaginationRange = () => {
     const totalPages = Math.ceil(buildings.length / itemsPerPage);
@@ -111,7 +120,7 @@ export function ArchitectPage() {
     };
 
     loadArchitectBuildings();
-  }, [slug, context.language, currentPage, itemsPerPage]);
+  }, [slug, context.language]); // currentPage, itemsPerPageを依存関係から削除
 
   if (!context) {
     return <div>Loading...</div>;
@@ -299,60 +308,17 @@ export function ArchitectPage() {
               onRemoveRecentSearch={context.handleRemoveRecentSearch}
               onFilterSearchClick={(filters) => {
                 if (filters) {
-                  // 既存のフィルターを保持しながら、新しいフィルターを適用
-                  const newFilters = { ...context.filters };
-                  
-                  // 建築家フィルターの処理（既存のフィルターを保持）
-                  if (filters.architects) {
-                    newFilters.architects = filters.architects;
+                  // Architectページではトップへ遷移し、クエリで反映
+                  const params = new URLSearchParams();
+                  if (filters.buildingTypes && filters.buildingTypes.length > 0) {
+                    params.set('buildingTypes', filters.buildingTypes[0]);
                   }
-                  
-                  // 都道府県フィルターの処理（既存のフィルターを保持）
-                  if (filters.prefectures) {
-                    newFilters.prefectures = filters.prefectures;
+                  if (filters.prefectures && filters.prefectures.length > 0) {
+                    params.set('prefectures', filters.prefectures[0]);
                   }
-                  
-                  // 建物タイプフィルターの処理（既存のフィルターを保持）
-                  if (filters.buildingTypes) {
-                    newFilters.buildingTypes = filters.buildingTypes;
+                  if (params.toString()) {
+                    navigate(`/?${params.toString()}`);
                   }
-                  
-                  // その他のフィルターも同様に処理
-                  if (filters.completionYear !== undefined) {
-                    newFilters.completionYear = filters.completionYear;
-                  }
-                  
-                  // 半径フィルターの処理
-                  if (filters.radius !== undefined) {
-                    newFilters.radius = filters.radius;
-                  }
-                  
-                  // 位置情報フィルターの処理
-                  if (filters.currentLocation) {
-                    newFilters.currentLocation = filters.currentLocation;
-                  }
-                  
-                  // 写真・動画フィルターの処理
-                  if (filters.hasPhotos !== undefined) {
-                    newFilters.hasPhotos = filters.hasPhotos;
-                  }
-                  if (filters.hasVideos !== undefined) {
-                    newFilters.hasVideos = filters.hasVideos;
-                  }
-                  
-                  // エリアフィルターの処理
-                  if (filters.areas) {
-                    newFilters.areas = filters.areas;
-                  }
-                  
-                  // 住宅除外フィルターの処理
-                  if (filters.excludeResidential !== undefined) {
-                    newFilters.excludeResidential = filters.excludeResidential;
-                  }
-                  
-                  context.setFilters(newFilters);
-                  context.setCurrentPage(1);
-                  context.handleSearchStart();
                 }
               }}
               showAdminPanel={false}

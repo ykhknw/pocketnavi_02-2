@@ -143,7 +143,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
                 return architectNames.map(name => {
                   const trimmedName = name.trim();
                   if (a.slug) {
-                    return `<a href="/architects/${a.slug}" style="color: #3b82f6; text-decoration: none; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${trimmedName}</a>`;
+                    return `<a href="/architect/${a.slug}" style="color: #3b82f6; text-decoration: none; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${trimmedName}</a>`;
                   } else {
                     return trimmedName;
                   }

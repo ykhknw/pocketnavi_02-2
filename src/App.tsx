@@ -18,7 +18,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/building/:slug" element={<BuildingDetailPage />} />
-        <Route path="/architects/:slug" element={<ArchitectPage />} />
+        <Route path="/architect/:slug" element={<ArchitectPage />} />
       </Routes>
     </ErrorBoundary>
   );

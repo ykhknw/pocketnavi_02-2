@@ -174,7 +174,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
                   return architectNames.map(name => {
                     const trimmedName = name.trim();
                     if (a.slug) {
-                      return `<a href="/architects/${a.slug}" style="background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#2563eb'" onmouseout="this.style.backgroundColor='#3b82f6'">${trimmedName}</a>`;
+                      return `<a href="/architect/${a.slug}" style="background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#2563eb'" onmouseout="this.style.backgroundColor='#3b82f6'">${trimmedName}</a>`;
                     } else {
                       return `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
                     }

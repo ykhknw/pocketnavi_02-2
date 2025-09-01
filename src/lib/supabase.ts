@@ -102,24 +102,44 @@ export type Database = {
           updated_at?: string
         }
       }
-      architects_table: {
+      individual_architects: {
         Row: {
-          architect_id: number
-          architectJa: string
-          architectEn: string
-          slug?: string
+          individual_architect_id: number
+          name_ja: string
+          name_en: string
+          slug: string
         }
         Insert: {
-          architect_id?: number
-          architectJa: string
-          architectEn: string
-          slug?: string
+          individual_architect_id?: number
+          name_ja: string
+          name_en: string
+          slug: string
         }
         Update: {
-          architect_id?: number
-          architectJa?: string
-          architectEn?: string
+          individual_architect_id?: number
+          name_ja?: string
+          name_en?: string
           slug?: string
+        }
+      }
+      architect_compositions: {
+        Row: {
+          composition_id: number
+          architect_id: number
+          individual_architect_id: number
+          order_index: number
+        }
+        Insert: {
+          composition_id?: number
+          architect_id: number
+          individual_architect_id: number
+          order_index: number
+        }
+        Update: {
+          composition_id?: number
+          architect_id?: number
+          individual_architect_id?: number
+          order_index?: number
         }
       }
       building_architects: {

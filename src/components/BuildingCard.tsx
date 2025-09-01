@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, Camera, Video, ExternalLink } from 'lucide-react';
 import { Building } from '../types';
 import { formatDistance } from '../utils/distance';
@@ -72,6 +73,8 @@ function BuildingCardComponent({
   language
 }: BuildingCardProps) {
   const context = useAppContext();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   
   // 建築物IDに基づいて安定した自然画像を取得
@@ -96,8 +99,18 @@ function BuildingCardComponent({
   const handleCardClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // 建築物の詳細ページに遷移（単数形に統一）
+    if (building.slug) {
+      navigate(`/building/${building.slug}`);
+    } else {
+      // slugがない場合はIDで遷移
+      navigate(`/building/${building.id}`);
+    }
+    
+    // 必要に応じてonSelectも呼び出し
     onSelect(building);
-  }, [onSelect, building]);
+  }, [navigate, building, onSelect]);
 
   const handleTogglePhotos = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -122,7 +135,7 @@ function BuildingCardComponent({
     if (slug) {
       // 新しいテーブル構造: slugベースの建築家ページに遷移
       console.log('新しいテーブル構造での建築家検索:', { name, slug });
-      window.location.href = `/architects/${slug}`;
+      window.location.href = `/architect/${slug}`;
     } else {
       // 古いテーブル構造: 名前ベースの検索
       console.log('古いテーブル構造での建築家検索:', { name });
@@ -155,6 +168,14 @@ function BuildingCardComponent({
 
   const handleBuildingTypeSearch = useCallback((e: React.MouseEvent, type: string) => {
     e.stopPropagation();
+    // 建築家ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/')) {
+      const params = new URLSearchParams();
+      params.set('buildingTypes', type);
+      navigate(`/?${params.toString()}`);
+      return;
+    }
+
     // 既存フィルターを保持し、建物用途のみを追加/更新
     const currentTypes = context.filters.buildingTypes || [];
     const newTypes = currentTypes.includes(type)
@@ -167,11 +188,19 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    // 現在のページを維持するため、navigate('/')を削除
-  }, [context]);
+  }, [context, location.pathname, navigate]);
 
   const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
     e.stopPropagation();
+    
+    // 建築家ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/')) {
+      const params = new URLSearchParams();
+      params.set('year', year.toString());
+      navigate(`/?${params.toString()}`);
+      return;
+    }
+
     // 既存フィルターを保持し、建築年の選択/解除を切り替え
     const newCompletionYear = context.filters.completionYear === year ? null : year;
     
@@ -181,11 +210,18 @@ function BuildingCardComponent({
     });
     context.setCurrentPage(1);
     context.handleSearchStart();
-    // 現在のページを維持するため、navigate('/')を削除
-  }, [context]);
+  }, [context, location.pathname, navigate]);
 
   const handlePrefectureSearch = useCallback((e: React.MouseEvent, pref: string) => {
     e.stopPropagation();
+    // 建築家ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/')) {
+      const params = new URLSearchParams();
+      params.set('prefectures', pref);
+      navigate(`/?${params.toString()}`);
+      return;
+    }
+
     // 既存フィルターを保持し、都道府県のみを追加/更新
     const currentPrefectures = context.filters.prefectures || [];
     const newPrefectures = currentPrefectures.includes(pref)
@@ -211,7 +247,7 @@ function BuildingCardComponent({
         newFilters
       );
     }
-  }, [context]);
+  }, [context, location.pathname, navigate]);
 
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
