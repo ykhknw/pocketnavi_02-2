@@ -116,32 +116,40 @@ function BuildingCardComponent({
     }
   }, [building.lat, building.lng]);
 
-  const handleArchitectSearch = useCallback((e: React.MouseEvent, name: string) => {
+  const handleArchitectSearch = useCallback((e: React.MouseEvent, name: string, slug?: string) => {
     e.stopPropagation();
-    // 既存フィルターを保持し、建築家のみを追加/更新
-    const currentArchitects = context.filters.architects || [];
-    const newArchitects = currentArchitects.includes(name)
-      ? currentArchitects.filter(a => a !== name)
-      : [...currentArchitects, name];
     
-    const newFilters = {
-      ...context.filters,
-      architects: newArchitects,
-    };
-    
-    context.setFilters(newFilters);
-    context.setCurrentPage(1);
-    context.handleSearchStart();
-    
-    // 検索履歴を更新
-    if (context.updateSearchHistory) {
-      context.updateSearchHistory(
-        context.searchHistory,
-        context.setSearchHistory,
-        name,
-        'architect',
-        newFilters
-      );
+    if (slug) {
+      // 新しいテーブル構造: slugベースの建築家ページに遷移
+      console.log('新しいテーブル構造での建築家検索:', { name, slug });
+      window.location.href = `/architects/${slug}`;
+    } else {
+      // 古いテーブル構造: 名前ベースの検索
+      console.log('古いテーブル構造での建築家検索:', { name });
+      
+      // 既存フィルターを保持し、建築家のみを追加/更新
+      const currentArchitects = context.filters.architects || [];
+      const newArchitects = currentArchitects.includes(name) 
+        ? currentArchitects.filter(a => a !== name) // 既に含まれている場合は削除
+        : [...currentArchitects, name]; // 含まれていない場合は追加
+      
+      const newFilters = {
+        ...context.filters,
+        architects: newArchitects
+      };
+      
+      context.setFilters(newFilters);
+      
+      // 検索履歴を更新
+      if (context.updateSearchHistory) {
+        context.updateSearchHistory(
+          context.searchHistory,
+          context.setSearchHistory,
+          name,
+          'architect',
+          newFilters
+        );
+      }
     }
   }, [context]);
 
@@ -291,7 +299,7 @@ function BuildingCardComponent({
                         ]
                       )}
                       title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
-                      onClick={(e) => handleArchitectSearch(e, trimmedName)}
+                      onClick={(e) => handleArchitectSearch(e, trimmedName, architect.slug)}
                     >
                       {trimmedName}
                     </Badge>

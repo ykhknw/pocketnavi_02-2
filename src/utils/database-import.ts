@@ -1,10 +1,20 @@
 // データベースインポート用ユーティリティ
+import { supabase } from '../lib/supabase';
 
 export interface ImportConfig {
   batchSize: number;
   skipDuplicates: boolean;
   optimizeImages: boolean;
   maxTextLength: number;
+}
+
+export interface MigrationResult {
+  success: boolean;
+  message: string;
+  data?: {
+    individualArchitects: number;
+    architectCompositions: number;
+  };
 }
 
 export class DatabaseImporter {
@@ -150,4 +160,77 @@ export async function importShinkenchikuDB(supabase: Record<string, unknown>) {
   const sqlContent = ''; // SQLファイルの内容
   
   await importer.importInBatches(sqlContent, supabase);
+}
+
+/**
+ * 移行状況の確認
+ */
+export async function checkMigrationStatus(): Promise<MigrationResult> {
+  try {
+    console.log('🔍 checkMigrationStatus: 開始');
+    
+    // 方法1: count: 'exact'を使用
+    const { data: individualCount, error: individualError, count: individualExactCount } = await supabase
+      .from('individual_architects')
+      .select('individual_architect_id', { count: 'exact' });
+
+    console.log('🔍 individual_architects クエリ結果:', { 
+      data: individualCount, 
+      error: individualError, 
+      count: individualExactCount,
+      dataLength: individualCount?.length || 0
+    });
+
+    if (individualError) {
+      console.error('❌ individual_architectsテーブル確認エラー:', individualError);
+      return {
+        success: false,
+        message: `individual_architectsテーブル確認エラー: ${individualError.message}`
+      };
+    }
+
+    // 方法2: データの長さも確認
+    const individualCountValue = individualExactCount || individualCount?.length || 0;
+
+    const { data: compositionCount, error: compositionError, count: compositionExactCount } = await supabase
+      .from('architect_compositions')
+      .select('architect_id', { count: 'exact' });
+
+    console.log('🔍 architect_compositions クエリ結果:', { 
+      data: compositionCount, 
+      error: compositionError, 
+      count: compositionExactCount,
+      dataLength: compositionCount?.length || 0
+    });
+
+    if (compositionError) {
+      console.error('❌ architect_compositionsテーブル確認エラー:', compositionError);
+      return {
+        success: false,
+        message: `architect_compositionsテーブル確認エラー: ${compositionError.message}`
+      };
+    }
+
+    // 方法2: データの長さも確認
+    const compositionCountValue = compositionExactCount || compositionCount?.length || 0;
+
+    const result = {
+      success: true,
+      message: '移行状況確認完了',
+      data: {
+        individualArchitects: individualCountValue,
+        architectCompositions: compositionCountValue
+      }
+    };
+
+    console.log('✅ checkMigrationStatus: 完了', result);
+    return result;
+
+  } catch (error) {
+    console.error('❌ checkMigrationStatus: 予期しないエラー:', error);
+    return {
+      success: false,
+      message: `予期しないエラー: ${error}`
+    };
+  }
 }

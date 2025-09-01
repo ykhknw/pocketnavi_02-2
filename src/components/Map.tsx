@@ -171,9 +171,14 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
                 ${building.architects.map(a => {
                   const architectName = language === 'ja' ? a.architectJa : a.architectEn;
                   const architectNames = architectName.split('　').filter(name => name.trim());
-                  return architectNames.map(name => 
-                    `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${name.trim()}</span>`
-                  ).join('');
+                  return architectNames.map(name => {
+                    const trimmedName = name.trim();
+                    if (a.slug) {
+                      return `<a href="/architects/${a.slug}" style="background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#2563eb'" onmouseout="this.style.backgroundColor='#3b82f6'">${trimmedName}</a>`;
+                    } else {
+                      return `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
+                    }
+                  }).join('');
                 }).join('')}
               </div>
             </div>
@@ -343,7 +348,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
   ]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden" style={{ zIndex: 1 }}>
       <div 
         ref={mapRef} 
         className="w-full h-96"

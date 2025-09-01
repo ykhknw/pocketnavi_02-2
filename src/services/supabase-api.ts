@@ -1,6 +1,6 @@
 
 import { supabase } from '../lib/supabase'
-import { Building, SearchFilters, Architect, Photo } from '../types'
+import { Building, SearchFilters, Architect, Photo, NewArchitect } from '../types'
 import { sessionManager } from '../utils/session-manager'
 
 export class SupabaseApiError extends Error {
@@ -882,14 +882,76 @@ class SupabaseApiClient {
     // 建築家データの変換（building_architectsテーブルのみから取得）
     let architects: any[] = [];
     if (data.building_architects && data.building_architects.length > 0) {
-      // データベースから取得した建築家データ
-      architects = data.building_architects.map((ba: any) => ({
-        architect_id: ba.architects_table?.architect_id || 0,
-        architectJa: ba.architects_table?.architectJa || '',
-        architectEn: ba.architects_table?.architectEn || ba.architects_table?.architectJa || '',
-        slug: ba.architects_table?.slug,
-        websites: []
-      }));
+      try {
+        // 新しいテーブル構造を使用して建築家データを取得
+        const architectPromises = data.building_architects.map(async (ba: any) => {
+          const architectId = ba.architects_table?.architect_id;
+          if (!architectId) return null;
+
+          // architect_compositionsテーブルから個別建築家IDを取得
+          const { data: compositions, error: compError } = await supabase
+            .from('architect_compositions')
+            .select(`
+              individual_architect_id,
+              order_index,
+              individual_architects!inner(
+                individual_architect_id,
+                name_ja,
+                name_en,
+                slug
+              )
+            `)
+            .eq('architect_id', architectId)
+            .order('order_index');
+
+          if (compError || !compositions) {
+            console.warn(`建築家構成取得エラー (architect_id: ${architectId}):`, compError);
+            // フォールバック: 古いテーブル構造を使用
+            return {
+              architect_id: architectId,
+              architectJa: ba.architects_table?.architectJa || '',
+              architectEn: ba.architects_table?.architectEn || ba.architects_table?.architectJa || '',
+              slug: ba.architects_table?.slug,
+              websites: [],
+              useOldStructure: true // 古い構造を使用したことを示すフラグ
+            };
+          }
+
+          // 新しいテーブル構造のデータを返す
+          return compositions.map((comp: any) => ({
+            architect_id: architectId,
+            individual_architect_id: comp.individual_architect_id,
+            architectJa: comp.individual_architects.name_ja,
+            architectEn: comp.individual_architects.name_en,
+            slug: comp.individual_architects.slug,
+            order_index: comp.order_index,
+            websites: [],
+            useOldStructure: false // 新しい構造を使用したことを示すフラグ
+          }));
+        });
+
+        // すべての建築家データを取得
+        const architectResults = await Promise.all(architectPromises);
+        
+        // 結果を平坦化して配列に変換
+        architects = architectResults
+          .filter(result => result !== null)
+          .flat()
+          .filter(architect => architect !== null);
+
+        console.log('新しいテーブル構造から取得した建築家データ:', architects);
+      } catch (error) {
+        console.error('新しいテーブル構造での建築家データ取得エラー:', error);
+        // エラー時は古いテーブル構造にフォールバック
+        architects = data.building_architects.map((ba: any) => ({
+          architect_id: ba.architects_table?.architect_id || 0,
+          architectJa: ba.architects_table?.architectJa || '',
+          architectEn: ba.architects_table?.architectEn || ba.architects_table?.architectJa || '',
+          slug: ba.architects_table?.slug,
+          websites: [],
+          useOldStructure: true
+        }));
+      }
     }
     // architectDetailsフィールドからのフォールバック処理を削除
 
@@ -930,6 +992,539 @@ class SupabaseApiClient {
       created_at: data.created_at || new Date().toISOString(),
       updated_at: data.updated_at || new Date().toISOString()
     };
+  }
+
+  /**
+   * 新しいテーブル構造を使用して建築家情報を取得
+   * individual_architects と architect_compositions を結合して取得
+   */
+  async getArchitectWithNewStructure(architectId: number): Promise<NewArchitect | null> {
+    const { data, error } = await supabase
+      .from('architect_compositions')
+      .select(`
+        architect_id,
+        order_index,
+        individual_architects!inner(
+          individual_architect_id,
+          name_ja,
+          name_en,
+          slug
+        )
+      `)
+      .eq('architect_id', architectId)
+      .order('order_index')
+      .single();
+
+    if (error || !data) {
+      console.error('新しいテーブル構造での建築家取得エラー:', error);
+      return null;
+    }
+
+    return {
+      architect_id: data.architect_id,
+      architectJa: data.individual_architects.name_ja,
+      architectEn: data.individual_architects.name_en,
+      slug: data.individual_architects.slug,
+      individual_architect_id: data.individual_architects.individual_architect_id,
+      order_index: data.order_index,
+      websites: [] // 必要に応じて取得
+    };
+  }
+
+  /**
+   * 新しいテーブル構造を使用して建築家のslugから建築家情報を取得
+   */
+  async getArchitectBySlugWithNewStructure(slug: string): Promise<NewArchitect | null> {
+    const { data, error } = await supabase
+      .from('individual_architects')
+      .select(`
+        individual_architect_id,
+        name_ja,
+        name_en,
+        slug,
+        architect_compositions!inner(
+          architect_id,
+          order_index
+        )
+      `)
+      .eq('slug', slug)
+      .single();
+
+    if (error || !data) {
+      console.error('新しいテーブル構造での建築家slug取得エラー:', error);
+      return null;
+    }
+
+    // 最初のcompositionを取得（複数ある場合はorder_indexでソート）
+    const composition = data.architect_compositions.sort((a, b) => a.order_index - b.order_index)[0];
+
+    return {
+      architect_id: composition.architect_id,
+      architectJa: data.name_ja,
+      architectEn: data.name_en,
+      slug: data.slug,
+      individual_architect_id: data.individual_architect_id,
+      order_index: composition.order_index,
+      websites: [] // 必要に応じて取得
+    };
+  }
+
+  /**
+   * 新しいテーブル構造を使用して建築物の建築家情報を取得
+   */
+  async getBuildingArchitectsWithNewStructure(buildingId: number): Promise<NewArchitect[]> {
+    const { data, error } = await supabase
+      .from('building_architects')
+      .select(`
+        architect_id,
+        architect_order,
+        architect_compositions!inner(
+          order_index,
+          individual_architects!inner(
+            individual_architect_id,
+            name_ja,
+            name_en,
+            slug
+          )
+        )
+      `)
+      .eq('building_id', buildingId)
+      .order('architect_order');
+
+    if (error || !data) {
+      console.error('新しいテーブル構造での建築物建築家取得エラー:', error);
+      return [];
+    }
+
+    return data.map((item: any) => {
+      const composition = item.architect_compositions.sort((a: any, b: any) => a.order_index - b.order_index)[0];
+      return {
+        architect_id: item.architect_id,
+        architectJa: composition.individual_architects.name_ja,
+        architectEn: composition.individual_architects.name_en,
+        slug: composition.individual_architects.slug,
+        individual_architect_id: composition.individual_architects.individual_architect_id,
+        order_index: composition.order_index,
+        websites: []
+      };
+    });
+  }
+
+  /**
+   * 新しいテーブル構造を使用した建築物データ変換（既存transformBuildingとの互換性を保つ）
+   */
+  async transformBuildingWithNewStructure(data: any): Promise<Building> {
+    // 既存のtransformBuildingメソッドをベースに、新しいテーブル構造に対応
+    const architects = await this.getBuildingArchitectsWithNewStructure(data.building_id);
+
+    // 外部写真URLの生成（画像チェックを無効化）
+    const generatePhotosFromUid = async (uid: string): Promise<Photo[]> => {
+      return [];
+    };
+
+    const photos = await generatePhotosFromUid(data.uid);
+    
+    return {
+      id: data.building_id,
+      uid: data.uid,
+      slug: data.slug,
+      title: data.title,
+      titleEn: data.titleEn || data.title,
+      thumbnailUrl: data.thumbnailUrl || '',
+      youtubeUrl: data.youtubeUrl || '',
+      completionYears: parseYear(data.completionYears),
+      parentBuildingTypes: parseCommaSeparated(data.parentBuildingTypes),
+      buildingTypes: parseSlashSeparated(data.buildingTypes),
+      parentStructures: parseCommaSeparated(data.parentStructures),
+      structures: parseCommaSeparated(data.structures),
+      prefectures: data.prefectures,
+      prefecturesEn: data.prefecturesEn || null,
+      areas: data.areas,
+      location: data.location,
+      locationEn: data.locationEn_from_datasheetChunkEn || data.location,
+      buildingTypesEn: parseSlashSeparated(data.buildingTypesEn),
+      architectDetails: data.architectDetails || '',
+      lat: parseFloat(data.lat) || 0,
+      lng: parseFloat(data.lng) || 0,
+      architects: architects,
+      photos: photos,
+      likes: 0,
+      created_at: data.created_at || new Date().toISOString(),
+      updated_at: data.updated_at || new Date().toISOString()
+    };
+  }
+
+  // ========================================
+  // ハイブリッド実装メソッド
+  // 新しいテーブル構造を優先し、フォールバックで既存テーブルを使用
+  // ========================================
+
+  /**
+   * ハイブリッド建築家取得（安全性重視）
+   * 新しいテーブル構造を優先し、フォールバックで既存テーブルを使用
+   */
+  async getArchitectHybrid(architectId: number): Promise<Architect | null> {
+    try {
+      // 1. 新しいテーブル構造で試行
+      const newStructureResult = await this.getArchitectWithNewStructure(architectId);
+      if (newStructureResult) {
+        console.log(`✅ 新しいテーブル構造で建築家取得成功: ${architectId}`);
+        return newStructureResult;
+      }
+      
+      // 2. フォールバック: 既存のarchitects_table
+      console.log(`🔄 フォールバック: 既存テーブルで建築家取得: ${architectId}`);
+      const { data, error } = await supabase
+        .from('architects_table')
+        .select('*')
+        .eq('architect_id', architectId)
+        .single();
+        
+      if (error || !data) return null;
+      
+      return {
+        architect_id: data.architect_id,
+        architectJa: data.architectJa,
+        architectEn: data.architectEn,
+        slug: data.slug,
+        websites: []
+      };
+    } catch (error) {
+      console.error('❌ ハイブリッド建築家取得エラー:', error);
+      return null;
+    }
+  }
+
+  /**
+   * ハイブリッド建築家検索（新しいテーブル構造優先）
+   */
+  async searchArchitectsHybrid(query: string, language: 'ja' | 'en' = 'ja'): Promise<Architect[]> {
+    try {
+      // 1. 新しいテーブル構造で検索
+      const newStructureResults = await this.searchArchitectsWithNewStructure(query, language);
+      if (newStructureResults.length > 0) {
+        console.log(`✅ 新しいテーブル構造で検索成功: ${query} (${newStructureResults.length}件)`);
+        return newStructureResults;
+      }
+      
+      // 2. フォールバック: 既存のarchitects_table
+      console.log(`🔄 フォールバック: 既存テーブルで検索: ${query}`);
+      const { data, error } = await supabase
+        .from('architects_table')
+        .select('*')
+        .or(`architectJa.ilike.%${query}%,architectEn.ilike.%${query}%`)
+        .order('architectJa');
+        
+      if (error || !data) return [];
+      
+      return data.map(arch => ({
+        architect_id: arch.architect_id,
+        architectJa: arch.architectJa,
+        architectEn: arch.architectEn,
+        slug: arch.slug,
+        websites: []
+      }));
+    } catch (error) {
+      console.error('❌ ハイブリッド建築家検索エラー:', error);
+      return [];
+    }
+  }
+
+  /**
+   * ハイブリッド建築家slug取得（新しいテーブル構造優先）
+   */
+  async getArchitectBySlugHybrid(slug: string): Promise<Architect | null> {
+    try {
+      // 1. 新しいテーブル構造で試行
+      const newStructureResult = await this.getArchitectBySlugWithNewStructure(slug);
+      if (newStructureResult) {
+        console.log(`✅ 新しいテーブル構造で建築家slug取得成功: ${slug}`);
+        return newStructureResult;
+      }
+      
+      // 2. フォールバック: 既存のarchitects_table
+      console.log(`🔄 フォールバック: 既存テーブルで建築家slug取得: ${slug}`);
+      const { data, error } = await supabase
+        .from('architects_table')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+        
+      if (error || !data) return null;
+      
+      return {
+        architect_id: data.architect_id,
+        architectJa: data.architectJa,
+        architectEn: data.architectEn,
+        slug: data.slug,
+        websites: []
+      };
+    } catch (error) {
+      console.error('❌ ハイブリッド建築家slug取得エラー:', error);
+      return null;
+    }
+  }
+
+  /**
+   * ハイブリッド建築物建築家取得（新しいテーブル構造優先）
+   */
+  async getBuildingArchitectsHybrid(buildingId: number): Promise<Architect[]> {
+    try {
+      // 1. 新しいテーブル構造で試行
+      const newStructureResults = await this.getBuildingArchitectsWithNewStructure(buildingId);
+      if (newStructureResults.length > 0) {
+        console.log(`✅ 新しいテーブル構造で建築物建築家取得成功: ${buildingId} (${newStructureResults.length}件)`);
+        return newStructureResults;
+      }
+      
+      // 2. フォールバック: 既存のbuilding_architects + architects_table
+      console.log(`🔄 フォールバック: 既存テーブルで建築物建築家取得: ${buildingId}`);
+      const { data, error } = await supabase
+        .from('building_architects')
+        .select(`
+          architect_id,
+          architect_order,
+          architects_table(*)
+        `)
+        .eq('building_id', buildingId)
+        .order('architect_order');
+        
+      if (error || !data) return [];
+      
+      return data.map(item => ({
+        architect_id: item.architect_id,
+        architectJa: item.architects_table?.architectJa || '',
+        architectEn: item.architects_table?.architectEn || '',
+        slug: item.architects_table?.slug,
+        websites: []
+      }));
+    } catch (error) {
+      console.error('❌ ハイブリッド建築物建築家取得エラー:', error);
+      return [];
+    }
+  }
+
+  /**
+   * 建築家の作品一覧を取得（slugベース）
+   */
+  async getArchitectBuildingsBySlug(slug: string): Promise<{ buildings: Building[], architectName: { ja: string, en: string } }> {
+    try {
+      console.log(`🔍 建築家の作品取得開始: ${slug}`);
+      
+      // 1. individual_architectsテーブルからindividual_architect_idを取得
+      const { data: individualArchitect, error: individualError } = await supabase
+        .from('individual_architects')
+        .select('individual_architect_id, name_ja, name_en')
+        .eq('slug', slug)
+        .single();
+      
+      if (individualError || !individualArchitect) {
+        console.log(`❌ individual_architectsテーブルで建築家が見つかりません: ${slug}`);
+        return { buildings: [], architectName: { ja: '', en: '' } };
+      }
+      
+      console.log(`✅ individual_architect_id取得: ${individualArchitect.individual_architect_id}`);
+      
+      // 2. architect_compositionsテーブルからarchitect_idを取得
+      const { data: compositions, error: compositionsError } = await supabase
+        .from('architect_compositions')
+        .select('architect_id')
+        .eq('individual_architect_id', individualArchitect.individual_architect_id);
+      
+      if (compositionsError || !compositions || compositions.length === 0) {
+        console.log(`❌ architect_compositionsテーブルで関連が見つかりません: ${individualArchitect.individual_architect_id}`);
+        return { buildings: [], architectName: { ja: individualArchitect.name_ja, en: individualArchitect.name_en } };
+      }
+      
+      const architectIds = compositions.map(comp => comp.architect_id);
+      console.log(`✅ architect_id取得: ${architectIds.join(', ')}`);
+      
+      // 3. building_architectsテーブルからbuilding_idを取得
+      const { data: buildingArchitects, error: buildingArchitectsError } = await supabase
+        .from('building_architects')
+        .select('building_id')
+        .in('architect_id', architectIds);
+      
+      if (buildingArchitectsError || !buildingArchitects || buildingArchitects.length === 0) {
+        console.log(`❌ building_architectsテーブルで建築物が見つかりません: ${architectIds.join(', ')}`);
+        return { buildings: [], architectName: { ja: individualArchitect.name_ja, en: individualArchitect.name_en } };
+      }
+      
+      const buildingIds = buildingArchitects.map(ba => ba.building_id);
+      console.log(`✅ building_id取得: ${buildingIds.join(', ')}`);
+      
+      // 4. buildings_table_2から建築物情報を取得
+      const { data: buildingsData, error: buildingsError } = await supabase
+        .from('buildings_table_2')
+        .select('*')
+        .in('building_id', buildingIds)
+        .order('completionYears', { ascending: false });
+      
+      if (buildingsError || !buildingsData) {
+        console.log(`❌ buildings_table_2で建築物データ取得エラー: ${buildingsError?.message}`);
+        return { buildings: [], architectName: { ja: individualArchitect.name_ja, en: individualArchitect.name_en } };
+      }
+      
+      console.log(`✅ 建築物データ取得: ${buildingsData.length}件`);
+      
+      // 5. 建築物データを変換
+      const transformedBuildings = await Promise.all(
+        buildingsData.map(building => this.transformBuildingHybrid(building))
+      );
+      
+      console.log(`✅ 建築物データ変換完了: ${transformedBuildings.length}件`);
+      return {
+        buildings: transformedBuildings,
+        architectName: {
+          ja: individualArchitect.name_ja,
+          en: individualArchitect.name_en
+        }
+      };
+      
+    } catch (error) {
+      console.error('❌ 建築家の作品取得エラー:', error);
+      return { buildings: [], architectName: { ja: '', en: '' } };
+    }
+  }
+
+  /**
+   * ハイブリッド建築物データ変換（新しいテーブル構造優先）
+   */
+  async transformBuildingHybrid(data: any): Promise<Building> {
+    try {
+      // 1. 新しいテーブル構造で試行
+      const newStructureResult = await this.transformBuildingWithNewStructure(data);
+      if (newStructureResult) {
+        console.log(`✅ 新しいテーブル構造で建築物変換成功: ${data.building_id}`);
+        return newStructureResult;
+      }
+      
+      // 2. フォールバック: 既存のtransformBuilding
+      console.log(`🔄 フォールバック: 既存メソッドで建築物変換: ${data.building_id}`);
+      return await this.transformBuilding(data);
+    } catch (error) {
+      console.error('❌ ハイブリッド建築物変換エラー:', error);
+      // 最後の手段: 基本的なデータ構造で返す
+      return {
+        id: data.building_id,
+        uid: data.uid || '',
+        slug: data.slug || '',
+        title: data.title || '',
+        titleEn: data.titleEn || data.title || '',
+        thumbnailUrl: data.thumbnailUrl || '',
+        youtubeUrl: data.youtubeUrl || '',
+        completionYears: 0,
+        parentBuildingTypes: [],
+        buildingTypes: [],
+        parentStructures: [],
+        structures: [],
+        prefectures: data.prefectures || '',
+        prefecturesEn: data.prefecturesEn || null,
+        areas: data.areas || '',
+        location: data.location || '',
+        locationEn: data.locationEn || null,
+        buildingTypesEn: [],
+        architectDetails: data.architectDetails || '',
+        lat: parseFloat(data.lat) || 0,
+        lng: parseFloat(data.lng) || 0,
+        architects: [],
+        photos: [],
+        likes: 0,
+        created_at: data.created_at || new Date().toISOString(),
+        updated_at: data.updated_at || new Date().toISOString()
+      };
+    }
+  }
+
+  /**
+   * 移行状況の確認
+   */
+  async getMigrationStatus(): Promise<{
+    newStructureAvailable: boolean;
+    fallbackUsed: boolean;
+    lastMigrationCheck: string;
+  }> {
+    try {
+      // 新しいテーブル構造の可用性を確認
+      const { data: individualCount, error: individualError } = await supabase
+        .from('individual_architects')
+        .select('individual_architect_id', { count: 'exact' });
+
+      const { data: compositionCount, error: compositionError } = await supabase
+        .from('architect_compositions')
+        .select('architect_id', { count: 'exact' });
+
+      const newStructureAvailable = !individualError && !compositionError && 
+        (individualCount || 0) > 0 && (compositionCount || 0) > 0;
+
+      return {
+        newStructureAvailable,
+        fallbackUsed: false, // この値は実際の使用状況で更新
+        lastMigrationCheck: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error('移行状況確認エラー:', error);
+      return {
+        newStructureAvailable: false,
+        fallbackUsed: false,
+        lastMigrationCheck: new Date().toISOString()
+      };
+    }
+  }
+
+  // ========================================
+  // 新しいテーブル構造での検索メソッド
+  // ========================================
+
+  /**
+   * 新しいテーブル構造を使用した建築家検索
+   */
+  async searchArchitectsWithNewStructure(query: string, language: 'ja' | 'en' = 'ja'): Promise<Architect[]> {
+    try {
+      const { data, error } = await supabase
+        .from('individual_architects')
+        .select(`
+          individual_architect_id,
+          name_ja,
+          name_en,
+          slug,
+          architect_compositions!inner(
+            architect_id,
+            order_index
+          )
+        `)
+        .or(`name_ja.ilike.%${query}%,name_en.ilike.%${query}%`)
+        .order('name_ja');
+
+      if (error || !data) {
+        console.error('新しいテーブル構造での建築家検索エラー:', error);
+        return [];
+      }
+
+      return data.map(item => {
+        // 最初のcompositionを取得（複数ある場合はorder_indexでソート）
+        const composition = item.architect_compositions.sort((a: any, b: any) => a.order_index - b.order_index)[0];
+        
+        return {
+          architect_id: composition.architect_id,
+          architectJa: item.name_ja,
+          architectEn: item.name_en,
+          slug: item.slug,
+          websites: []
+        };
+      });
+    } catch (error) {
+      console.error('新しいテーブル構造での建築家検索でエラーが発生:', error);
+      return [];
+    }
+  }
+
+  /**
+   * 既存の建築家検索メソッド（ハイブリッド実装を使用）
+   */
+  async searchArchitects(query: string, language: 'ja' | 'en' = 'ja'): Promise<Architect[]> {
+    // ハイブリッド実装を使用
+    return await this.searchArchitectsHybrid(query, language);
   }
 }
 

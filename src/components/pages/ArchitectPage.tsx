@@ -16,53 +16,40 @@ export function ArchitectPage() {
   const [error, setError] = useState<string | null>(null);
   const [architectName, setArchitectName] = useState<string>('');
 
+  console.log('🔍 ArchitectPage レンダリング, slug:', slug);
+
   useEffect(() => {
     const loadArchitectBuildings = async () => {
       if (!slug) return;
+
+      console.log('🔍 建築家ページ読み込み開始:', slug);
 
       try {
         setLoading(true);
         setError(null);
 
-        // 建築家のslugから建築家IDを取得
-        const { data: architect, error: architectError } = await supabaseApiClient.supabase
-          .from('architects_table')
-          .select('architect_id, architectJa, architectEn')
-          .eq('slug', slug)
-          .single();
-
-        if (architectError || !architect) {
+        // 建築家のslugから建築家IDを取得（ハイブリッド実装）
+        console.log('🔍 建築家情報取得開始');
+        const architect = await supabaseApiClient.getArchitectBySlugHybrid(slug);
+        if (!architect) {
+          console.log('❌ 建築家が見つかりません:', slug);
           setError('建築家が見つかりません');
           return;
         }
+        console.log('✅ 建築家情報取得成功:', architect);
 
-        setArchitectName(context.language === 'ja' ? architect.architectJa : architect.architectEn);
+        // 建築家の名前は後でgetArchitectBuildingsBySlugから取得するため、ここでは設定しない
 
-        // その建築家の作品を取得
-        const { data: buildingsData, error: buildingsError } = await supabaseApiClient.supabase
-          .from('buildings_table_2')
-          .select(`
-            *,
-            building_architects!inner(
-              architects_table(*)
-            )
-          `)
-          .eq('building_architects.architect_id', architect.architect_id);
-
-        if (buildingsError) {
-          setError('作品の取得に失敗しました');
-          return;
-        }
-
-        // 建築物データを変換
-        const transformedBuildings = await Promise.all(
-          buildingsData.map(building => supabaseApiClient.transformBuilding(building))
-        );
-
-        setBuildings(transformedBuildings);
+        // その建築家の作品を取得（slugベース）
+        console.log('🔍 建築家の作品取得開始');
+        const result = await supabaseApiClient.getArchitectBuildingsBySlug(slug);
+        console.log('✅ 建築家の作品取得完了:', result);
+        
+        setBuildings(result.buildings);
+        setArchitectName(context.language === 'ja' ? result.architectName.ja : result.architectName.en);
       } catch (err) {
+        console.error('❌ 建築家ページエラー:', err);
         setError('エラーが発生しました');
-        console.error('建築家ページエラー:', err);
       } finally {
         setLoading(false);
       }

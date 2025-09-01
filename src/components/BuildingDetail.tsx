@@ -110,12 +110,17 @@ function BuildingDetailComponent({
     }
   }, [building.lat, building.lng]);
 
-  const handleArchitectSearch = useCallback((name: string) => {
-    // 詳細ページから一覧ページに戻り、建築家のみで検索
-    const searchParams = new URLSearchParams();
-    searchParams.set('architects', name);
-    const url = `/?${searchParams.toString()}`;
-    window.location.href = url;
+  const handleArchitectSearch = useCallback((name: string, slug?: string) => {
+    if (slug) {
+      // 新しいテーブル構造: slugベースの建築家ページに遷移
+      window.location.href = `/architects/${slug}`;
+    } else {
+      // 古いテーブル構造: 詳細ページから一覧ページに戻り、建築家のみで検索
+      const searchParams = new URLSearchParams();
+      searchParams.set('architects', name);
+      const url = `/?${searchParams.toString()}`;
+      window.location.href = url;
+    }
   }, []);
 
   const handleBuildingTypeSearch = useCallback((type: string) => {
@@ -186,7 +191,7 @@ function BuildingDetailComponent({
                     variant="default"
                     className="bg-primary/10 text-primary hover:bg-primary/20 text-sm cursor-pointer"
                     title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
-                    onClick={() => handleArchitectSearch(name.trim())}
+                    onClick={() => handleArchitectSearch(name.trim(), architect.slug)}
                   >
                     {name.trim()}
                   </Badge>

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 管理画面のz-indexを確実に高くする */
+.admin-panel-dialog {
+  z-index: 10000 !important;
+}
+
+.admin-panel-dialog [data-radix-dialog-overlay] {
+  z-index: 9999 !important;
+}
+
+.admin-panel-dialog [data-radix-dialog-content] {
+  z-index: 10000 !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

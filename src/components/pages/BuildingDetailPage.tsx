@@ -5,7 +5,7 @@ import { useBuildingBySlug } from '../../hooks/useSupabaseBuildings';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { BuildingDetail } from '../BuildingDetail';
-import { Sidebar } from '../layout/Sidebar';
+import Sidebar from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';

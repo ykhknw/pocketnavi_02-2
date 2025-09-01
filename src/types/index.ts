@@ -36,6 +36,31 @@ export interface Architect {
   websites: Website[];
 }
 
+// 新しいテーブル構造の型定義
+export interface IndividualArchitect {
+  individual_architect_id: number;
+  name_ja: string;
+  name_en: string;
+  slug: string;
+}
+
+export interface ArchitectComposition {
+  architect_id: number;
+  individual_architect_id: number;
+  order_index: number;
+}
+
+// 新しいテーブル構造を使用した建築家情報（既存Architect型との互換性を保つ）
+export interface NewArchitect {
+  architect_id: number;
+  architectJa: string; // name_jaから取得
+  architectEn: string; // name_enから取得
+  slug?: string; // individual_architectのslugから取得
+  individual_architect_id: number;
+  order_index: number;
+  websites: Website[];
+}
+
 export interface Website {
   website_id: number;
   url: string;

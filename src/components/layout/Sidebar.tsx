@@ -22,6 +22,7 @@ interface SidebarProps {
   onSearchClick: (query: string) => void;
   onFilterSearchClick?: (filters: Partial<SearchHistory['filters']>) => void;
   onRemoveRecentSearch?: (index: number) => void;
+  showAdminPanel?: boolean;
 }
 
 function SidebarComponent({
@@ -41,19 +42,22 @@ function SidebarComponent({
   popularSearchesError = null,
   onSearchClick,
   onFilterSearchClick,
-  onRemoveRecentSearch
+  onRemoveRecentSearch,
+  showAdminPanel = false
 }: SidebarProps) {
   return (
     <div className="lg:col-span-1 space-y-6 lg:pl-4 pt-6">
-      <Map
-        buildings={buildings}
-        selectedBuilding={selectedBuilding}
-        onBuildingSelect={onBuildingSelect}
-        currentLocation={currentLocation}
-        language={language}
-        startIndex={startIndex}
-        onSearchAround={onSearchAround}
-      />
+      <div style={{ zIndex: showAdminPanel ? 1 : 'auto' }}>
+        <Map
+          buildings={buildings}
+          selectedBuilding={selectedBuilding}
+          onBuildingSelect={onBuildingSelect}
+          currentLocation={currentLocation}
+          language={language}
+          startIndex={startIndex}
+          onSearchAround={onSearchAround}
+        />
+      </div>
       
       <LikedBuildings
         likedBuildings={likedBuildings}
@@ -95,8 +99,9 @@ const arePropsEqual = (prevProps: SidebarProps, nextProps: SidebarProps): boolea
     prevProps.onSearchAround === nextProps.onSearchAround &&
     prevProps.onLikedBuildingClick === nextProps.onLikedBuildingClick &&
     prevProps.onRemoveLikedBuilding === nextProps.onRemoveLikedBuilding &&
-    prevProps.onSearchClick === nextProps.onSearchClick
+    prevProps.onSearchClick === nextProps.onSearchClick &&
+    prevProps.showAdminPanel === nextProps.showAdminPanel
   );
 };
 
-export const Sidebar = React.memo(SidebarComponent, arePropsEqual); 
+export default React.memo(SidebarComponent, arePropsEqual); 

@@ -9,6 +9,7 @@ import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { t } from '../utils/translations';
+import { DataMigration } from './DataMigration';
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -124,7 +125,7 @@ export function AdminPanel({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto admin-panel-dialog" style={{ zIndex: 10000 }}>
         <DialogHeader>
           <DialogTitle>{t('adminPanel', language)}</DialogTitle>
         </DialogHeader>
@@ -425,30 +426,41 @@ export function AdminPanel({
 
           {activeTab === 'import' && (
             <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">データインポート</h3>
-              <Card>
-                <CardContent className="p-8 text-center">
-                <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground mb-4">
-                  JSONファイルをドラッグ&ドロップするか、ファイルを選択してください
-                </p>
-                <input
-                  type="file"
-                  accept=".json"
-                  className="hidden"
-                  id="import-file"
-                />
-                <Button asChild>
-                  <label
-                  htmlFor="import-file"
-                  className="cursor-pointer"
-                >
-                  <Upload className="h-4 w-4" />
-                  ファイルを選択
-                </label>
-                </Button>
-                </CardContent>
-              </Card>
+              <h3 className="text-lg font-semibold text-foreground mb-4">データベース移行・インポート</h3>
+              
+              {/* データベース移行状況 */}
+              <div className="mb-6">
+                <h4 className="text-md font-semibold text-foreground mb-3">データベース移行状況</h4>
+                <DataMigration />
+              </div>
+              
+              {/* 従来のデータインポート機能 */}
+              <div>
+                <h4 className="text-md font-semibold text-foreground mb-3">データインポート</h4>
+                <Card>
+                  <CardContent className="p-8 text-center">
+                  <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground mb-4">
+                    JSONファイルをドラッグ&ドロップするか、ファイルを選択してください
+                  </p>
+                  <input
+                    type="file"
+                    accept=".json"
+                    className="hidden"
+                    id="import-file"
+                  />
+                  <Button asChild>
+                    <label
+                    htmlFor="import-file"
+                    className="cursor-pointer"
+                  >
+                    <Upload className="h-4 w-4" />
+                    ファイルを選択
+                  </label>
+                  </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
 

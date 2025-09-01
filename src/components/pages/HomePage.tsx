@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../providers/AppProvider';
 import { AppHeader } from '../layout/AppHeader';
 import { MainContent } from '../layout/MainContent';
-import { Sidebar } from '../layout/Sidebar';
+import Sidebar from '../layout/Sidebar';
 import { Footer } from '../layout/Footer';
 import { Button } from '../ui/button';
 import { Building } from '../../types';
@@ -181,6 +181,7 @@ export function HomePage() {
                   context.handleSearchStart();
                 }
               }}
+              showAdminPanel={showAdminPanel}
             />
           </div>
         </div>
