@@ -1,114 +1,323 @@
-# Supabase接続エラー解決ガイド
+# PocketNavi - Supabase接続トラブルシューティング
 
-## **エラー: ホスト名をアドレスに変換できません**
+## 概要
+PocketNaviアプリケーションでSupabase接続時に発生する問題の解決方法
 
-### **原因**
-- ネットワーク接続の問題
-- DNS解決の問題
-- ファイアウォールの制限
-- プロキシ設定の影響
+## 前提条件
+- PocketNaviプロジェクトが設定済み
+- Supabaseプロジェクトが作成済み
+- 環境変数が設定済み
 
-## **解決手順**
+## よくある問題と解決方法
 
-### **1. ネットワーク接続確認**
-```cmd
-# インターネット接続テスト
-ping google.com
+### 1. 環境変数の問題
 
-# Supabaseホスト名の解決テスト
-nslookup db.srxtxukhonqejalqcymt.supabase.co
+#### 問題: 環境変数が読み込まれない
+```
+Error: Supabase URL is not defined
+Error: Supabase anon key is not defined
 ```
 
-### **2. 正しい接続文字列の確認**
-Supabaseダッシュボードで最新の接続文字列を確認：
-
-1. **Supabaseダッシュボード**にログイン
-2. **Settings** → **Database**
-3. **Connection string**をコピー
-
-### **3. 代替接続方法**
-
-#### **A. IPv4アドレス直接指定**
-```cmd
-# ホスト名をIPアドレスに変換して接続
-nslookup db.srxtxukhonqejalqcymt.supabase.co
-# 結果のIPアドレスを使用
-psql "postgresql://postgres:kKoJiuoijn2KG@[IP_ADDRESS]:5432/postgres"
+**解決方法:**
+1. `.env`ファイルの確認
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-#### **B. 別のDNSサーバー使用**
-```cmd
-# Google DNSを使用
-nslookup db.srxtxukhonqejalqcymt.supabase.co 8.8.8.8
+2. 環境変数の再読み込み
+```bash
+# 開発サーバーを再起動
+npm run dev
 ```
 
-### **4. ファイアウォール設定**
-
-#### **Windows Defender ファイアウォール**
-1. **コントロールパネル** → **システムとセキュリティ** → **Windows Defender ファイアウォール**
-2. **詳細設定**
-3. **送信の規則** → **新しい規則**
-4. **ポート** → **TCP** → **5432**を許可
-
-#### **企業ネットワークの場合**
-- IT部門にPostgreSQL接続（ポート5432）の許可を依頼
-- プロキシ設定の確認
-
-### **5. 代替接続方法: pgAdmin**
-
-#### **pgAdminを使用**
-1. **pgAdmin 4**を起動
-2. **サーバー追加**：
-   - **Name**: Supabase
-   - **Host**: db.srxtxukhonqejalqcymt.supabase.co
-   - **Port**: 5432
-   - **Database**: postgres
-   - **Username**: postgres
-   - **Password**: kKoJiuoijn2KG
-
-### **6. Supabase SQL Editorの使用**
-
-#### **ブラウザ経由でのインポート**
-Direct connectionが使えない場合：
-
-1. **Supabaseダッシュボード** → **SQL Editor**
-2. **分割版SQLファイル**を使用
-3. **500件ずつ**段階的にインポート
-
-## **トラブルシューティング**
-
-### **エラーパターン別対処法**
-
-#### **"Name or service not known"**
-```cmd
-# DNS設定確認
-ipconfig /all
-ipconfig /flushdns
+3. 環境変数の確認
+```javascript
+// src/lib/supabase.tsで確認
+console.log('SUPABASE_URL:', import.meta.env.VITE_SUPABASE_URL);
+console.log('SUPABASE_ANON_KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY);
 ```
 
-#### **"Connection timed out"**
-```cmd
-# ファイアウォール確認
-netsh advfirewall show allprofiles
+#### 問題: 本番環境で環境変数が設定されていない
+**解決方法:**
+- Vercel: プロジェクト設定 → Environment Variables
+- Netlify: Site settings → Environment variables
+- GitHub Pages: リポジトリ設定 → Secrets and variables
+
+### 2. Supabaseクライアントの初期化問題
+
+#### 問題: Supabaseクライアントが初期化されない
+```javascript
+// src/lib/supabase.ts
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables')
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 ```
 
-#### **"Authentication failed"**
-- パスワードの再確認
-- Supabaseダッシュボードでパスワードリセット
+**解決方法:**
+1. 環境変数の存在確認
+2. Supabaseプロジェクトの設定確認
+3. ネットワーク接続の確認
 
-### **最終手段: ブラウザ経由**
+### 3. データベース接続の問題
 
-Direct connectionが全く使えない場合：
-1. **変換済みSQLファイル**を**分割版**でダウンロード
-2. **Supabase SQL Editor**で段階的実行
-3. **約60バッチ**を順次実行
+#### 問題: データベースに接続できない
+```
+Error: connection failed
+Error: timeout
+```
 
-## **推奨順序**
+**解決方法:**
+1. Supabaseダッシュボードでデータベースの状態確認
+2. ネットワーク接続の確認
+3. ファイアウォール設定の確認
 
-1. ✅ **ネットワーク接続確認**
-2. ✅ **正しい接続文字列確認**
-3. ✅ **pgAdmin使用**
-4. ✅ **ファイアウォール設定**
-5. ✅ **分割版SQLでブラウザ実行**
+#### 問題: テーブルが見つからない
+```
+Error: relation "buildings_table_2" does not exist
+```
 
-まずはネットワーク接続の確認から始めてください！
+**解決方法:**
+1. テーブルが作成されているか確認
+```sql
+SELECT table_name FROM information_schema.tables 
+WHERE table_schema = 'public';
+```
+
+2. テーブル名の確認
+```sql
+-- 正しいテーブル名を確認
+\d buildings_table_2
+```
+
+### 4. 認証の問題
+
+#### 問題: 認証エラー
+```
+Error: JWT expired
+Error: Invalid JWT
+```
+
+**解決方法:**
+1. Supabaseプロジェクトの設定確認
+2. JWT設定の確認
+3. 認証トークンの更新
+
+#### 問題: RLS（Row Level Security）エラー
+```
+Error: new row violates row-level security policy
+```
+
+**解決方法:**
+1. RLSポリシーの確認
+```sql
+-- RLSポリシーの確認
+SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual
+FROM pg_policies 
+WHERE tablename = 'buildings_table_2';
+```
+
+2. 一時的にRLSを無効化（開発時のみ）
+```sql
+ALTER TABLE buildings_table_2 DISABLE ROW LEVEL SECURITY;
+```
+
+### 5. クエリの問題
+
+#### 問題: クエリが遅い
+**解決方法:**
+1. インデックスの確認
+```sql
+-- インデックスの確認
+SELECT indexname, indexdef 
+FROM pg_indexes 
+WHERE tablename = 'buildings_table_2';
+```
+
+2. クエリの最適化
+```sql
+-- クエリの実行計画確認
+EXPLAIN ANALYZE SELECT * FROM buildings_table_2 
+WHERE title ILIKE '%建築%';
+```
+
+#### 問題: 複雑なクエリでエラー
+```
+Error: too many arguments for function
+```
+
+**解決方法:**
+1. クエリの簡素化
+2. 段階的なクエリ実行
+3. パラメータの型確認
+
+### 6. 画像・ファイルの問題
+
+#### 問題: 画像が表示されない
+**解決方法:**
+1. 画像URLの確認
+2. CORS設定の確認
+3. 画像ファイルの存在確認
+
+#### 問題: ファイルアップロードエラー
+```
+Error: file upload failed
+```
+
+**解決方法:**
+1. ファイルサイズ制限の確認
+2. ファイル形式の確認
+3. ストレージバケットの設定確認
+
+## デバッグ方法
+
+### 1. ブラウザ開発者ツールでの確認
+```javascript
+// コンソールでSupabase接続を確認
+console.log('Supabase client:', supabase);
+console.log('Supabase auth:', supabase.auth);
+```
+
+### 2. ネットワークタブでの確認
+- Supabase APIリクエストの確認
+- レスポンスステータスの確認
+- エラーレスポンスの確認
+
+### 3. Supabaseダッシュボードでの確認
+- ログの確認
+- データベースの状態確認
+- 認証の状態確認
+
+## 予防策
+
+### 1. エラーハンドリングの実装
+```javascript
+// src/services/supabase-api.ts
+try {
+  const { data, error } = await supabase
+    .from('buildings_table_2')
+    .select('*')
+    .limit(10);
+  
+  if (error) {
+    console.error('Supabase error:', error);
+    throw new Error(error.message);
+  }
+  
+  return data;
+} catch (error) {
+  console.error('API error:', error);
+  throw error;
+}
+```
+
+### 2. 接続状態の監視
+```javascript
+// 接続状態の確認
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('Auth state changed:', event, session);
+});
+```
+
+### 3. 定期的なヘルスチェック
+```javascript
+// ヘルスチェック関数
+async function checkSupabaseConnection() {
+  try {
+    const { data, error } = await supabase
+      .from('buildings_table_2')
+      .select('count')
+      .limit(1);
+    
+    if (error) {
+      console.error('Connection check failed:', error);
+      return false;
+    }
+    
+    console.log('Connection check successful');
+    return true;
+  } catch (error) {
+    console.error('Connection check error:', error);
+    return false;
+  }
+}
+```
+
+## ログとモニタリング
+
+### 1. エラーログの設定
+```javascript
+// エラーログの記録
+function logError(error, context) {
+  console.error('Error in', context, ':', error);
+  
+  // エラー報告サービスに送信（例：Sentry）
+  if (window.Sentry) {
+    window.Sentry.captureException(error, {
+      tags: { context }
+    });
+  }
+}
+```
+
+### 2. パフォーマンス監視
+```javascript
+// クエリ実行時間の監視
+async function measureQueryPerformance(queryFn) {
+  const start = performance.now();
+  
+  try {
+    const result = await queryFn();
+    const end = performance.now();
+    
+    console.log(`Query executed in ${end - start}ms`);
+    return result;
+  } catch (error) {
+    const end = performance.now();
+    console.error(`Query failed after ${end - start}ms:`, error);
+    throw error;
+  }
+}
+```
+
+## 緊急時の対応
+
+### 1. 接続が完全に切れた場合
+1. Supabaseダッシュボードでサービス状態確認
+2. 代替データソースの準備
+3. オフライン機能の実装
+
+### 2. データが破損した場合
+1. バックアップからの復旧
+2. データ整合性チェック
+3. 影響範囲の特定
+
+### 3. セキュリティ問題が発生した場合
+1. アクセストークンの無効化
+2. セキュリティログの確認
+3. 必要に応じてデータベースの再作成
+
+## サポート
+
+### 1. Supabaseサポート
+- [Supabase Documentation](https://supabase.com/docs)
+- [Supabase Community](https://github.com/supabase/supabase/discussions)
+- [Supabase Discord](https://discord.supabase.com/)
+
+### 2. PocketNaviプロジェクト
+- プロジェクトのREADME.mdを確認
+- 開発チームに連絡
+- GitHub Issuesで問題を報告
+
+---
+
+**最終更新**: 2024年12月19日  
+**バージョン**: 2.2.0  
+**プロジェクト**: PocketNavi

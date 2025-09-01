@@ -1,0 +1,14 @@
+新建築データクリーニングの手順
+
+１．
+architects_table変更後0823.xlsm　の列「architect_id」,「列1」（architectJa）,「architectEn」をコピーペーストで、
+architects_table0823-3.tsvに保存（TAB区切り）
+
+
+２．
+Python「architects_table_cleaner.py」で、上記のTSVファイル（３列）を５列にする
+４列は、architectJa_cleaned とするが、さしあたり空である。
+５列は、architectEn_cleaned とし、Pythonにより、３列のarchitectEn文字列の小文字部分を大文字に変換して、全角文字があれば半角文字に置き換える（大文字が残っていないかはPython「detect_fullwidth_chars.py」でチェックする）
+
+
+

@@ -1,0 +1,59 @@
+新建築データクリーニングの手順
+
+１．
+architects_table変更後0823.xlsm　の列「architect_id」,「列1」（architectJa）,「architectEn」をコピーペーストで、
+architects_table0828-1.tsvに保存（TAB区切り）する
+
+
+２．
+「
+python architects_table_cleaner02.py
+」で、上記のTSVファイル（３列）を５列にする
+４列は、architectJa_cleaned とするが、さしあたり空である。
+５列は、architectEn_cleaned とし、Pythonにより、３列のarchitectEn文字列の小文字部分を大文字に変換して、全角文字があれば半角文字に置き換える
+→出力ファイル：architects_table0828-1_cleaned.tsv
+
+
+３．
+大文字が残っていないか、
+「
+python detect_fullwidth_chars.py
+」でチェックする
+
+
+４．和名のクリーニング
+さしあたり空にしてある４列目（architectJa_cleaned）を埋める。
+２列目をそのままコピーするが、その際に、
+正誤表（architectJa正誤表_1.txt）を読み込み、文字列の入れ替えを行う
+「
+python cleanArchitectJa03.py
+」
+→出力ファイル：architects_table0828-1_cleaned_01.tsv
+
+
+５．英名のクリーニング
+５列目architectEnの名称に統一感がないため、
+architectJa正誤表_2.txtに記載した正誤表
+を用いて、必要に応じて５列目を入れ替える。
+「
+python replace_architectEn_cleaned02.py
+」
+→出力ファイル：architects_table0828-1_cleaned_02.tsv
+
+
+
+５.
+”|”区切りで分解して、
+①設計者が、英語名は重複しているが日本語名が異なるケース
+②同、日本語名は同じで英語名が異なるケース
+がそれぞれどのくらいあるのかをチェックする
+”
+node process-architect-data_03.js architects_table0828-1_cleaned_02.tsv
+”　
+
+出力ファイル
+duplicate_analysis_ja.csv
+duplicate_analysis_en.csv
+duplicate_ja_same_en_different.csv
+duplicate_en_same_ja_different.csv
+

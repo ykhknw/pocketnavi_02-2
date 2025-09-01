@@ -1,24 +1,26 @@
-# 建築作品データベース 仕様書
+# PocketNavi - 建築物ナビゲーションアプリ 仕様書
 
 ## 1. プロジェクト概要
 
 ### 1.1 プロジェクト名
-建築作品データベース (Architectural Works Database)
+PocketNavi - 建築物ナビゲーションアプリ
 
 ### 1.2 バージョン
 2.2.0
 
 ### 1.3 概要
-現代建築の作品を検索・閲覧できるWebアプリケーション。建築家、建物タイプ、地域などでフィルタリングが可能で、地図上での位置確認もできる。
+日本の建築物を検索・閲覧できるWebアプリケーション。建築家、建物タイプ、地域などでフィルタリングが可能で、地図上での位置確認もできる。多言語対応（日本語・英語）とレスポンシブデザインを提供。
 
 ### 1.4 技術スタック
 - **フロントエンド**: React 18 + TypeScript + Vite
-- **スタイリング**: Tailwind CSS + shadcn/ui
+- **スタイリング**: Tailwind CSS + shadcn/ui + Radix UI
 - **地図**: Leaflet
 - **データベース**: Supabase (PostgreSQL)
 - **画像API**: Unsplash API, Pexels API
-- **ルーティング**: React Router DOM
+- **ルーティング**: React Router DOM v7
 - **状態管理**: React Context + Custom Hooks
+- **テスト**: Vitest + Testing Library
+- **UIコンポーネント**: Radix UI (Dialog, Select, Checkbox等)
 
 ## 2. システム構成
 
@@ -308,111 +310,243 @@ Response: { likes: number }
 - **エンドポイント**: `https://api.pexels.com/v1/search`
 - **認証**: API Key認証
 
-## 6. データベース設計
+## 7. データベース設計
 
-### 6.1 テーブル構造
+### 7.1 主要テーブル
 
-#### buildings_table_2 (建築物テーブル)
+#### buildings_table_2 (建築物メインテーブル)
 ```sql
 CREATE TABLE buildings_table_2 (
   building_id SERIAL PRIMARY KEY,
   uid VARCHAR(255) UNIQUE,
-  title VARCHAR(500),
+  slug VARCHAR(500),
+  title VARCHAR(500) NOT NULL,
   titleEn VARCHAR(500),
   thumbnailUrl TEXT,
   youtubeUrl TEXT,
-  completionYears INTEGER,
+  completionYears SMALLINT,
   parentBuildingTypes TEXT,
   buildingTypes TEXT,
   parentStructures TEXT,
   structures TEXT,
   prefectures VARCHAR(100),
+  prefecturesEn VARCHAR(100),
   areas VARCHAR(100),
   location TEXT,
-  locationEn_from_datasheetChunkEn TEXT,
+  locationEn TEXT,
   buildingTypesEn TEXT,
   architectDetails TEXT,
   lat DECIMAL(10, 8),
   lng DECIMAL(11, 8),
   likes INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  updated_at TIMESTAMP DEFAULT NOW(),
+  
+  -- 制約
+  CONSTRAINT chk_completion_years CHECK (completionYears >= 1800 AND completionYears <= 2030),
+  CONSTRAINT chk_coordinates CHECK (lat BETWEEN -90 AND 90 AND lng BETWEEN -180 AND 180)
 );
 ```
 
-#### architects_table (建築家テーブル)
+#### individual_architects (個別建築家テーブル)
 ```sql
-CREATE TABLE architects_table (
-  architect_id SERIAL PRIMARY KEY,
-  architectJa VARCHAR(255),
-  architectEn VARCHAR(255),
-  created_at TIMESTAMP DEFAULT NOW()
+CREATE TABLE individual_architects (
+  individual_architect_id SERIAL PRIMARY KEY,
+  name_ja VARCHAR(255) NOT NULL,
+  name_en VARCHAR(255),
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  
+  -- 制約
+  CONSTRAINT chk_individual_architect_names CHECK (name_ja != '' OR name_en != ''),
+  CONSTRAINT chk_slug_format CHECK (slug ~ '^[a-z0-9-]+$')
 );
 ```
 
-#### building_architects (関連テーブル)
+#### architect_compositions (建築家構成テーブル)
+```sql
+CREATE TABLE architect_compositions (
+  composition_id SERIAL PRIMARY KEY,
+  architect_id INTEGER NOT NULL REFERENCES architects_table(architect_id) ON DELETE CASCADE,
+  individual_architect_id INTEGER NOT NULL REFERENCES individual_architects(individual_architect_id) ON DELETE CASCADE,
+  order_index INTEGER DEFAULT 0,
+  
+  -- 制約
+  CONSTRAINT chk_order_index CHECK (order_index >= 0),
+  UNIQUE(architect_id, individual_architect_id)
+);
+```
+
+#### building_architects (建築物-建築家関連テーブル)
 ```sql
 CREATE TABLE building_architects (
-  building_id INTEGER REFERENCES buildings_table_2(building_id),
-  architect_id INTEGER REFERENCES architects_table(architect_id),
-  PRIMARY KEY (building_id, architect_id)
+  building_id INTEGER NOT NULL REFERENCES buildings_table_2(building_id) ON DELETE CASCADE,
+  architect_id INTEGER NOT NULL REFERENCES architects_table(architect_id) ON DELETE CASCADE,
+  architect_order INTEGER DEFAULT 0,
+  
+  PRIMARY KEY (building_id, architect_id),
+  CONSTRAINT chk_architect_order CHECK (architect_order >= 0)
 );
 ```
 
-#### architect_websites_3 (ウェブサイトテーブル)
+#### architect_websites_3 (建築家ウェブサイトテーブル)
 ```sql
 CREATE TABLE architect_websites_3 (
   website_id SERIAL PRIMARY KEY,
-  architect_id INTEGER REFERENCES architects_table(architect_id),
+  architect_id INTEGER NOT NULL REFERENCES architects_table(architect_id) ON DELETE CASCADE,
   url TEXT,
   title VARCHAR(255),
-  invalid BOOLEAN DEFAULT FALSE,
-  architectJa VARCHAR(255),
+  architectJa VARCHAR(255) NOT NULL,
   architectEn VARCHAR(255),
-  created_at TIMESTAMP DEFAULT NOW()
+  invalid BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  
+  -- 制約
+  CONSTRAINT chk_url_format CHECK (url IS NULL OR url ~ '^https?://'),
+  CONSTRAINT chk_architect_names CHECK (architectJa != '' OR architectEn != '')
 );
 ```
 
-## 7. セキュリティ
+#### photos (写真テーブル)
+```sql
+CREATE TABLE photos (
+  id SERIAL PRIMARY KEY,
+  building_id INTEGER NOT NULL REFERENCES buildings_table_2(building_id) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  thumbnail_url TEXT NOT NULL,
+  likes INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW(),
+  
+  -- 制約
+  CONSTRAINT chk_url_format CHECK (url ~ '^https?://'),
+  CONSTRAINT chk_thumbnail_url_format CHECK (thumbnail_url ~ '^https?://'),
+  CONSTRAINT chk_likes CHECK (likes >= 0)
+);
+```
 
-### 7.1 認証・認可
+#### users (ユーザーテーブル)
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  
+  -- 制約
+  CONSTRAINT chk_email_format CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+);
+```
+
+
+
+### 7.2 テーブル間の関連性
+
+#### 建築物と建築家の関連（現在の構造）
+```
+buildings_table_2 (1) ←→ (N) building_architects (N) ←→ (1) individual_architects
+```
+
+#### 建築家の構成管理
+```
+individual_architects (1) ←→ (N) architect_compositions (N) ←→ (1) architect_groups
+```
+
+#### 建築家とウェブサイト
+```
+individual_architects (1) ←→ (N) architect_websites_3
+```
+
+#### 建築物と写真
+```
+buildings_table_2 (1) ←→ (N) photos
+```
+
+### 7.3 現在のデータフロー
+
+#### 建築家情報の取得フロー
+1. `building_architects`テーブルから建築物に関連する`architect_id`を取得
+2. `architect_compositions`テーブルから`individual_architect_id`を取得
+3. `individual_architects`テーブルから建築家の詳細情報を取得
+4. `architect_websites_3`テーブルからウェブサイト情報を取得
+
+#### 検索時の処理
+- 建築家名での検索は`individual_architects`テーブルで実行
+- 関連する建築物は`architect_compositions`と`building_architects`を経由して取得
+
+### 7.4 インデックス設計
+```sql
+-- 検索パフォーマンス向上のためのインデックス
+CREATE INDEX idx_buildings_location ON buildings_table_2(lat, lng);
+CREATE INDEX idx_buildings_title ON buildings_table_2(title);
+CREATE INDEX idx_buildings_architect ON buildings_table_2(architect_details);
+CREATE INDEX idx_buildings_completion_year ON buildings_table_2(completion_years);
+CREATE INDEX idx_buildings_prefectures ON buildings_table_2(prefectures);
+CREATE INDEX idx_buildings_areas ON buildings_table_2(areas);
+CREATE INDEX idx_buildings_slug ON buildings_table_2(slug);
+
+-- 建築家関連インデックス（現在の構造）
+CREATE INDEX idx_individual_architects_slug ON individual_architects(slug);
+CREATE INDEX idx_individual_architects_name_ja ON individual_architects(name_ja);
+CREATE INDEX idx_individual_architects_name_en ON individual_architects(name_en);
+
+-- 関連テーブルインデックス
+CREATE INDEX idx_building_architects_building ON building_architects(building_id);
+CREATE INDEX idx_building_architects_architect ON building_architects(architect_id);
+CREATE INDEX idx_architect_compositions_architect ON architect_compositions(architect_id);
+CREATE INDEX idx_architect_compositions_individual ON architect_compositions(individual_architect_id);
+CREATE INDEX idx_architect_websites_architect ON architect_websites_3(architect_id);
+
+-- 複合インデックス
+CREATE INDEX idx_buildings_search ON buildings_table_2(prefectures, completion_years, lat, lng);
+CREATE INDEX idx_buildings_type_location ON buildings_table_2(buildingTypes, lat, lng);
+CREATE INDEX idx_building_architects_composite ON building_architects(building_id, architect_id);
+CREATE INDEX idx_architect_compositions_composite ON architect_compositions(architect_id, individual_architect_id);
+
+-- 全文検索インデックス
+CREATE INDEX idx_buildings_fulltext_ja ON buildings_table_2 USING gin(to_tsvector('japanese', title || ' ' || architectDetails));
+CREATE INDEX idx_buildings_fulltext_en ON buildings_table_2 USING gin(to_tsvector('english', titleEn || ' ' || architectDetails));
+CREATE INDEX idx_individual_architects_fulltext ON individual_architects USING gin(to_tsvector('japanese', name_ja || ' ' || name_en));
+```
+
+## 8. セキュリティ
+
+### 8.1 認証・認可
 - **Supabase Auth**: ユーザー認証
 - **Row Level Security (RLS)**: データベースレベルでのセキュリティ
 - **API Key管理**: 環境変数による安全な管理
 
-### 7.2 データ保護
+### 8.2 データ保護
 - **入力検証**: クライアント・サーバー両方での入力検証
 - **SQLインジェクション対策**: パラメータ化クエリの使用
 - **XSS対策**: 出力エスケープの実装
 
-## 8. エラーハンドリング
+## 9. エラーハンドリング
 
-### 8.1 エラーバウンダリ
+### 9.1 エラーバウンダリ
 - **React Error Boundary**: 予期しないエラーのキャッチ
 - **ユーザーフレンドリーなエラー表示**: エラーID生成による追跡
 - **開発環境での詳細情報**: デバッグ情報の表示
 
-### 8.2 型安全性
+### 9.2 型安全性
 - **TypeScript strict mode**: 厳密な型チェック
 - **型ガード関数**: ランタイム型検証
 - **カスタムエラークラス**: 構造化されたエラー処理
 
-## 9. パフォーマンス指標
+## 10. パフォーマンス指標
 
-### 9.1 目標値
+### 10.1 目標値
 - **バンドルサイズ**: 500KB以下 (gzip: 150KB以下)
 - **初期読み込み時間**: 3秒以下
 - **レンダリング回数**: 最大80%削減
 - **画像読み込み**: 遅延読み込みによる最適化
 
-### 9.2 監視項目
+### 10.2 監視項目
 - **バンドルサイズ**: ビルド時の自動チェック
 - **レンダリング回数**: React DevToolsで監視
 - **メモリ使用量**: ブラウザ開発者ツールで確認
 
-## 10. デプロイメント
+## 11. デプロイメント
 
-### 10.1 環境変数
+### 11.1 環境変数
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -420,7 +554,7 @@ VITE_UNSPLASH_ACCESS_KEY=your_unsplash_access_key
 VITE_PEXELS_API_KEY=your_pexels_api_key
 ```
 
-### 10.2 ビルド・デプロイ
+### 11.2 ビルド・デプロイ
 ```bash
 # 開発環境
 npm run dev
@@ -432,33 +566,33 @@ npm run build
 npm run preview
 ```
 
-### 10.3 推奨デプロイ先
+### 11.3 推奨デプロイ先
 - **Vercel**: Vite対応、自動デプロイ
 - **Netlify**: 静的サイトホスティング
 - **GitHub Pages**: 無料ホスティング
 
-## 11. 開発ガイドライン
+## 12. 開発ガイドライン
 
-### 11.1 コーディング規約
+### 12.1 コーディング規約
 - **TypeScript**: 厳密な型定義
 - **React Hooks**: カスタムフックの活用
 - **パフォーマンス**: 最適化の継続
 - **エラーハンドリング**: 包括的な対応
 
-### 11.2 テスト戦略
+### 12.2 テスト戦略
 - **型チェック**: TypeScriptによる静的解析
 - **リンター**: ESLintによるコード品質チェック
 - **手動テスト**: 主要機能の動作確認
 
-## 12. 今後の拡張予定
+## 13. 今後の拡張予定
 
-### 12.1 機能拡張
+### 13.1 機能拡張
 - **ユーザー認証**: 完全なログイン・登録機能
 - **コメント機能**: 建築物へのコメント投稿
 - **評価機能**: 建築物の評価・レビュー
 - **ソーシャル機能**: シェア・フォロー機能
 
-### 12.2 技術的改善
+### 13.2 技術的改善
 - **PWA対応**: オフライン対応
 - **SEO最適化**: メタデータの充実
 - **アクセシビリティ**: WCAG準拠
