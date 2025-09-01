@@ -250,75 +250,109 @@ function BuildingCardComponent({
         </div>
 
         <div className="space-y-3 mb-3">
-          <div>
-            <div className="flex flex-wrap gap-1">
-              {building.architects.map(architect => {
-                const architectName = language === 'ja' ? architect.architectJa : architect.architectEn;
-                
-                // architectNameがnull、undefined、空文字列の場合はスキップ
-                if (!architectName || architectName.trim() === '') {
-                  return null;
-                }
-                
-                // 全角スペースで分割
-                const architectNames = architectName.split('　').filter(name => name.trim());
-                
-                // 有効な名前がない場合はスキップ
-                if (architectNames.length === 0) {
-                  return null;
-                }
-                
-                return architectNames.map((name, index) => {
-                  const trimmedName = name.trim();
-                  
-                  // 空文字列の場合はスキップ
-                  if (trimmedName === '') {
-                    return null;
-                  }
-                  
-                  // 部分一致チェック: フィルターの建築家名が現在の建築家名に含まれているか、またはその逆
-                  const isHighlighted = context.filters.architects?.some(filterArchitect => 
-                    trimmedName.includes(filterArchitect) || filterArchitect.includes(trimmedName)
-                  );
-                  
-                  return (
-                    <Badge
-                      key={`${architect.architect_id}-${index}`}
-                      variant={isHighlighted ? "default" : "secondary"}
-                      className={cn(
-                        "text-sm cursor-pointer transition-all duration-300",
-                        isHighlighted ? [
-                          "bg-primary text-primary-foreground",
-                          "ring-2 ring-primary/50",
-                          "scale-105",
-                          "font-semibold",
-                          "shadow-md"
-                        ] : [
-                          "bg-primary/10 text-primary",
-                          "hover:bg-primary/20"
-                        ]
-                      )}
-                      title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
-                      onClick={(e) => handleArchitectSearch(e, trimmedName, architect.slug)}
-                    >
-                      {trimmedName}
-                    </Badge>
-                  );
-                });
-              }).filter(Boolean)} {/* nullの要素をフィルタリング */}
-            </div>
-          </div>
+          {/* 建築家バッジ - architectsが存在し、空でない場合のみ表示 */}
+          {(() => {
+            // デバッグ用: 建築家情報の詳細確認
+            console.log(`🔍 BuildingCard ${building.id} (${building.title}) の建築家情報:`, {
+              architects: building.architects,
+              architectsLength: building.architects?.length,
+              firstArchitect: building.architects?.[0],
+              architectJa: building.architects?.[0]?.architectJa,
+              architectEn: building.architects?.[0]?.architectEn,
+              slug: building.architects?.[0]?.slug
+            });
+            
+            if (!building.architects || building.architects.length === 0) {
+              console.log(`⚠️ 建築物 ${building.id} の建築家情報がありません`);
+              return null;
+            }
+            
+            return (
+              <div>
+                <div className="flex flex-wrap gap-1">
+                  {building.architects.map(architect => {
+                    const architectName = language === 'ja' ? architect.architectJa : architect.architectEn;
+                    
+                    console.log(`🔍 建築家 ${architect.architect_id}:`, {
+                      architectJa: architect.architectJa,
+                      architectEn: architect.architectEn,
+                      slug: architect.slug,
+                      architectName: architectName
+                    });
+                    
+                    // architectNameがnull、undefined、空文字列の場合はスキップ
+                    if (!architectName || architectName.trim() === '') {
+                      console.log(`⚠️ 建築家 ${architect.architect_id} の名前が空です`);
+                      return null;
+                    }
+                    
+                    // 全角スペースで分割
+                    const architectNames = architectName.split('　').filter(name => name.trim());
+                    
+                    // 有効な名前がない場合はスキップ
+                    if (architectNames.length === 0) {
+                      console.log(`⚠️ 建築家 ${architect.architect_id} の分割後の名前が空です`);
+                      return null;
+                    }
+                    
+                    return architectNames.map((name, index) => {
+                      const trimmedName = name.trim();
+                      
+                      // 空文字列の場合はスキップ
+                      if (trimmedName === '') {
+                        return null;
+                      }
+                      
+                      console.log(`✅ 建築家バッジ作成: ${trimmedName} (${architect.slug})`);
+                      
+                      // 部分一致チェック: フィルターの建築家名が現在の建築家名に含まれているか、またはその逆
+                      const isHighlighted = context.filters.architects?.some(filterArchitect => 
+                        trimmedName.includes(filterArchitect) || filterArchitect.includes(trimmedName)
+                      );
+                      
+                      return (
+                        <Badge
+                          key={`${architect.architect_id}-${index}`}
+                          variant={isHighlighted ? "default" : "secondary"}
+                          className={cn(
+                            "text-sm cursor-pointer transition-all duration-300",
+                            isHighlighted ? [
+                              "bg-primary text-primary-foreground",
+                              "ring-2 ring-primary/50",
+                              "scale-105",
+                              "font-semibold",
+                              "shadow-md"
+                            ] : [
+                              "bg-primary/10 text-primary",
+                              "hover:bg-primary/20"
+                            ]
+                          )}
+                          title={language === 'ja' ? 'この建築家で検索' : 'Search by this architect'}
+                          onClick={(e) => handleArchitectSearch(e, trimmedName, architect.slug)}
+                        >
+                          {trimmedName}
+                        </Badge>
+                      );
+                    });
+                  }).filter(Boolean)} {/* nullの要素をフィルタリング */}
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="flex flex-wrap gap-1">
-            <Badge
-              variant="outline"
-              className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
-              title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
-              onClick={handleOpenInGoogleMaps}
-            >
-              <MapPin className="h-3 w-3 mr-1" />
-              {language === 'ja' ? building.location : (building.locationEn || building.location)}
-            </Badge>
+            {/* 住所バッジ - locationが存在する場合のみ表示 */}
+            {building.location && building.location.trim() !== '' && (
+              <Badge
+                variant="outline"
+                className="border-gray-300 text-gray-700 bg-gray-50 text-sm cursor-pointer hover:bg-gray-100"
+                title={language === 'ja' ? 'Googleマップで開く' : 'Open in Google Maps'}
+                onClick={handleOpenInGoogleMaps}
+              >
+                <MapPin className="h-3 w-3 mr-1" />
+                {language === 'ja' ? building.location : (building.locationEn || building.location)}
+              </Badge>
+            )}
                          {building.prefectures && (() => {
                const prefecture = language === 'ja' ? building.prefectures : (building.prefecturesEn || building.prefectures);
                const isHighlighted = context.filters.prefectures?.includes(prefecture);
@@ -356,69 +390,82 @@ function BuildingCardComponent({
             )}
           </div>
 
-                     <div className="flex flex-wrap gap-1">
-             {(language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes))
-                               .map((type, index) => {
-                  // 部分一致チェック: フィルターの用途が現在の用途に含まれているか、またはその逆
-                  const isHighlighted = context.filters.buildingTypes?.some(filterType => 
-                    type.includes(filterType) || filterType.includes(type)
-                  );
-                  
-                  return (
-                    <Badge
-                      key={`${type}-${index}`}
-                      variant={isHighlighted ? "default" : "secondary"}
-                      className={cn(
-                        "text-sm cursor-pointer transition-all duration-300",
-                        isHighlighted ? [
-                          "bg-green-500 text-white",
-                          "ring-2 ring-green-500/50",
-                          "scale-105",
-                          "font-semibold",
-                          "shadow-md"
-                        ] : [
-                          "border-gray-300 text-gray-700",
-                          "hover:bg-gray-100"
-                        ]
-                      )}
-                      title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
-                      onClick={(e) => handleBuildingTypeSearch(e, type)}
-                    >
-                      {type}
-                    </Badge>
-                  );
-                })}
-           </div>
+                     {/* 用途バッジ - buildingTypesが存在し、空でない場合のみ表示 */}
+                     {(() => {
+                       const types = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
+                       if (!types || types.length === 0) return null;
+                       
+                       const validTypes = types.filter(type => type && type.trim() !== '');
+                       if (validTypes.length === 0) return null;
+                       
+                       return (
+                         <div className="flex flex-wrap gap-1">
+                           {validTypes.map((type, index) => {
+                             // 部分一致チェック: フィルターの用途が現在の用途に含まれているか、またはその逆
+                             const isHighlighted = context.filters.buildingTypes?.some(filterType => 
+                               type.includes(filterType) || filterType.includes(type)
+                             );
+                             
+                             return (
+                               <Badge
+                                 key={`${type}-${index}`}
+                                 variant={isHighlighted ? "default" : "secondary"}
+                                 className={cn(
+                                   "text-sm cursor-pointer transition-all duration-300",
+                                   isHighlighted ? [
+                                     "bg-green-500 text-white",
+                                     "ring-2 ring-green-500/50",
+                                     "scale-105",
+                                     "font-semibold",
+                                     "shadow-md"
+                                   ] : [
+                                     "border-gray-300 text-gray-700",
+                                     "hover:bg-gray-100"
+                                   ]
+                                 )}
+                                 title={language === 'ja' ? 'この用途で検索' : 'Search by this building type'}
+                                 onClick={(e) => handleBuildingTypeSearch(e, type)}
+                               >
+                                 {type}
+                               </Badge>
+                             );
+                           })}
+                         </div>
+                       );
+                     })()}
 
-                     {building.completionYears && (() => {
-             const isHighlighted = context.filters.completionYear === building.completionYears;
-             
-             return (
-               <div className="flex items-center gap-1">
-                 <Badge
-                   variant={isHighlighted ? "default" : "outline"}
-                   className={cn(
-                     "text-sm cursor-pointer transition-all duration-300",
-                                           isHighlighted ? [
-                        "bg-orange-500 text-white",
-                        "ring-2 ring-orange-500/50",
-                        "scale-105",
-                        "font-semibold",
-                        "shadow-md"
-                      ] : [
-                       "border-gray-300 text-gray-700 bg-gray-50",
-                       "hover:bg-gray-100"
-                     ]
-                   )}
-                   title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
-                   onClick={(e) => handleCompletionYearSearch(e, building.completionYears)}
-                 >
-                   <Calendar className="h-3 w-3 mr-1" />
-                   {building.completionYears}
-                 </Badge>
-               </div>
-             );
-           })()}
+                     {/* 建築年バッジ - completionYearsが存在し、有効な値の場合のみ表示 */}
+                     {building.completionYears && 
+                      building.completionYears > 0 && 
+                      !isNaN(building.completionYears) && (() => {
+                       const isHighlighted = context.filters.completionYear === building.completionYears;
+                       
+                       return (
+                         <div className="flex items-center gap-1">
+                           <Badge
+                             variant={isHighlighted ? "default" : "outline"}
+                             className={cn(
+                               "text-sm cursor-pointer transition-all duration-300",
+                               isHighlighted ? [
+                                 "bg-orange-500 text-white",
+                                 "ring-2 ring-orange-500/50",
+                                 "scale-105",
+                                 "font-semibold",
+                                 "shadow-md"
+                               ] : [
+                                 "border-gray-300 text-gray-700 bg-gray-50",
+                                 "hover:bg-gray-100"
+                               ]
+                             )}
+                             title={language === 'ja' ? 'この建築年で検索' : 'Search by this completion year'}
+                             onClick={(e) => handleCompletionYearSearch(e, building.completionYears)}
+                           >
+                             <Calendar className="h-3 w-3 mr-1" />
+                             {building.completionYears}
+                           </Badge>
+                         </div>
+                       );
+                     })()}
         </div>
 
         {/* 写真ギャラリー */}

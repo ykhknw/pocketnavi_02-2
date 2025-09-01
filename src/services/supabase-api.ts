@@ -1073,41 +1073,87 @@ class SupabaseApiClient {
    * 新しいテーブル構造を使用して建築物の建築家情報を取得
    */
   async getBuildingArchitectsWithNewStructure(buildingId: number): Promise<NewArchitect[]> {
-    const { data, error } = await supabase
-      .from('building_architects')
-      .select(`
-        architect_id,
-        architect_order,
-        architect_compositions!inner(
-          order_index,
-          individual_architects!inner(
-            individual_architect_id,
-            name_ja,
-            name_en,
-            slug
-          )
-        )
-      `)
-      .eq('building_id', buildingId)
-      .order('architect_order');
+    try {
+      console.log(`🔍 新しいテーブル構造で建築物建築家取得開始: ${buildingId}`);
+      
+      // 段階的にクエリを実行して問題を特定
+      const { data, error } = await supabase
+        .from('building_architects')
+        .select(`
+          architect_id,
+          architect_order
+        `)
+        .eq('building_id', buildingId)
+        .order('architect_order');
 
-    if (error || !data) {
+      if (error || !data) {
+        console.error('building_architects取得エラー:', error);
+        return [];
+      }
+
+      console.log(`✅ building_architects取得成功: ${data.length}件`, data);
+
+      // 各architect_idに対して個別に建築家情報を取得
+      const architects: NewArchitect[] = [];
+      
+      for (const buildingArchitect of data) {
+        try {
+          // architect_compositionsから建築家情報を取得（すべてのindividual_architect_idを取得）
+          const { data: compositionData, error: compositionError } = await supabase
+            .from('architect_compositions')
+            .select(`
+              order_index,
+              individual_architects(
+                individual_architect_id,
+                name_ja,
+                name_en,
+                slug
+              )
+            `)
+            .eq('architect_id', buildingArchitect.architect_id)
+            .order('order_index');
+
+          if (compositionError || !compositionData) {
+            console.warn(`architect_compositions取得エラー (architect_id: ${buildingArchitect.architect_id}):`, compositionError);
+            continue;
+          }
+
+          console.log(`✅ architect_compositions取得成功 (architect_id: ${buildingArchitect.architect_id}): ${compositionData.length}件`, compositionData);
+
+          // 各compositionに対して建築家情報を追加
+          for (const composition of compositionData) {
+            if (composition.individual_architects) {
+              architects.push({
+                architect_id: buildingArchitect.architect_id,
+                architectJa: composition.individual_architects.name_ja,
+                architectEn: composition.individual_architects.name_en,
+                slug: composition.individual_architects.slug,
+                individual_architect_id: composition.individual_architects.individual_architect_id,
+                order_index: composition.order_index,
+                websites: []
+              });
+              
+              console.log(`✅ 建築家追加: ${composition.individual_architects.name_ja} (${composition.individual_architects.slug})`);
+            }
+          }
+        } catch (compositionError) {
+          console.warn(`個別建築家情報取得エラー (architect_id: ${buildingArchitect.architect_id}):`, compositionError);
+          continue;
+        }
+      }
+
+      // individual_architect_idベースでユニークな建築家のみを返す
+      const uniqueArchitects = architects.filter((architect, index, self) => 
+        index === self.findIndex(a => a.individual_architect_id === architect.individual_architect_id)
+      );
+
+      console.log(`✅ 最終的な建築家情報: ${uniqueArchitects.length}件 (重複除去後)`, uniqueArchitects);
+      return uniqueArchitects;
+
+    } catch (error) {
       console.error('新しいテーブル構造での建築物建築家取得エラー:', error);
       return [];
     }
-
-    return data.map((item: any) => {
-      const composition = item.architect_compositions.sort((a: any, b: any) => a.order_index - b.order_index)[0];
-      return {
-        architect_id: item.architect_id,
-        architectJa: composition.individual_architects.name_ja,
-        architectEn: composition.individual_architects.name_en,
-        slug: composition.individual_architects.slug,
-        individual_architect_id: composition.individual_architects.individual_architect_id,
-        order_index: composition.order_index,
-        websites: []
-      };
-    });
   }
 
   /**
@@ -1305,6 +1351,29 @@ class SupabaseApiClient {
   }
 
   /**
+   * 建築家ページ専用: 新しいテーブル構造のみを使用して建築物の建築家情報を取得
+   */
+  async getBuildingArchitectsForArchitectPage(buildingId: number): Promise<Architect[]> {
+    try {
+      console.log(`🔍 建築家ページ用建築家情報取得: ${buildingId}`);
+      
+      // 新しいテーブル構造のみを使用
+      const newStructureResults = await this.getBuildingArchitectsWithNewStructure(buildingId);
+      
+      if (newStructureResults.length > 0) {
+        console.log(`✅ 建築家ページ用建築家情報取得成功: ${buildingId} (${newStructureResults.length}件)`);
+        return newStructureResults;
+      } else {
+        console.log(`⚠️ 建築家ページ用建築家情報が取得できません: ${buildingId}`);
+        return [];
+      }
+    } catch (error) {
+      console.error('❌ 建築家ページ用建築家情報取得エラー:', error);
+      return [];
+    }
+  }
+
+  /**
    * 建築家の作品一覧を取得（slugベース）
    */
   async getArchitectBuildingsBySlug(slug: string): Promise<{ buildings: Building[], architectName: { ja: string, en: string } }> {
@@ -1353,11 +1422,21 @@ class SupabaseApiClient {
       const buildingIds = buildingArchitects.map(ba => ba.building_id);
       console.log(`✅ building_id取得: ${buildingIds.join(', ')}`);
       
-      // 4. buildings_table_2から建築物情報を取得
+      // 4. buildings_table_2から建築物情報を取得（通常の建築物一覧ページと同様のフィルタリング適用）
       const { data: buildingsData, error: buildingsError } = await supabase
         .from('buildings_table_2')
-        .select('*')
+        .select(`
+          *,
+          building_architects!inner(
+            architect_id,
+            architect_order
+          )
+        `)
         .in('building_id', buildingIds)
+        .not('lat', 'is', null)  // 座標が存在するもののみ
+        .not('lng', 'is', null)  // 座標が存在するもののみ
+        .not('buildingTypes', 'eq', '住宅')  // 住宅を除外
+        .not('buildingTypesEn', 'eq', 'housing')  // 英語版住宅も除外
         .order('completionYears', { ascending: false });
       
       if (buildingsError || !buildingsData) {
@@ -1365,14 +1444,81 @@ class SupabaseApiClient {
         return { buildings: [], architectName: { ja: individualArchitect.name_ja, en: individualArchitect.name_en } };
       }
       
-      console.log(`✅ 建築物データ取得: ${buildingsData.length}件`);
+      console.log(`✅ 建築物データ取得（フィルタリング適用後）: ${buildingsData.length}件`);
+      console.log(`🔍 適用されたフィルター: lat/lng非NULL、住宅除外`);
       
-      // 5. 建築物データを変換
+      // 5. 建築物データを変換（建築家情報を含む）
       const transformedBuildings = await Promise.all(
-        buildingsData.map(building => this.transformBuildingHybrid(building))
+        buildingsData.map(async (building) => {
+          // 建築家情報を明示的に取得（建築家ページ専用: 新しいテーブル構造のみ）
+          const buildingArchitects = await this.getBuildingArchitectsForArchitectPage(building.building_id);
+          
+          // 建築家情報の詳細ログ
+          console.log(`🔍 建築物 ${building.building_id} の建築家情報:`, buildingArchitects.map(arch => ({
+            architect_id: arch.architect_id,
+            architectJa: arch.architectJa,
+            architectEn: arch.architectEn,
+            slug: arch.slug
+          })));
+          
+          // 外部写真URLの生成（画像チェックを無効化）
+          const generatePhotosFromUid = async (uid: string): Promise<any[]> => {
+            return [];
+          };
+
+          const photos = await generatePhotosFromUid(building.uid);
+          
+          // データの存在チェックと適切な処理
+          const hasLocation = building.location && building.location.trim() !== '';
+          const hasPrefectures = building.prefectures && building.prefectures.trim() !== '';
+          const hasBuildingTypes = building.buildingTypes && building.buildingTypes.trim() !== '';
+          const hasCompletionYears = building.completionYears && building.completionYears > 0;
+          
+          console.log(`🔍 建築物 ${building.building_id} のデータ状況:`, {
+            hasLocation,
+            hasPrefectures,
+            hasBuildingTypes,
+            hasCompletionYears,
+            architectsCount: buildingArchitects.length
+          });
+          
+          return {
+            id: building.building_id,
+            uid: building.uid,
+            slug: building.slug,
+            title: building.title,
+            titleEn: building.titleEn || building.title,
+            thumbnailUrl: building.thumbnailUrl || '',
+            youtubeUrl: building.youtubeUrl || '',
+            completionYears: hasCompletionYears ? building.completionYears : null,
+            parentBuildingTypes: building.parentBuildingTypes ? building.parentBuildingTypes.split(',').map(s => s.trim()).filter(s => s) : [],
+            buildingTypes: hasBuildingTypes ? building.buildingTypes.split('/').map(s => s.trim()).filter(s => s) : [],
+            parentStructures: building.parentStructures ? building.parentStructures.split(',').map(s => s.trim()).filter(s => s) : [],
+            structures: building.structures ? building.structures.split(',').map(s => s.trim()).filter(s => s) : [],
+            prefectures: hasPrefectures ? building.prefectures : null,
+            prefecturesEn: building.prefecturesEn || null,
+            areas: building.areas,
+            location: hasLocation ? building.location : null,
+            locationEn: building.locationEn_from_datasheetChunkEn || building.location,
+            buildingTypesEn: building.buildingTypesEn ? building.buildingTypesEn.split('/').map(s => s.trim()).filter(s => s) : [],
+            architectDetails: building.architectDetails || '',
+            lat: parseFloat(building.lat) || 0,
+            lng: parseFloat(building.lng) || 0,
+            architects: buildingArchitects,
+            photos: photos,
+            likes: building.likes || 0,
+            created_at: building.created_at || new Date().toISOString(),
+            updated_at: building.updated_at || new Date().toISOString()
+          };
+        })
       );
       
       console.log(`✅ 建築物データ変換完了: ${transformedBuildings.length}件`);
+      console.log(`🔍 最初の建築物の建築家情報:`, transformedBuildings[0]?.architects);
+      console.log(`🔍 最初の建築物の用途情報:`, transformedBuildings[0]?.buildingTypes);
+      console.log(`🔍 最初の建築物の完成年:`, transformedBuildings[0]?.completionYears);
+      console.log(`🔍 建築家ページ用: 新しいテーブル構造から建築家情報を取得完了`);
+      
       return {
         buildings: transformedBuildings,
         architectName: {
