@@ -124,6 +124,7 @@ export function useAppHandlers() {
     console.log('🔍 周辺検索開始:', { lat, lng });
     
     // デフォルト半径は5km、位置情報をフィルターに設定
+    const radius = 5; // 半径5km
     const newFilters = {
       query: '',
       architects: [],
@@ -132,12 +133,17 @@ export function useAppHandlers() {
       areas: [],
       hasPhotos: false,
       hasVideos: false,
-      radius: 5,
+      radius: radius,
       currentLocation: { lat, lng },
       completionYear: undefined
     };
     
-    console.log('🔍 新しいフィルター設定:', newFilters);
+    console.log('🔍 周辺検索設定完了:', { 
+      lat, 
+      lng, 
+      radius: radius + 'km',
+      filters: newFilters 
+    });
     
     // フィルターを設定
     setFilters(newFilters);
@@ -148,7 +154,7 @@ export function useAppHandlers() {
       console.log('🔍 建築物詳細ページからホームページにナビゲート');
       // フィルター状態を設定してから、少し遅延を入れてからナビゲーション
       setTimeout(() => {
-        window.location.href = `/?lat=${lat}&lng=${lng}&radius=5`;
+        window.location.href = `/?lat=${lat}&lng=${lng}&radius=${radius}`;
       }, 200);
     }
   };

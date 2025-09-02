@@ -95,30 +95,49 @@ export function searchBuildings(
     );
   }
 
-  // Distance filter
+  // Distance filter and sorting
   if (filters.currentLocation) {
-    results = results.filter(building => {
-      const distance = calculateDistance(
+    console.log('🔍 距離フィルタリング開始:', { 
+      currentLocation: filters.currentLocation, 
+      radius: filters.radius,
+      totalBuildings: results.length 
+    });
+
+    // 1. まず距離を計算して付与
+    results = results.map(building => ({
+      ...building,
+      distance: calculateDistance(
         filters.currentLocation!.lat,
         filters.currentLocation!.lng,
         building.lat,
         building.lng
-      );
-      return distance <= filters.radius;
-    });
+      )
+    }));
 
-    // Add distance to buildings and sort by distance
-    results = results
-      .map(building => ({
-        ...building,
-        distance: calculateDistance(
-          filters.currentLocation!.lat,
-          filters.currentLocation!.lng,
-          building.lat,
-          building.lng
-        )
+    // 2. 半径フィルタリング
+    const beforeFilterCount = results.length;
+    results = results.filter(building => 
+      building.distance <= filters.radius
+    );
+    const afterFilterCount = results.length;
+
+    // 3. 距離順ソート（必ず実行されるよう強制）
+    results = results.sort((a, b) => {
+      const distanceA = a.distance || 999999;
+      const distanceB = b.distance || 999999;
+      return distanceA - distanceB;
+    });
+    
+    // デバッグ用ログ
+    console.log('🔍 距離フィルタリング完了:', {
+      beforeFilter: beforeFilterCount,
+      afterFilter: afterFilterCount,
+      radius: filters.radius,
+      sortedResults: results.slice(0, 5).map(b => ({
+        name: b.title,
+        distance: b.distance?.toFixed(2) + 'km'
       }))
-      .sort((a, b) => (a.distance || 0) - (b.distance || 0));
+    });
   }
 
   // console.debug('🔍 Final results:', results.length, 'buildings');

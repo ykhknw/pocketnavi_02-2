@@ -286,27 +286,21 @@ class SupabaseApiClient {
         console.log('📍 地点検索: 距離計算とソートを実行');
         
         // BuildingSearchViewServiceで既に距離フィルタリングが適用されている場合は、
-        // 距離計算とソートのみを実行（再度フィルタリングは行わない）
+        // データベースレベルでの距離ソート結果を尊重し、再度ソートは行わない
         if (result.data[0].distance !== undefined) {
-          console.log('🔍 BuildingSearchViewServiceで既に距離フィルタリング済み、ソートのみ実行');
+          console.log('🔍 BuildingSearchViewServiceで既に距離フィルタリング済み、データベースレベルでのソート結果を尊重');
           
-          // 距離でソート（昇順）
-          const sortedData = [...result.data].sort((a, b) => {
-            const distanceA = (a as any).distance || Infinity;
-            const distanceB = (b as any).distance || Infinity;
-            return distanceA - distanceB;
-          });
-          
-          console.log('🔍 距離ソート結果:', {
-            totalBuildings: sortedData.length,
-            sortedDistances: sortedData.slice(0, 10).map(b => ({
+          // データベースレベルでの距離ソート結果を確認
+          console.log('🔍 データベースレベルでの距離ソート結果:', {
+            totalBuildings: result.data.length,
+            sortedDistances: result.data.slice(0, 10).map(b => ({
               title: b.title,
               distance: (b as any).distance
             }))
           });
           
-          // データ形式を変換
-          const transformedBuildings = sortedData.map((building: any) => ({
+          // データ形式を変換（ソートは行わない）
+          const transformedBuildings = result.data.map((building: any) => ({
             id: building.building_id,
             uid: building.uid,
             slug: building.slug,

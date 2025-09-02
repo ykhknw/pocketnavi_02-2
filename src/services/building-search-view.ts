@@ -72,11 +72,11 @@ export class BuildingSearchViewService {
         query = query.not('thumbnailUrl', 'is', null);
       }
 
-      if (filters.q && filters.q.trim()) {
+      if (filters.query && filters.query.trim()) {
         if (language === 'ja') {
-          query = query.ilike('title', `%${filters.q}%`);
+          query = query.ilike('title', `%${filters.query}%`);
         } else {
-          query = query.ilike('titleEn', `%${filters.q}%`);
+          query = query.ilike('titleEn', `%${filters.query}%`);
         }
       }
 
@@ -363,13 +363,13 @@ export class BuildingSearchViewService {
     }
 
     // キーワード検索
-    if (filters.q && filters.q.trim()) {
+    if (filters.query && filters.query.trim()) {
       // 日本語の場合はタイトルでのみ検索、英語の場合は英語タイトルでのみ検索
       // 複数条件を避けて、単一条件のみを適用
       if (language === 'ja') {
-        query = query.ilike('title', `%${filters.q}%`);
+        query = query.ilike('title', `%${filters.query}%`);
       } else {
-        query = query.ilike('titleEn', `%${filters.q}%`);
+        query = query.ilike('titleEn', `%${filters.query}%`);
       }
     }
 
@@ -503,6 +503,9 @@ export class BuildingSearchViewService {
     try {
       console.log('🔍 距離ソート検索開始:', { filters, language, page, limit });
       
+      // allData変数を宣言
+      let allData: any[] = [];
+      
       // 基本クエリの構築（ページネーションなし）
       // 検索元の座標に近い建築物を優先的に取得するため、座標範囲で絞り込み
       let query = supabase
@@ -564,11 +567,11 @@ export class BuildingSearchViewService {
         query = query.not('thumbnailUrl', 'is', null);
       }
 
-      if (filters.q && filters.q.trim()) {
+      if (filters.query && filters.query.trim()) {
         if (language === 'ja') {
-          query = query.ilike('title', `%${filters.q}%`);
+          query = query.ilike('title', `%${filters.query}%`);
         } else {
-          query = query.ilike('titleEn', `%${filters.q}%`);
+          query = query.ilike('titleEn', `%${filters.query}%`);
         }
       }
 
@@ -603,7 +606,7 @@ export class BuildingSearchViewService {
        }
       
       console.log('🔍 全データ取得完了:', {
-        totalPages: currentPage - 1,
+        totalPages: page - 1, // currentPage - 1 は未定義なので、page - 1 に修正
         totalDataCount: allData.length
       });
       

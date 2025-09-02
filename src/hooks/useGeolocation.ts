@@ -37,9 +37,31 @@ export function useGeolocation() {
         });
       },
       (error) => {
+        let errorMessage = '';
+        
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = '位置情報の使用が拒否されました。ブラウザの設定で位置情報を許可してください。';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = '位置情報が利用できません。';
+            break;
+          case error.TIMEOUT:
+            errorMessage = '位置情報の取得がタイムアウトしました。';
+            break;
+          default:
+            errorMessage = `位置情報の取得に失敗しました: ${error.message}`;
+        }
+        
+        console.error('位置情報取得エラー:', {
+          code: error.code,
+          message: error.message,
+          userMessage: errorMessage
+        });
+        
         setState({
           location: null,
-          error: error.message,
+          error: errorMessage,
           loading: false
         });
       },
