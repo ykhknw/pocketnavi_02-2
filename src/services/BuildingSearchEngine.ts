@@ -193,12 +193,32 @@ export class BuildingSearchEngine {
     // 建物用途フィルター（言語切替対応）
     if (filters.buildingTypes && filters.buildingTypes.length > 0) {
       const column = language === 'ja' ? 'buildingTypes' : 'buildingTypesEn';
-      const buildingTypeConditions = filters.buildingTypes.map(type => 
-        `${column}.ilike.*${String(type).replace(/[,]/g, '')}*`
-      );
-      // クエリを実行せず、クエリビルダーを返す
+      
       try {
-        query = query.or(buildingTypeConditions.join(','));
+        // .or()メソッドの代わりに、個別の条件を適用
+        const conditions = filters.buildingTypes.map(type => 
+          `${column}.ilike.%${String(type).replace(/[,]/g, '')}%`
+        );
+        
+        // 最初の条件でクエリを開始
+        query = query.or(conditions[0]);
+        
+        // 残りの条件を追加（最初の条件が既に適用されているため、スキップ）
+        for (let i = 1; i < conditions.length; i++) {
+          try {
+            query = query.or(conditions[i]);
+          } catch (error) {
+            console.warn(`🔍 建物用途フィルター条件${i}の適用エラー:`, error);
+            break;
+          }
+        }
+        
+        console.log('🔍 建物用途フィルター適用完了:', {
+          filters: filters.buildingTypes,
+          column,
+          conditions: conditions.length
+        });
+        
         // フィルター適用後にクエリの状態をチェック
         if (!query || typeof query.order !== 'function' || typeof query.range !== 'function') {
           console.warn('🔍 建物用途フィルター適用後、クエリが不正な状態になりました。新しいクエリを構築します。');
@@ -257,38 +277,38 @@ export class BuildingSearchEngine {
       }
     }
 
-    // 住宅系の除外（デフォルト有効）
-    if (filters.excludeResidential !== false) {
-      try {
-        console.log('🔍 住宅除外フィルター適用前のクエリ状態:', {
-          queryType: typeof query,
-          hasOrder: typeof query?.order,
-          hasRange: typeof query?.range,
-          queryConstructor: query?.constructor?.name
-        });
+    // 住宅系の除外（無効化 - クエリ破綻の原因）
+    // if (filters.excludeResidential !== false) {
+    //   try {
+    //     console.log('🔍 住宅除外フィルター適用前のクエリ状態:', {
+    //       queryType: typeof query,
+    //       hasOrder: typeof query?.order,
+    //       hasRange: typeof query?.range,
+    //       queryConstructor: query?.constructor?.name
+    //     });
         
-        query = query
-          .not('buildingTypes', 'eq', '住宅')
-          .not('buildingTypesEn', 'eq', 'housing');
+    //     query = query
+    //       .not('buildingTypes', 'eq', '住宅')
+    //       .not('buildingTypesEn', 'eq', 'housing');
           
-        console.log('🔍 住宅除外フィルター適用後のクエリ状態:', {
-          queryType: typeof query,
-          hasOrder: typeof query?.order,
-          hasRange: typeof query?.range,
-          queryConstructor: query?.constructor?.name,
-          queryKeys: query ? Object.keys(query) : 'null'
-        });
+    //     console.log('🔍 住宅除外フィルター適用後のクエリ状態:', {
+    //       queryType: typeof query,
+    //       hasOrder: typeof query?.order,
+    //       hasRange: typeof query?.range,
+    //       queryConstructor: query?.constructor?.name,
+    //       queryKeys: query ? Object.keys(query) : 'null'
+    //     });
         
-        // フィルター適用後にクエリの状態をチェック
-        if (!query || typeof query.order !== 'function' || typeof query.range !== 'function') {
-          console.warn('🔍 住宅除外フィルター適用後、クエリが不正な状態になりました。新しいクエリを構築します。');
-          query = this.buildBaseQuery();
-        }
-      } catch (error) {
-        console.warn('🔍 住宅除外フィルター適用エラー:', error);
-        query = this.buildBaseQuery();
-      }
-    }
+    //     // フィルター適用後にクエリの状態をチェック
+    //     if (!query || typeof query.order !== 'function' || typeof query.range !== 'function') {
+    //       console.warn('🔍 住宅除外フィルター適用後、クエリが不正な状態になりました。新しいクエリを構築します。');
+    //       query = this.buildBaseQuery();
+    //     }
+    //   } catch (error) {
+    //     console.warn('🔍 住宅除外フィルター適用エラー:', error);
+    //     query = this.buildBaseQuery();
+    //   }
+    // }
 
     console.log('🔍 BuildingSearchEngine.applyFiltersToQuery 完了:', {
       queryType: typeof query,
@@ -302,5 +322,48 @@ export class BuildingSearchEngine {
     });
 
     return query;
+  }
+
+  // RPC関数用のフィルターパラメータを構築
+  buildRPCFilterParams(filters: SearchFilters, language: 'ja' | 'en'): {
+    hasFilters: boolean;
+    params: any;
+  } {
+    const params: any = {};
+    let hasFilters = false;
+
+    // 建物用途フィルター
+    if (filters.buildingTypes && filters.buildingTypes.length > 0) {
+      params.building_types = filters.buildingTypes;
+      hasFilters = true;
+    }
+
+    // 都道府県フィルター
+    if (filters.prefectures && filters.prefectures.length > 0) {
+      params.prefectures = filters.prefectures;
+      hasFilters = true;
+    }
+
+    // 動画フィルター
+    if (filters.hasVideos) {
+      params.has_videos = true;
+      hasFilters = true;
+    }
+
+    // 建築年フィルター
+    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+      params.completion_year = filters.completionYear;
+      hasFilters = true;
+    }
+
+    // 言語設定
+    params.language = language;
+
+    console.log('�� RPCフィルターパラメータ:', {
+      hasFilters,
+      params
+    });
+
+    return { hasFilters, params };
   }
 }

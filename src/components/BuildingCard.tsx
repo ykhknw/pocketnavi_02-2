@@ -251,10 +251,12 @@ function BuildingCardComponent({
 
   // 表示する写真を計算（useMemoで最適化）
   const displayPhotos = useMemo(() => {
+    // photosがundefinedの場合は空配列を使用
+    const photos = building.photos || [];
     if (showAllPhotos) {
-      return building.photos;
+      return photos;
     }
-    return building.photos.slice(0, 3);
+    return photos.slice(0, 3);
   }, [building.photos, showAllPhotos]);
 
   return (
@@ -428,8 +430,15 @@ function BuildingCardComponent({
 
                      {/* 用途バッジ - buildingTypesが存在し、空でない場合のみ表示 */}
                      {(() => {
-                       const types = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
-                       if (!types || types.length === 0) return null;
+                       // buildingTypesが文字列の場合は配列に変換
+                       let types = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
+                       
+                       // 文字列の場合はスラッシュで分割して配列に変換
+                       if (typeof types === 'string') {
+                         types = types.split('/').map(t => t.trim()).filter(t => t);
+                       }
+                       
+                       if (!types || !Array.isArray(types) || types.length === 0) return null;
                        
                        const validTypes = types.filter(type => type && type.trim() !== '');
                        if (validTypes.length === 0) return null;

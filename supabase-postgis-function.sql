@@ -257,3 +257,88 @@ COMMENT ON FUNCTION search_buildings_with_distance IS
 --   0,                    -- 1ページ目開始
 --   10                    -- 1ページあたり10件
 -- );
+
+-- Supabase用のPostgreSQL関数（RPC）
+-- フィルター条件に基づいて建築物IDを返す関数
+
+-- 関数の作成
+CREATE OR REPLACE FUNCTION search_buildings_with_filters(
+  building_types TEXT[] DEFAULT NULL,
+  prefectures TEXT[] DEFAULT NULL,
+  has_videos BOOLEAN DEFAULT NULL,
+  completion_year INTEGER DEFAULT NULL,
+  language TEXT DEFAULT 'ja'
+)
+RETURNS INTEGER[]
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  result_ids INTEGER[];
+  query_text TEXT;
+  where_conditions TEXT[] := ARRAY[]::TEXT[];
+  final_query TEXT;
+BEGIN
+  -- 基本クエリの構築
+  query_text := 'SELECT DISTINCT building_id FROM buildings_table_2 WHERE 1=1';
+  
+  -- 建物用途フィルター
+  IF building_types IS NOT NULL AND array_length(building_types, 1) > 0 THEN
+    IF language = 'ja' THEN
+      where_conditions := array_append(where_conditions, 
+        'buildingTypes ILIKE ANY(SELECT ''%'' || unnest || ''%'' FROM unnest($1))');
+    ELSE
+      where_conditions := array_append(where_conditions, 
+        'buildingTypesEn ILIKE ANY(SELECT ''%'' || unnest || ''%'' FROM unnest($1))');
+    END IF;
+  END IF;
+  
+  -- 都道府県フィルター
+  IF prefectures IS NOT NULL AND array_length(prefectures, 1) > 0 THEN
+    IF language = 'ja' THEN
+      where_conditions := array_append(where_conditions, 
+        'prefectures = ANY($2)');
+    ELSE
+      where_conditions := array_append(where_conditions, 
+        'prefecturesEn = ANY($2)');
+    END IF;
+  END IF;
+  
+  -- 動画フィルター
+  IF has_videos = TRUE THEN
+    where_conditions := array_append(where_conditions, 
+      'youtubeUrl IS NOT NULL');
+  END IF;
+  
+  -- 建築年フィルター
+  IF completion_year IS NOT NULL THEN
+    where_conditions := array_append(where_conditions, 
+      'completionYears = $4');
+  END IF;
+  
+  -- WHERE条件を結合
+  IF array_length(where_conditions, 1) > 0 THEN
+    query_text := query_text || ' AND ' || array_to_string(where_conditions, ' AND ');
+  END IF;
+  
+  -- クエリの実行
+  EXECUTE 'SELECT array_agg(building_id) FROM (' || query_text || ') AS filtered_buildings'
+  INTO result_ids
+  USING building_types, prefectures, has_videos, completion_year;
+  
+  -- NULLの場合は空配列を返す
+  IF result_ids IS NULL THEN
+    result_ids := ARRAY[]::INTEGER[];
+  END IF;
+  
+  RETURN result_ids;
+END;
+$$;
+
+-- 関数の権限設定
+GRANT EXECUTE ON FUNCTION search_buildings_with_filters TO authenticated;
+GRANT EXECUTE ON FUNCTION search_buildings_with_filters TO anon;
+
+-- 関数のテスト用クエリ例
+-- SELECT search_buildings_with_filters(ARRAY['庁舎'], NULL, NULL, NULL, 'ja');
+-- SELECT search_buildings_with_filters(ARRAY['庁舎'], ARRAY['東京都'], NULL, NULL, 'ja');
+-- SELECT search_buildings_with_filters(NULL, NULL, TRUE, NULL, 'ja');

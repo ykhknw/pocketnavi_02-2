@@ -2,6 +2,7 @@ import { supabase } from '../lib/supabase'
 import { Building, SearchFilters, Architect, Photo, NewArchitect } from '../types'
 import { sessionManager } from '../utils/session-manager'
 import { BuildingSearchEngine } from './BuildingSearchEngine'
+import { BuildingSearchViewService } from './building-search-view'
 
 export class SupabaseApiError extends Error {
   constructor(public status: number, message: string) {
@@ -12,9 +13,11 @@ export class SupabaseApiError extends Error {
 
 class SupabaseApiClient {
   private searchEngine: BuildingSearchEngine;
+  private searchViewService: BuildingSearchViewService;
 
   constructor() {
     this.searchEngine = new BuildingSearchEngine();
+    this.searchViewService = new BuildingSearchViewService();
   }
   // 建築物関連API
   async getBuildings(page: number = 1, limit: number = 10): Promise<{ buildings: Building[], total: number }> {
@@ -113,231 +116,47 @@ class SupabaseApiClient {
     limit: number = 10,
     language: 'ja' | 'en' = 'ja'
   ): Promise<{ buildings: Building[], total: number }> {
-    // 🔍 検索開始時のフィルター全体ログ
-    console.log('🔍 検索開始 - フィルター全体:', {
-      query: filters.query,
-      architects: filters.architects,
-      buildingTypes: filters.buildingTypes,
-      prefectures: filters.prefectures,
-      language,
-      page,
-      limit,
-      currentLocation: filters.currentLocation,
-      hasPhotos: filters.hasPhotos,
-      hasVideos: filters.hasVideos,
-      completionYear: filters.completionYear,
-      excludeResidential: filters.excludeResidential
-    });
-
-        // 地点検索が有効な場合は、PostGISの空間関数を使用
+    // 地点検索が有効な場合は、PostGISの空間関数を使用
     if (filters.currentLocation) {
       return this.searchBuildingsWithDistance(filters, page, limit, language);
     }
 
-    // 基本クエリを構築
-    let query = this.searchEngine.buildBaseQuery();
-    
-    // 🔍 建築家名検索の結果を保存する変数（OR条件統合用）
-    let architectBuildingIds: number[] = [];
+    console.log('🔍 ビュー検索開始:', { filters, language, page, limit });
 
-    // テキスト検索（建築家名含む）- 全ての条件をOR条件に統合
-    if (filters.query.trim()) {
-      // メインテーブルの検索条件を構築
-      const allConditions = this.searchEngine.buildTextSearchConditions(filters.query, language);
+    try {
+      // 新しいビュー検索サービスを使用
+      const result = await this.searchViewService.searchBuildings(filters, language, page, limit);
       
-      console.log('🔍 検索条件（メイン）:', { 
-        query: filters.query, 
-        language,
-        allConditions
+      console.log('✅ ビュー検索完了:', {
+        resultCount: result.data.length,
+        totalCount: result.count,
+        page: result.page,
+        totalPages: result.totalPages
       });
-      
-      // 建築家名の検索条件（新しいテーブル構造）
-      const allBuildingIds = await this.searchEngine.searchBuildingIdsByArchitectName(filters.query);
-      if (allBuildingIds.length > 0) {
-        // 建築家名検索結果を保存
-        architectBuildingIds = allBuildingIds;
-        
-        // 建築家名検索条件をOR条件に追加
-        allConditions.push(`building_id.in.(${allBuildingIds.join(',')})`);
-        
-        console.log('🔍 建築家名検索クエリ適用後（OR条件統合）:', {
-          allConditions,
-          architectBuildingIds: architectBuildingIds.length
-        });
-      }
-      
-      // 全ての条件をOR条件として適用
-      if (allConditions.length > 0) {
-        query = (query as any).or(allConditions.join(','));
-        console.log('🔍 統合されたOR条件適用完了:', allConditions.join(','));
-      }
-    }
 
-    // フィルターをクエリに適用
-    console.log('🔍 フィルター適用前のクエリ状態:', {
-      queryType: typeof query,
-      hasOrder: typeof query?.order,
-      hasRange: typeof query?.range,
-      queryConstructor: query?.constructor?.name
-    });
-    
-    query = await this.searchEngine.applyFiltersToQuery(query, filters, language);
-    
-    console.log('🔍 フィルター適用後のクエリ状態:', {
-      queryType: typeof query,
-      hasOrder: typeof query?.order,
-      hasRange: typeof query?.range,
-      queryConstructor: query?.constructor?.name,
-      queryKeys: query ? Object.keys(query) : 'null',
-      isSupabaseQuery: query && typeof query.order === 'function' && typeof query.range === 'function'
-    });
-
-    // クエリが既に実行されている場合は、新しいクエリを構築
-    if (query && query.data !== undefined) {
-      console.warn('🔍 applyFiltersToQuery後にクエリが実行されています。新しいクエリを構築します。');
-      query = this.searchEngine.buildBaseQuery();
-      
-      // 住宅除外フィルターのみ再適用（デフォルト有効）
-      if (filters.excludeResidential !== false) {
-        query = query
-          .not('buildingTypes', 'eq', '住宅')
-          .not('buildingTypesEn', 'eq', 'housing');
-      }
-    }
-
-    // 🔍 建築家名検索結果は既にOR条件に統合済み（重複なし）
-    console.log('🔍 建築家名検索結果の統合状況:', {
-      architectBuildingIds_exists: !!architectBuildingIds,
-      architectBuildingIds_length: architectBuildingIds?.length,
-      architectBuildingIds_type: typeof architectBuildingIds,
-      architectBuildingIds_isArray: Array.isArray(architectBuildingIds),
-      sample_ids: architectBuildingIds?.slice(0, 5),
-      note: 'OR条件に統合済みのため、追加のIN条件は不要'
-    });
-
-    console.log('🔍 最終的なクエリオブジェクト（実行直前）:', query);
-    console.log('🔍 クエリオブジェクトの型とメソッド:', {
-      queryType: typeof query,
-      hasOrder: typeof query?.order,
-      hasRange: typeof query?.range,
-      queryKeys: query ? Object.keys(query) : 'null',
-      queryConstructor: query?.constructor?.name
-    });
-
-    const start = (page - 1) * limit;
-    const end = start + limit - 1;
-
-    // 🔍 最終クエリの詳細ログを追加
-    console.log('🔍 最終クエリ条件:', {
-      mainConditions: filters.query.trim() ? [
-        `title.ilike.%${filters.query}%`,
-        `titleEn.ilike.%${filters.query}%`,
-        `location.ilike.%${filters.query}%`
-      ] : [],
-      architectBuildingIds: filters.query.trim() ? '取得済み' : 'なし',
-      finalQuery: query,
-      page,
-      limit,
-      start,
-      end
-    });
-
-    console.log('🔍 最終クエリ実行前:', {
-      page,
-      limit,
-      start,
-      end,
-      queryObject: query,
-      filters: {
-        query: filters.query,
-        architects: filters.architects,
-        buildingTypes: filters.buildingTypes,
-        prefectures: filters.prefectures
-      }
-    });
-
-    // クエリオブジェクトの状態を最終確認
-    console.log('🔍 クエリ実行直前の最終確認:', {
-      query: query,
-      queryType: typeof query,
-      hasOrder: typeof query?.order,
-      hasRange: typeof query?.range,
-      queryConstructor: query?.constructor?.name,
-      isSupabaseQuery: query && typeof query.order === 'function' && typeof query.range === 'function'
-    });
-
-    // クエリが正しいSupabaseクエリオブジェクトかチェック
-    if (!query || typeof query.order !== 'function' || typeof query.range !== 'function') {
-      console.error('❌ クエリオブジェクトが不正です:', query);
-      throw new Error('Invalid query object: missing order or range methods');
-    }
-
-    const { data: buildings, error, count } = await query
-      .order('building_id', { ascending: false })
-      .range(start, end);
-
-    // 🔍 Supabase最終レスポンスの詳細ログを追加
-    console.log('🔍 Supabase最終レスポンス:', { 
-      data: buildings?.length || 0, 
-      count, 
-      error: error?.message,
-      sampleData: buildings?.slice(0, 2).map(b => ({
-        building_id: b.building_id,
-        title: b.title,
-        location: b.location
-      })) || []
-    });
-
-    console.log('🔍 Search results:', { 
-      buildingsCount: buildings?.length || 0, 
-      totalCount: count || 0,
-      error: error?.message,
-      filters: {
-        query: filters.query,
-        architects: filters.architects,
-        buildingTypes: filters.buildingTypes,
-        prefectures: filters.prefectures
-      },
-      // 🔍 詳細な検索結果ログを追加
-      queryDetails: {
-        page,
-        limit,
-        start,
-        end,
-        rangeApplied: `${start}-${end}`
-      },
-      // 🔍 最初の数件の建築物IDを表示
-      sampleBuildingIds: buildings?.slice(0, 3).map(b => b.building_id) || []
-    });
-
-    if (error) {
-      throw new SupabaseApiError(500, error.message);
-    }
-
-    // データ変換と写真フィルター
-    const transformedBuildings: Building[] = [];
-    if (buildings) {
-      for (const building of buildings) {
+      // データ変換
+      const transformedBuildings: Building[] = [];
+      for (const building of result.data) {
         try {
-          const transformed = await this.transformBuilding(building);
-          
-          // 写真フィルター（変換後に適用）
-          if (filters.hasPhotos && transformed.photos.length === 0) {
-            continue; // 写真がない場合はスキップ
-          }
-
+          const transformed = await this.transformBuildingFromView(building);
           transformedBuildings.push(transformed);
         } catch (error) {
-          console.warn('Skipping building due to invalid data:', error);
-          // 無効なデータの建築物はスキップ
+          console.warn('ビューデータ変換エラー:', error);
         }
       }
-    }
 
-    return {
-      buildings: transformedBuildings,
-      total: count || 0
-    };
+      return {
+        buildings: transformedBuildings,
+        total: result.count
+      };
+
+    } catch (error) {
+      console.error('❌ ビュー検索でエラー:', error);
+      
+      // フォールバック: 既存の検索エンジンを使用
+      console.log(' フォールバック: 既存の検索エンジンを使用');
+      return this.searchBuildingsWithFallback(filters, page, limit, language);
+    }
   }
 
   // 地点検索用の新しい関数：PostGISの空間関数を使用
@@ -434,158 +253,142 @@ class SupabaseApiClient {
     }
   }
 
-  // フォールバック用の関数：従来のBBox検索 + クライアント側ソート
+  // ID配列から建築家情報を取得
+  private async getArchitectsByIds(architectIds: number[]): Promise<Architect[]> {
+    try {
+      const { data, error } = await supabase
+        .from('architect_compositions')
+        .select(`
+          architect_id,
+          order_index,
+          individual_architects!inner(
+            individual_architect_id,
+            name_ja,
+            name_en,
+            slug
+          )
+        `)
+        .in('architect_id', architectIds)
+        .order('order_index');
+
+      if (error || !data) {
+        console.warn('建築家情報取得エラー:', error);
+        return [];
+      }
+
+      // 結果を平坦化して配列に変換
+      const architects = data
+        .map((comp: any) => ({
+          architect_id: comp.architect_id,
+          individual_architect_id: comp.individual_architect_id,
+          architectJa: comp.individual_architects.name_ja,
+          architectEn: comp.individual_architects.name_en,
+          slug: comp.individual_architects.slug,
+          order_index: comp.order_index,
+          websites: []
+        }))
+        .filter(architect => architect !== null);
+
+      return architects;
+    } catch (error) {
+      console.error('建築家情報取得でエラー:', error);
+      return [];
+    }
+  }
+
+  // ビューデータからBuildingオブジェクトへの変換
+  private async transformBuildingFromView(buildingView: any): Promise<Building> {
+    // 建築家情報の処理
+    let architects: Architect[] = [];
+    if (buildingView.architect_ids && buildingView.architect_ids.length > 0) {
+      architects = await this.getArchitectsByIds(buildingView.architect_ids);
+    }
+
+    // 文字列を配列に変換するヘルパー関数
+    const parseSlashSeparated = (value: any): string[] => {
+      if (!value) return [];
+      if (Array.isArray(value)) return value;
+      if (typeof value === 'string') {
+        return value.split('/').map(v => v.trim()).filter(v => v);
+      }
+      return [];
+    };
+
+    return {
+      id: buildingView.building_id,
+      uid: buildingView.uid,
+      title: buildingView.title,
+      titleEn: buildingView.titleEn,
+      thumbnailUrl: buildingView.thumbnailUrl,
+      youtubeUrl: buildingView.youtubeUrl,
+      completionYears: buildingView.completionYears,
+      buildingTypes: parseSlashSeparated(buildingView.buildingTypes),
+      buildingTypesEn: parseSlashSeparated(buildingView.buildingTypesEn),
+      prefectures: buildingView.prefectures,
+      prefecturesEn: buildingView.prefecturesEn,
+      areas: buildingView.areas,
+      areasEn: buildingView.areasEn,
+      location: buildingView.location,
+      lat: buildingView.lat,
+      lng: buildingView.lng,
+      slug: buildingView.slug,
+      architects,
+      photos: [], // 空の配列を設定（ビューには含まれていないため）
+      likes: 0, // ビューには含まれていないためデフォルト値
+      created_at: buildingView.created_at,
+      updated_at: buildingView.updated_at
+    };
+  }
+
+  // フォールバック用の既存検索（統合版）
   private async searchBuildingsWithFallback(
     filters: SearchFilters,
     page: number = 1,
     limit: number = 10,
     language: 'ja' | 'en' = 'ja'
   ): Promise<{ buildings: Building[], total: number }> {
-    const { lat, lng } = filters.currentLocation!;
-    const radius = filters.radius;
-
-    console.log('🔄 フォールバック処理開始（クライアント側ソート）:', { 
-      lat, lng, radius, page, limit 
-    });
-
-    // BBoxで粗く絞る（インデックス活用）
-    const latDelta = radius / 111.32;
-    const lngDelta = radius / (111.32 * Math.cos((lat * Math.PI) / 180));
-
-    let query = supabase
-      .from('buildings_table_2')
-      .select(`
-        *,
-        building_architects(
-          architect_id,
-          architect_order
-        )
-      `, { count: 'exact' })
-      .not('lat', 'is', null)
-      .not('lng', 'is', null)
-      .gte('lat', lat - latDelta)
-      .lte('lat', lat + latDelta)
-      .gte('lng', lng - lngDelta)
-      .lte('lng', lng + lngDelta);
-
-    // テキスト検索（建築家名含む）
-    if (filters.query.trim()) {
-      // メインテーブルの検索条件
-      const mainConditions = [
-        `title.ilike.%${filters.query}%`,
-        `titleEn.ilike.%${filters.query}%`,
-        `location.ilike.%${filters.query}%`
-      ];
-      
-      console.log('🔍 建築家名検索条件（フォールバック）:', { 
-        query: filters.query, 
-        mainConditions
-      });
-      
-      // まずメイン条件を適用
-      query = (query as any).or(mainConditions.join(','));
-
-      // ここでの architects_table 参照は撤去（新構造では個別の手順で対応済み）
+    console.log('🔄 フォールバック検索実行');
+    
+    // 地点検索の場合は距離検索用のフォールバック
+    if (filters.currentLocation) {
+      return this.searchBuildingsWithDistance(filters, page, limit, language);
     }
+    
+    // 既存の検索ロジックを使用
+    let query = this.searchEngine.buildBaseQuery();
+    query = await this.searchEngine.applyFiltersToQuery(query, filters, language);
+    
+    const start = (page - 1) * limit;
+    const end = start + limit - 1;
 
-    // 建築家フィルター
-    if (filters.architects && filters.architects.length > 0) {
-      // 旧 foreignTable 条件は撤去。新構造の検索ロジックは searchBuildings 側に統合済み。
-    }
-
-    // 建物用途フィルター
-    if (filters.buildingTypes && filters.buildingTypes.length > 0) {
-      const column = language === 'ja' ? 'buildingTypes' : 'buildingTypesEn';
-      const buildingTypeConditions = filters.buildingTypes.map(type => 
-        `${column}.ilike.*${String(type).replace(/[,]/g, '')}*`
-      );
-      query = query.or(buildingTypeConditions.join(','));
-    }
-
-    // 都道府県フィルター
-    if (filters.prefectures.length > 0) {
-      const column = language === 'ja' ? 'prefectures' : 'prefecturesEn';
-      query = query.in(column as any, filters.prefectures);
-    }
-
-    // 動画フィルター
-    if (filters.hasVideos) {
-      query = query.not('youtubeUrl', 'is', null);
-    }
-
-    // 建築年フィルター
-    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
-      query = query.eq('completionYears', filters.completionYear);
-    }
-
-    // 住宅系の除外
-    if (filters.excludeResidential !== false) {
-      query = query
-        .not('buildingTypes', 'eq', '住宅')
-        .not('buildingTypesEn', 'eq', 'housing');
-    }
-
-    // 全件取得してから距離ソート（フォールバック用）
-    const { data: buildings, error, count } = await query;
+    const { data: buildings, error, count } = await query
+      .order('building_id', { ascending: false })
+      .range(start, end);
 
     if (error) {
       throw new SupabaseApiError(500, error.message);
     }
 
-    console.log('🔄 フォールバック処理: BBox検索結果:', { 
-      totalBuildings: buildings?.length || 0,
-      count: count || 0
-    });
-
-    // データ変換と写真フィルター
+    // データ変換
     const transformedBuildings: Building[] = [];
     if (buildings) {
       for (const building of buildings) {
         try {
           const transformed = await this.transformBuilding(building);
-          
-          // 写真フィルター（変換後に適用）
-          if (filters.hasPhotos && transformed.photos.length === 0) {
-            continue; // 写真がない場合はスキップ
-          }
-          
-          // 距離を計算
-          const d = this.haversineKm(lat, lng, transformed.lat, transformed.lng);
-          (transformed as any).distance = d;
-
           transformedBuildings.push(transformed);
         } catch (error) {
           console.warn('Skipping building due to invalid data:', error);
-          // 無効なデータの建築物はスキップ
         }
       }
     }
 
-    // 距離でソート
-    transformedBuildings.sort((a, b) => (a.distance || 0) - (b.distance || 0));
-
-    console.log('🔄 フォールバック処理: 距離ソート完了:', { 
-      sortedBuildings: transformedBuildings.length,
-      firstDistance: transformedBuildings[0]?.distance,
-      lastDistance: transformedBuildings[transformedBuildings.length - 1]?.distance
-    });
-
-    // ページ分割
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedBuildings = transformedBuildings.slice(start, end);
-
-    console.log('🔄 フォールバック処理: ページ分割完了:', { 
-      page, limit, start, end,
-      paginatedCount: paginatedBuildings.length,
-      totalCount: transformedBuildings.length
-    });
-
     return {
-      buildings: paginatedBuildings,
-      total: transformedBuildings.length
+      buildings: transformedBuildings,
+      total: count || 0
     };
   }
+
+
 
   async getNearbyBuildings(lat: number, lng: number, radius: number): Promise<Building[]> {
     // PostGISを使用した地理空間検索（Supabaseで有効化必要）
