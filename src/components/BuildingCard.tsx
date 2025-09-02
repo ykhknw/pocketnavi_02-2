@@ -288,9 +288,33 @@ function BuildingCardComponent({
             <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-sm font-medium">
               {index + 1}
             </div>
-            <h3 className="text-lg font-semibold line-clamp-2 text-gray-900 font-bold" style={{ fontSize: '1.25rem' }}>
-              {language === 'ja' ? building.title : building.titleEn}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold line-clamp-2 text-gray-900 font-bold" style={{ fontSize: '1.25rem' }}>
+                {language === 'ja' ? building.title : building.titleEn}
+              </h3>
+              {/* 距離バッジ - titleの横に表示（四角い形状） */}
+              {(() => {
+                console.log(`🔍 BuildingCard ${building.id} の距離情報:`, {
+                  distance: building.distance,
+                  distanceType: typeof building.distance,
+                  isZero: building.distance === 0,
+                  isUndefined: building.distance === undefined,
+                  isNull: building.distance === null
+                });
+                
+                if (building.distance !== undefined && building.distance !== null) {
+                  return (
+                    <div
+                      className="border border-blue-300 text-blue-700 bg-blue-50 text-sm font-medium px-2 py-1"
+                      style={{ borderRadius: '0' }}
+                    >
+                      {formatDistance(building.distance)}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+            </div>
           </div>
           <Button
             variant="ghost"
@@ -434,14 +458,7 @@ function BuildingCardComponent({
                  </Badge>
                );
              })()}
-            {building.distance && (
-              <Badge
-                variant="outline"
-                className="border-gray-300 text-gray-700 bg-gray-50 text-sm"
-              >
-                {formatDistance(building.distance)}
-              </Badge>
-            )}
+
           </div>
 
                      {/* 用途バッジ - buildingTypesが存在し、空でない場合のみ表示 */}
@@ -497,9 +514,9 @@ function BuildingCardComponent({
 
                      {/* 建築年バッジ - completionYearsが存在し、有効な値の場合のみ表示 */}
                      {building.completionYears && 
-                      building.completionYears > 0 && 
-                      !isNaN(building.completionYears) && (() => {
-                       const isHighlighted = context.filters.completionYear === building.completionYears;
+                      building.completionYears.toString().trim() !== '' && 
+                      !isNaN(parseInt(building.completionYears, 10)) && (() => {
+                       const isHighlighted = context.filters.completionYear === parseInt(building.completionYears, 10);
                        
                        return (
                          <div className="flex items-center gap-1">
@@ -508,8 +525,8 @@ function BuildingCardComponent({
                              className={cn(
                                "text-sm cursor-pointer transition-all duration-300",
                                isHighlighted ? [
-                                 "bg-orange-500 text-white",
-                                 "ring-2 ring-orange-500/50",
+                                 "bg-blue-500 text-white",
+                                 "ring-2 ring-blue-500/50",
                                  "scale-105",
                                  "font-semibold",
                                  "shadow-md"
@@ -530,16 +547,16 @@ function BuildingCardComponent({
         </div>
 
         {/* 写真ギャラリー */}
-        {building.photos.length > 0 && (
+        {building.photos && building.photos.length > 0 && (
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Camera className="h-4 w-4 text-gray-600" />
                 <span className="text-sm font-medium text-gray-700">
-                  {t('photos', language)} ({building.photos.length})
+                  {t('photos', language)} ({building.photos?.length || 0})
                 </span>
               </div>
-              {building.photos.length > 3 && (
+              {building.photos && building.photos.length > 3 && (
                 <Button
                   variant="ghost"
                   size="sm"

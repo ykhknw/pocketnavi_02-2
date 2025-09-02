@@ -121,17 +121,35 @@ export function useAppHandlers() {
     setFilters: (filters: SearchFilters) => void,
     setCurrentPage: (page: number) => void
   ) => {
+    console.log('🔍 周辺検索開始:', { lat, lng });
+    
     // デフォルト半径は5km、位置情報をフィルターに設定
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      query: '',
+      architects: [],
+      buildingTypes: [],
+      prefectures: [],
+      areas: [],
+      hasPhotos: false,
+      hasVideos: false,
+      radius: 5,
       currentLocation: { lat, lng },
-      radius: 5
-    }));
+      completionYear: undefined
+    };
+    
+    console.log('🔍 新しいフィルター設定:', newFilters);
+    
+    // フィルターを設定
+    setFilters(newFilters);
     setCurrentPage(1);
     
     // ホームページにナビゲート（建築物詳細ページから移動する場合）
     if (window.location.pathname.startsWith('/building/')) {
-      window.location.href = `/?lat=${lat}&lng=${lng}&radius=5`;
+      console.log('🔍 建築物詳細ページからホームページにナビゲート');
+      // フィルター状態を設定してから、少し遅延を入れてからナビゲーション
+      setTimeout(() => {
+        window.location.href = `/?lat=${lat}&lng=${lng}&radius=5`;
+      }, 200);
     }
   };
 

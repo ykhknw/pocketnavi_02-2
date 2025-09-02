@@ -80,6 +80,39 @@ export class BuildingSearchViewService {
         }
       }
 
+      // 距離フィルタリング（現在地が指定されている場合）
+      if (filters.currentLocation && filters.radius) {
+        console.log('🔍 距離フィルタリング適用:', { 
+          currentLocation: filters.currentLocation, 
+          radius: filters.radius 
+        });
+        
+        // 緯度・経度の範囲を計算（概算）
+        const latRange = filters.radius / 111.0; // 1度 ≈ 111km
+        const lngRange = filters.radius / (111.0 * Math.cos(filters.currentLocation.lat * Math.PI / 180));
+        
+        // 緯度・経度の範囲で絞り込み
+        query = query
+          .gte('lat', filters.currentLocation.lat - latRange)
+          .lte('lat', filters.currentLocation.lat + latRange)
+          .gte('lng', filters.currentLocation.lng - lngRange)
+          .lte('lng', filters.currentLocation.lng + lngRange);
+        
+        console.log('🔍 距離フィルタリング適用後:', { 
+          latRange, 
+          lngRange,
+          latMin: filters.currentLocation.lat - latRange,
+          latMax: filters.currentLocation.lat + latRange,
+          lngMin: filters.currentLocation.lng - lngRange,
+          lngMax: filters.currentLocation.lng + lngRange
+        });
+        
+        // 距離フィルタリングが適用される場合は、ページネーションを後で適用
+        // 全データを取得して距離でソートしてからページネーション
+        console.log('🔍 距離フィルタリング適用のため、全データ取得後にページネーション適用');
+        return this.searchBuildingsWithDistanceSorting(filters, language, page, limit);
+      }
+
       // ページネーションの適用
       const start = (page - 1) * limit;
       const end = start + limit - 1;
@@ -139,13 +172,17 @@ export class BuildingSearchViewService {
           })));
         }
         
-        return {
+        const result = {
           data: data || [],
           count: count || 0,
           page,
           limit,
           totalPages: Math.ceil((count || 0) / limit)
         };
+        
+        console.log('🔍 BuildingSearchViewService 戻り値:', result);
+        
+        return result;
         
       } catch (queryError) {
         console.error('❌ クエリ実行でエラー:', queryError);
@@ -452,6 +489,281 @@ export class BuildingSearchViewService {
       console.error('❌ 複数建物用途フィルター検索でエラー:', error);
       throw error;
     }
+  }
+
+  /**
+   * 距離ソート用の検索（全データ取得後に距離でソートしてページネーション）
+   */
+  private async searchBuildingsWithDistanceSorting(
+    filters: SearchFilters,
+    language: 'ja' | 'en',
+    page: number,
+    limit: number
+  ) {
+    try {
+      console.log('🔍 距離ソート検索開始:', { filters, language, page, limit });
+      
+      // 基本クエリの構築（ページネーションなし）
+      // 検索元の座標に近い建築物を優先的に取得するため、座標範囲で絞り込み
+      let query = supabase
+        .from('buildings_search_view')
+        .select('*', { count: 'exact' });
+      
+             // 検索元の座標周辺の建築物を優先的に取得
+       if (filters.currentLocation) {
+         // より広い範囲で取得してから距離フィルタリングを適用
+         const latRange = (filters.radius || 5) * 3 / 111.0; // 半径の3倍の範囲
+         const lngRange = (filters.radius || 5) * 3 / (111.0 * Math.cos(filters.currentLocation.lat * Math.PI / 180));
+         
+         query = query
+           .gte('lat', filters.currentLocation.lat - latRange)
+           .lte('lat', filters.currentLocation.lat + latRange)
+           .gte('lng', filters.currentLocation.lng - lngRange)
+           .lte('lng', filters.currentLocation.lng + lngRange);
+         
+         console.log('🔍 座標範囲絞り込み適用:', {
+           latRange,
+           lngRange,
+           latMin: filters.currentLocation.lat - latRange,
+           latMax: filters.currentLocation.lat + latRange,
+           lngMin: filters.currentLocation.lng - lngRange,
+           lngMax: filters.currentLocation.lng + lngRange
+         });
+       }
+
+      // フィルター条件を個別に適用
+      if (filters.buildingTypes && filters.buildingTypes.length === 1) {
+        const column = language === 'ja' ? 'buildingTypes' : 'buildingTypesEn';
+        query = query.ilike(column, `%${filters.buildingTypes[0]}%`);
+      }
+
+      if (filters.prefectures && filters.prefectures.length > 0) {
+        const column = language === 'ja' ? 'prefectures' : 'prefecturesEn';
+        query = query.in(column, filters.prefectures);
+      }
+
+      if (filters.hasVideos) {
+        query = query.not('youtubeUrl', 'is', null);
+      }
+
+      if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+        query = query.eq('completionYears', filters.completionYear);
+      }
+
+      if (filters.architects && filters.architects.length > 0) {
+        const column = language === 'ja' ? 'architect_names_ja' : 'architect_names_en';
+        query = query.ilike(column, `%${filters.architects[0]}%`);
+      }
+
+      if (filters.areas && filters.areas.length > 0) {
+        const column = language === 'ja' ? 'areas' : 'areasEn';
+        query = query.in(column, filters.areas);
+      }
+
+      if (filters.hasPhotos) {
+        query = query.not('thumbnailUrl', 'is', null);
+      }
+
+      if (filters.q && filters.q.trim()) {
+        if (language === 'ja') {
+          query = query.ilike('title', `%${filters.q}%`);
+        } else {
+          query = query.ilike('titleEn', `%${filters.q}%`);
+        }
+      }
+
+             // 座標範囲フィルタリングが適用されている場合は、rangeを使用せずに全データを取得
+       console.log('🔍 座標範囲フィルタリングが適用されているため、rangeなしで全データを取得');
+       
+       try {
+         const { data: fullData, error: fullError } = await query;
+         
+         if (fullError) {
+           console.error('❌ 全データ取得エラー:', fullError);
+           throw fullError;
+         }
+         
+         if (!fullData || fullData.length === 0) {
+           console.log('🔍 座標範囲内にデータが存在しません');
+           return {
+             data: [],
+             count: 0,
+             page,
+             limit,
+             totalPages: 0
+           };
+         }
+         
+         allData = fullData;
+         console.log(`✅ 全データ取得成功: ${fullData.length}件`);
+         
+       } catch (fullError) {
+         console.error('❌ 全データ取得でエラー:', fullError);
+         throw fullError;
+       }
+      
+      console.log('🔍 全データ取得完了:', {
+        totalPages: currentPage - 1,
+        totalDataCount: allData.length
+      });
+      
+      if (allData.length === 0) {
+        return {
+          data: [],
+          count: 0,
+          page,
+          limit,
+          totalPages: 0
+        };
+      }
+
+      // 検索元の座標をログ出力
+      console.log('🔍 検索元座標:', {
+        lat: filters.currentLocation!.lat,
+        lng: filters.currentLocation!.lng,
+        radius: filters.radius
+      });
+
+      // 取得されたデータの座標範囲をログ出力
+      const coordinates = allData.map(b => ({
+        id: b.building_id,
+        title: b.title,
+        lat: b.lat,
+        lng: b.lng
+      }));
+      console.log('🔍 取得されたデータの座標:', coordinates.slice(0, 5));
+
+      // 距離を計算して各建築物に追加
+      const buildingsWithDistance = allData.map(building => {
+        const distance = this.calculateDistance(
+          filters.currentLocation!.lat,
+          filters.currentLocation!.lng,
+          building.lat || 0,
+          building.lng || 0
+        );
+        return { ...building, distance };
+      });
+
+      // 距離計算結果をログ出力
+      console.log('🔍 距離計算結果:', buildingsWithDistance.slice(0, 5).map(b => ({
+        id: b.building_id,
+        title: b.title,
+        distance: b.distance,
+        distanceType: typeof b.distance,
+        isZero: b.distance === 0,
+        lat: b.lat,
+        lng: b.lng
+      })));
+      
+      // 0kmの建築物を特別にログ出力
+      const zeroDistanceBuildings = buildingsWithDistance.filter(b => b.distance === 0);
+      if (zeroDistanceBuildings.length > 0) {
+        console.log('🔍 0kmの建築物:', zeroDistanceBuildings.map(b => ({
+          id: b.building_id,
+          title: b.title,
+          distance: b.distance,
+          lat: b.lat,
+          lng: b.lng
+        })));
+      }
+
+      // radiusでフィルタリング（距離が指定された半径内の建築物のみ）
+      let filteredBuildings = buildingsWithDistance;
+      if (filters.radius) {
+        filteredBuildings = buildingsWithDistance.filter(building => 
+          building.distance <= filters.radius!
+        );
+        
+        console.log('🔍 radiusフィルタリング結果:', {
+          beforeFiltering: buildingsWithDistance.length,
+          afterFiltering: filteredBuildings.length,
+          radius: filters.radius,
+          maxDistance: Math.max(...filteredBuildings.map(b => b.distance || 0))
+        });
+      }
+
+      // 距離でソート（昇順）
+      filteredBuildings.sort((a, b) => {
+        const distanceA = a.distance ?? Infinity;
+        const distanceB = b.distance ?? Infinity;
+        
+        // 0kmの場合は確実に最上位に
+        if (distanceA === 0 && distanceB !== 0) return -1;
+        if (distanceB === 0 && distanceA !== 0) return 1;
+        
+        // その他の場合は通常の数値比較
+        return distanceA - distanceB;
+      });
+      
+      // ソート結果の詳細ログ
+      console.log('🔍 距離ソート詳細:', {
+        totalBuildings: filteredBuildings.length,
+        sortedDistances: filteredBuildings.slice(0, 10).map((b, index) => ({
+          index,
+          title: b.title,
+          distance: b.distance,
+          distanceType: typeof b.distance,
+          isZero: b.distance === 0
+        }))
+      });
+
+      console.log('🔍 距離ソート結果:', {
+        totalBuildings: filteredBuildings.length,
+        sortedDistances: filteredBuildings.slice(0, 10).map(b => ({
+          title: b.title,
+          distance: b.distance
+        }))
+      });
+
+      // ページネーションを適用
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      const paginatedResults = filteredBuildings.slice(start, end);
+
+      return {
+        data: paginatedResults,
+        count: filteredBuildings.length,
+        page,
+        limit,
+        totalPages: Math.ceil(filteredBuildings.length / limit)
+      };
+
+    } catch (error) {
+      console.error('❌ 距離ソート検索でエラーが発生:', {
+        error,
+        errorType: typeof error,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : 'N/A'
+      });
+      
+      // エラーの詳細をログ出力
+      if (error && typeof error === 'object') {
+        console.error('❌ エラーオブジェクトの詳細:', {
+          keys: Object.keys(error),
+          hasMessage: 'message' in error,
+          hasCode: 'code' in error,
+          hasDetails: 'details' in error,
+          hasHint: 'hint' in error
+        });
+      }
+      
+      throw error;
+    }
+  }
+
+  /**
+   * 2点間の距離を計算（Haversine公式）
+   */
+  private calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const R = 6371; // 地球の半径（km）
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
   }
 
   /**

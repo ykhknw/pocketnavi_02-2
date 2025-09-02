@@ -218,8 +218,8 @@ function MainContentComponent({
             {(useApi ? totalBuildings : filteredBuildings.length) >= 10 && totalPages > 1 && (
               <span className="text-sm text-muted-foreground">
                 {language === 'ja' 
-                  ? `${startIndex + 1}-${Math.min(startIndex + itemsPerPage, useApi ? totalBuildings : filteredBuildings.length)}/${useApi ? totalBuildings : filteredBuildings.length}件 (${currentPage}/${totalPages}ページ)`
-                  : `${startIndex + 1}-${Math.min(startIndex + itemsPerPage, useApi ? totalBuildings : filteredBuildings.length)}/${useApi ? totalBuildings : filteredBuildings.length} items (Page ${currentPage}/${totalPages})`
+                  ? `${startIndex + 1}-${Math.min(startIndex + itemsPerPage, useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0))}/${useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0)}件 (${currentPage}/${totalPages}ページ)`
+                  : `${startIndex + 1}-${Math.min(startIndex + itemsPerPage, useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0))}/${useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0)} items (Page ${currentPage}/${totalPages})`
                 }
               </span>
             )}
@@ -250,13 +250,13 @@ function MainContentComponent({
 
               {/* Pagination */}
               {(() => {
-                const totalItems = useApi ? totalBuildings : filteredBuildings.length;
+                const totalItems = useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0);
                 const shouldShow = totalItems >= 10 && totalPages > 1;
                 
                 console.log('🔍 ページャー表示条件:', {
                   useApi,
                   totalBuildings,
-                  filteredBuildingsLength: filteredBuildings.length,
+                  filteredBuildingsLength: filteredBuildings?.length || 0,
                   totalItems,
                   totalPages,
                   shouldShow,
@@ -270,8 +270,8 @@ function MainContentComponent({
                   {/* ページ情報の表示改善 */}
                   <div className="text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-lg">
                     {language === 'ja' 
-                      ? `ページ ${currentPage} / ${totalPages} (全${useApi ? totalBuildings : filteredBuildings.length}件)`
-                      : `Page ${currentPage} of ${totalPages} (${useApi ? totalBuildings : filteredBuildings.length} total items)`
+                      ? `ページ ${currentPage} / ${totalPages} (全${useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0)}件)`
+                      : `Page ${currentPage} of ${totalPages} (${useApi ? (totalBuildings || 0) : (filteredBuildings?.length || 0)} total items)`
                     }
                   </div>
                   

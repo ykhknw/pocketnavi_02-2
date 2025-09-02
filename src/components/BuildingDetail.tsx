@@ -70,7 +70,7 @@ function BuildingDetailComponent({
 }: BuildingDetailProps) {
   const context = useAppContext();
   // 実際の建築写真かどうかを判定
-  const hasRealPhotos = building.photos.length > 0;
+  const hasRealPhotos = building.photos && building.photos.length > 0;
   const isRealThumbnail = !building.thumbnailUrl.includes('pexels.com');
   const isRealBuilding = hasRealPhotos || isRealThumbnail;
 
@@ -289,10 +289,10 @@ function BuildingDetailComponent({
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            {building.photos.length > 0 && (
+            {building.photos && building.photos.length > 0 && (
               <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2 py-1 rounded-full">
                 <Camera className="h-4 w-4" />
-                <span className="text-sm font-medium">{building.photos.length}</span>
+                <span className="text-sm font-medium">{building.photos?.length || 0}</span>
               </div>
             )}
             {building.youtubeUrl && (
@@ -307,10 +307,10 @@ function BuildingDetailComponent({
 
 
         {/* Photos */}
-        {building.photos.length > 0 ? (
+        {building.photos && building.photos.length > 0 ? (
           <div className="mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {building.photos.map(photo => (
+                              {building.photos?.map(photo => (
                 <div key={photo.id} className="relative group">
                   <LazyImage
                     src={photo.url}

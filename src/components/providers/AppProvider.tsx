@@ -89,7 +89,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   // フィルター変更効果（依存の変化で実行）
   const handleFilterChange = effects.useFilterChangeEffect(
     effects.useApi,
-    buildingsData.buildings,
+    buildingsData.buildings || [], // 安全なアクセスを追加
     state.filters,
     effects.setFilteredBuildings,
     state.setCurrentPage,
@@ -154,7 +154,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   
   // 現在の建物リスト
   const currentBuildings = effects.useApi 
-    ? buildingsData.buildings // API使用時はbuildings（既にページング済み）
+    ? (buildingsData.buildings || []) // API使用時はbuildings（既にページング済み）
     : effects.filteredBuildings.slice(pagination.startIndex, pagination.startIndex + state.itemsPerPage);
 
   // ハンドラー関数のラッパー（useCallbackで最適化）
@@ -164,7 +164,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
   );
     
   const handleLike = useCallback((buildingId: number) => 
-    handlers.handleLike(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings),
+    handlers.handleLike(buildingId, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings || []),
     [handlers.handleLike, state.likedBuildings, state.setLikedBuildings, buildingsData.buildings]
   );
     

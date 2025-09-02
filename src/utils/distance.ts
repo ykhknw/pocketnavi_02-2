@@ -16,6 +16,9 @@ export function calculateDistance(
 }
 
 export function formatDistance(distance: number): string {
+  if (distance === 0) {
+    return '0km';
+  }
   if (distance < 1) {
     return `${Math.round(distance * 1000)}m`;
   }

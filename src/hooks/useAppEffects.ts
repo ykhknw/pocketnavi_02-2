@@ -121,6 +121,16 @@ export function useAppEffects() {
           page
         });
         
+        // 位置情報の詳細ログ
+        if (lat !== null && lng !== null) {
+          console.log('🔍 位置情報フィルター設定:', {
+            lat,
+            lng,
+            radius,
+            currentLocation: { lat, lng }
+          });
+        }
+        
         setFilters({
           query,
           architects,
@@ -225,7 +235,7 @@ export function useAppEffects() {
       console.log('🔄 フィルター変更検出:', { 
         prevFilters, 
         currentFilters: filters,
-        buildingsCount: buildings.length 
+        buildingsCount: buildings?.length || 0 
       });
       
       // 建築年フィルターの詳細ログ
@@ -268,7 +278,9 @@ export function useAppEffects() {
       }
       
       // クライアントサイドフィルタリング（デバウンス処理）
-      debouncedSearch(buildings, filters, language);
+      if (buildings) {
+        debouncedSearch(buildings, filters, language);
+      }
       
       // 前のフィルターを更新
       prevFiltersRef.current = { ...filters };
