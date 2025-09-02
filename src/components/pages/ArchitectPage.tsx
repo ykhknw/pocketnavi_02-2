@@ -255,7 +255,7 @@ export function ArchitectPage() {
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-2 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
                       >
                         {language === 'ja' ? '前へ' : 'Previous'}
                       </button>
@@ -277,7 +277,7 @@ export function ArchitectPage() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === getPaginationRange().totalPages}
-                        className="px-3 py-2 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
                       >
                         {language === 'ja' ? '次へ' : 'Next'}
                       </button>
