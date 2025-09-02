@@ -18,6 +18,7 @@ SELECT
   b.areas,
   b.areasEn,
   b.location,
+  b.locationEn_from_datasheetChunkEn,
   b.lat,
   b.lng,
   b.likes,
@@ -39,7 +40,7 @@ LEFT JOIN building_architects ba ON b.building_id = ba.building_id
 LEFT JOIN architects_table a ON ba.architect_id = a.architect_id
 GROUP BY b.building_id, b.uid, b.title, b.titleEn, b.thumbnailUrl, b.youtubeUrl, 
          b.completionYears, b.buildingTypes, b.buildingTypesEn, b.prefectures, 
-         b.prefecturesEn, b.areas, b.areasEn, b.location, b.lat, b.lng, b.likes, 
+         b.prefecturesEn, b.areas, b.areasEn, b.location, b.locationEn_from_datasheetChunkEn, b.lat, b.lng, b.likes, 
          b.created_at, b.updated_at;
 
 -- 2. ビューの権限設定

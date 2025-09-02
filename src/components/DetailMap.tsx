@@ -150,7 +150,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
                 }).join(', ');
               }).join(', ')}
             </p>
-            <p style="font-size: 10px; color: #9ca3af;">${building.location}</p>
+            <p style="font-size: 10px; color: #9ca3af;">${language === 'ja' ? building.location : (building.locationEn || 'Location not available')}</p>
           </div>
         `, {
           closeButton: true,

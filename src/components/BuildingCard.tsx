@@ -428,7 +428,24 @@ function BuildingCardComponent({
                 onClick={handleOpenInGoogleMaps}
               >
                 <MapPin className="h-3 w-3 mr-1" />
-                {language === 'ja' ? building.location : (building.locationEn || building.location)}
+                {(() => {
+                  // デバッグ用ログ
+                  if (language === 'en') {
+                    console.log('🔍 BuildingCard Location Debug:', {
+                      buildingId: building.id,
+                      title: building.title,
+                      location: building.location,
+                      locationEn: building.locationEn,
+                      locationEnType: typeof building.locationEn,
+                      locationEnLength: building.locationEn?.length,
+                      buildingKeys: Object.keys(building),
+                      hasLocationEn: 'locationEn' in building,
+                      buildingRaw: building
+                    });
+                  }
+                  
+                  return language === 'ja' ? building.location : (building.locationEn || 'Location not available');
+                })()}
               </Badge>
             )}
                          {building.prefectures && (() => {

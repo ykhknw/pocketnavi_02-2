@@ -14,6 +14,7 @@ export interface Building {
   prefectures: string;
   prefecturesEn?: string;
   areas: string;
+  areasEn?: string;
   location: string;
   locationEn?: string;
   buildingTypesEn?: string[];

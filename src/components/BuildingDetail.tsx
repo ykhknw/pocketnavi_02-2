@@ -218,7 +218,7 @@ function BuildingDetailComponent({
               onClick={handleOpenInGoogleMaps}
             >
               <MapPin className="h-3 w-3 mr-1" />
-              {language === 'ja' ? building.location : (building.locationEn || building.location)}
+              {language === 'ja' ? building.location : (building.locationEn || 'Location not available')}
             </Badge>
             {building.prefectures && (
               <Badge

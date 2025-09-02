@@ -217,6 +217,18 @@ class SupabaseApiClient {
 
   // ビューデータからBuildingオブジェクトへの変換
   private async transformBuildingFromView(buildingView: any): Promise<Building> {
+    // デバッグログ
+    console.log('🔍 transformBuildingFromView Debug:', {
+      buildingId: buildingView.building_id,
+      title: buildingView.title,
+      location: buildingView.location,
+      locationEn_from_datasheetChunkEn: buildingView.locationEn_from_datasheetChunkEn,
+      locationEn_from_datasheetChunkEnType: typeof buildingView.locationEn_from_datasheetChunkEn,
+      buildingViewKeys: Object.keys(buildingView),
+      hasLocationEnField: 'locationEn_from_datasheetChunkEn' in buildingView,
+      buildingViewRaw: buildingView
+    });
+
     // 建築家情報の処理
     let architects: Architect[] = [];
     if (buildingView.architect_ids && buildingView.architect_ids.length > 0) {
@@ -233,7 +245,7 @@ class SupabaseApiClient {
       return [];
     };
 
-    return {
+    const transformedBuilding = {
       id: buildingView.building_id,
       uid: buildingView.uid,
       title: buildingView.title,
@@ -241,13 +253,18 @@ class SupabaseApiClient {
       thumbnailUrl: buildingView.thumbnailUrl,
       youtubeUrl: buildingView.youtubeUrl,
       completionYears: buildingView.completionYears,
+      parentBuildingTypes: [], // ビューには含まれていないため空配列
       buildingTypes: parseSlashSeparated(buildingView.buildingTypes),
       buildingTypesEn: parseSlashSeparated(buildingView.buildingTypesEn),
+      parentStructures: [], // ビューには含まれていないため空配列
+      structures: [], // ビューには含まれていないため空配列
       prefectures: buildingView.prefectures,
       prefecturesEn: buildingView.prefecturesEn,
       areas: buildingView.areas,
       areasEn: buildingView.areasEn,
       location: buildingView.location,
+      locationEn: buildingView.locationEn_from_datasheetChunkEn,
+      architectDetails: '', // ビューには含まれていないため空文字
       lat: buildingView.lat,
       lng: buildingView.lng,
       slug: buildingView.slug,
@@ -257,6 +274,14 @@ class SupabaseApiClient {
       created_at: buildingView.created_at,
       updated_at: buildingView.updated_at
     };
+
+    console.log('🔍 transformBuildingFromView Result:', {
+      buildingId: transformedBuilding.id,
+      locationEn: transformedBuilding.locationEn,
+      locationEnType: typeof transformedBuilding.locationEn
+    });
+
+    return transformedBuilding;
   }
 
   // フォールバック用の既存検索（統合版）
