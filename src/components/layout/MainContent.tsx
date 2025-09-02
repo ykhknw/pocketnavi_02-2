@@ -249,7 +249,23 @@ function MainContentComponent({
               </div>
 
               {/* Pagination */}
-              {(useApi ? totalBuildings : filteredBuildings.length) >= 10 && totalPages > 1 && (
+              {(() => {
+                const totalItems = useApi ? totalBuildings : filteredBuildings.length;
+                const shouldShow = totalItems >= 10 && totalPages > 1;
+                
+                console.log('🔍 ページャー表示条件:', {
+                  useApi,
+                  totalBuildings,
+                  filteredBuildingsLength: filteredBuildings.length,
+                  totalItems,
+                  totalPages,
+                  shouldShow,
+                  condition1: totalItems >= 10,
+                  condition2: totalPages > 1
+                });
+                
+                return shouldShow;
+              })() && (
                 <div className="flex flex-col items-center space-y-4 mt-8 w-full">
                   {/* ページ情報の表示改善 */}
                   <div className="text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-lg">

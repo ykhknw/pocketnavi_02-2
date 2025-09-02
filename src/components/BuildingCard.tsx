@@ -168,8 +168,8 @@ function BuildingCardComponent({
 
   const handleBuildingTypeSearch = useCallback((e: React.MouseEvent, type: string) => {
     e.stopPropagation();
-    // 建築家ページ内ならホームに遷移してクエリを付与
-    if (location.pathname.startsWith('/architect/')) {
+    // 建築家ページ内または建築物詳細ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/') || location.pathname.startsWith('/building/')) {
       const params = new URLSearchParams();
       params.set('buildingTypes', type);
       navigate(`/?${params.toString()}`);
@@ -193,8 +193,8 @@ function BuildingCardComponent({
   const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
     e.stopPropagation();
     
-    // 建築家ページ内ならホームに遷移してクエリを付与
-    if (location.pathname.startsWith('/architect/')) {
+    // 建築家ページ内または建築物詳細ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/') || location.pathname.startsWith('/building/')) {
       const params = new URLSearchParams();
       params.set('year', year.toString());
       navigate(`/?${params.toString()}`);
@@ -214,8 +214,8 @@ function BuildingCardComponent({
 
   const handlePrefectureSearch = useCallback((e: React.MouseEvent, pref: string) => {
     e.stopPropagation();
-    // 建築家ページ内ならホームに遷移してクエリを付与
-    if (location.pathname.startsWith('/architect/')) {
+    // 建築家ページ内または建築物詳細ページ内ならホームに遷移してクエリを付与
+    if (location.pathname.startsWith('/architect/') || location.pathname.startsWith('/building/')) {
       const params = new URLSearchParams();
       params.set('prefectures', pref);
       navigate(`/?${params.toString()}`);

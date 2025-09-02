@@ -56,7 +56,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     new URLSearchParams(state.location.search),
     state.setFilters,
     state.setCurrentPage,
-    state.isUpdatingFromURL.current
+    state.isUpdatingFromURL
   );
   useEffect(() => {
     syncURLToState();
@@ -68,7 +68,7 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.filters,
     state.currentPage,
     actions.updateURLWithFilters,
-    state.isUpdatingFromURL.current
+    state.isUpdatingFromURL
   );
   useEffect(() => {
     const cleanup = updateURL();
@@ -113,6 +113,18 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     state.itemsPerPage,
     state.currentPage
   );
+  
+  console.log('🔍 ページネーション計算詳細:', {
+    useApi: effects.useApi,
+    buildingsDataTotal: buildingsData.totalBuildings,
+    filteredBuildingsLength: effects.filteredBuildings.length,
+    totalItemsForPagination,
+    itemsPerPage: state.itemsPerPage,
+    currentPage: state.currentPage,
+    calculatedPagination: pagination,
+    totalPages: pagination.totalPages,
+    startIndex: pagination.startIndex
+  });
 
 
 

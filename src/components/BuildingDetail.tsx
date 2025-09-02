@@ -136,7 +136,7 @@ function BuildingDetailComponent({
     const searchParams = new URLSearchParams();
     const newCompletionYear = context.filters.completionYear === year ? null : year;
     if (newCompletionYear !== null) {
-      searchParams.set('completionYear', newCompletionYear.toString());
+      searchParams.set('year', newCompletionYear.toString());
     }
     const url = `/?${searchParams.toString()}`;
     window.location.href = url;

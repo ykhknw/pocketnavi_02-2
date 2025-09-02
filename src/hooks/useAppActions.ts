@@ -8,6 +8,8 @@ export function useAppActions() {
   
   // フィルターとページ情報をURLに反映する関数（メモ化）
   const updateURLWithFilters = useCallback((filters: SearchFilters, currentPage: number) => {
+    console.log('🔍 updateURLWithFilters 呼び出し:', { filters, currentPage });
+    
     const searchParams = new URLSearchParams();
     
     if (filters.query) searchParams.set('q', filters.query);
@@ -27,7 +29,20 @@ export function useAppActions() {
     if (filters.areas && filters.areas.length > 0) searchParams.set('areas', filters.areas.join(','));
     if (filters.hasPhotos) searchParams.set('hasPhotos', 'true');
     if (filters.hasVideos) searchParams.set('hasVideos', 'true');
-    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) searchParams.set('year', String(filters.completionYear));
+    
+    // 建築年フィルターの詳細ログ
+    console.log('🔍 建築年フィルター状態:', {
+      completionYear: filters.completionYear,
+      type: typeof filters.completionYear,
+      isNumber: typeof filters.completionYear === 'number',
+      isNaN: typeof filters.completionYear === 'number' ? isNaN(filters.completionYear) : 'N/A'
+    });
+    
+    if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+      searchParams.set('year', String(filters.completionYear));
+      console.log('🔍 建築年パラメータ設定:', String(filters.completionYear));
+    }
+    
     if (filters.excludeResidential === false) searchParams.set('excl', '0');
     if (currentPage > 1) searchParams.set('page', currentPage.toString());
 
@@ -36,11 +51,21 @@ export function useAppActions() {
 
     // 変更がない場合は遷移しない
     const currentSearch = new URLSearchParams(location.search).toString();
+    
+    console.log('🔍 URL更新詳細:', {
+      currentSearch,
+      searchString,
+      basePath,
+      willNavigate: currentSearch !== searchString
+    });
+    
     if (currentSearch === searchString) {
+      console.log('🔍 URL変更なし - ナビゲーションをスキップ');
       return;
     }
 
     const newPath = searchString ? `${basePath}?${searchString}` : basePath;
+    console.log('🔍 新しいパスにナビゲート:', newPath);
     navigate(newPath, { replace: true });
   }, [navigate, location.pathname, location.search]);
 

@@ -67,42 +67,82 @@ export function useAppEffects() {
     searchParams: URLSearchParams,
     setFilters: (filters: SearchFilters) => void,
     setCurrentPage: (page: number) => void,
-    isUpdatingFromURL: boolean
+    isUpdatingFromURL: React.MutableRefObject<boolean>
   ) => {
     // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
     const syncURLToState = () => {
-      if (isUpdatingFromURL) return;
-      
-      const query = searchParams.get('q') || '';
-      const architects = searchParams.get('architects')?.split(',') || [];
-      const buildingTypes = searchParams.get('buildingTypes')?.split(',') || [];
-      const prefectures = searchParams.get('prefectures')?.split(',') || [];
-      const areas = searchParams.get('areas')?.split(',') || [];
-      const hasPhotos = searchParams.get('hasPhotos') === 'true';
-      const hasVideos = searchParams.get('hasVideos') === 'true';
-      const radius = parseInt(searchParams.get('radius') || '5', 10);
-      const page = parseInt(searchParams.get('page') || '1', 10);
-      const latStr = searchParams.get('lat');
-      const lngStr = searchParams.get('lng');
-      const lat = latStr !== null ? parseFloat(latStr) : null;
-      const lng = lngStr !== null ? parseFloat(lngStr) : null;
-      
-       setFilters({
-        query,
-        architects,
-        buildingTypes,
-        prefectures,
-        areas,
-        hasPhotos,
-        hasVideos,
-        radius,
-         currentLocation: lat !== null && !Number.isNaN(lat) && lng !== null && !Number.isNaN(lng)
-           ? { lat, lng }
-           : null,
-         completionYear: searchParams.get('year') ? Number(searchParams.get('year')) : undefined
+      console.log('🔍 URL同期開始:', { 
+        searchParams: searchParams.toString(),
+        isUpdatingFromURL: isUpdatingFromURL.current 
       });
       
-      setCurrentPage(page);
+      if (isUpdatingFromURL.current) {
+        console.log('🔍 URL更新中 - 同期をスキップ');
+        return;
+      }
+      
+      // URL同期中フラグを設定
+      isUpdatingFromURL.current = true;
+      console.log('🔍 URL同期中フラグ設定: true');
+      
+      try {
+        const query = searchParams.get('q') || '';
+        const architects = searchParams.get('architects')?.split(',') || [];
+        const buildingTypes = searchParams.get('buildingTypes')?.split(',') || [];
+        const prefectures = searchParams.get('prefectures')?.split(',') || [];
+        const areas = searchParams.get('areas')?.split(',') || [];
+        const hasPhotos = searchParams.get('hasPhotos') === 'true';
+        const hasVideos = searchParams.get('hasVideos') === 'true';
+        const radius = parseInt(searchParams.get('radius') || '5', 10);
+        const page = parseInt(searchParams.get('page') || '1', 10);
+        const latStr = searchParams.get('lat');
+        const lngStr = searchParams.get('lng');
+        const lat = latStr !== null ? parseFloat(latStr) : null;
+        const lng = lngStr !== null ? parseFloat(lngStr) : null;
+        
+        const completionYear = searchParams.get('year') ? Number(searchParams.get('year')) : undefined;
+        
+        console.log('🔍 URLから読み込んだ値:', {
+          query,
+          architects,
+          buildingTypes,
+          prefectures,
+          areas,
+          hasPhotos,
+          hasVideos,
+          radius,
+          lat,
+          lng,
+          completionYear,
+          page
+        });
+        
+        setFilters({
+          query,
+          architects,
+          buildingTypes,
+          prefectures,
+          areas,
+          hasPhotos,
+          hasVideos,
+          radius,
+          currentLocation: lat !== null && !Number.isNaN(lat) && lng !== null && !Number.isNaN(lng)
+            ? { lat, lng }
+            : null,
+          completionYear
+        });
+        
+        setCurrentPage(page);
+        
+        console.log('🔍 URL同期完了');
+        
+      } finally {
+        // 少し遅延を入れてからフラグをリセット（useEffectの実行順序を考慮）
+        setTimeout(() => {
+          isUpdatingFromURL.current = false;
+          console.log('🔍 URL同期中フラグリセット: false');
+        }, 100);
+      }
     };
     
     return syncURLToState;
@@ -113,14 +153,24 @@ export function useAppEffects() {
     filters: SearchFilters,
     currentPage: number,
     updateURLWithFilters: (filters: SearchFilters, currentPage: number) => void,
-    isUpdatingFromURL: boolean
+    isUpdatingFromURL: React.MutableRefObject<boolean>
   ) => {
     // useEffectをuseCallback内で呼び出すのはHooks違反なので、直接関数として実装
     const updateURL = () => {
-      if (isUpdatingFromURL) return;
+      console.log('🔍 URL更新効果実行:', { 
+        filters,
+        currentPage,
+        isUpdatingFromURL: isUpdatingFromURL.current 
+      });
       
-       // デバウンス処理でURL更新を最適化
+      if (isUpdatingFromURL.current) {
+        console.log('🔍 URL同期中 - 更新をスキップ');
+        return;
+      }
+      
+      // デバウンス処理でURL更新を最適化
       const timeoutId = setTimeout(() => {
+        console.log('🔍 URL更新実行（デバウンス後）');
         updateURLWithFilters(filters, currentPage);
       }, 300);
       
