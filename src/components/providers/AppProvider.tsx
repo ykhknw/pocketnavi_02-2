@@ -141,7 +141,15 @@ function AppProviderContent({ children }: { children: React.ReactNode }) {
     startIndex: pagination.startIndex,
     hasArchitectFilter: state.filters.architects && state.filters.architects.length > 0,
     architects: state.filters.architects,
-
+  });
+  
+  // フィルター状態の詳細ログ
+  console.log('🔍 現在のフィルター状態:', {
+    completionYear: state.filters.completionYear,
+    completionYearType: typeof state.filters.completionYear,
+    isNumber: typeof state.filters.completionYear === 'number',
+    isNaN: typeof state.filters.completionYear === 'number' ? isNaN(state.filters.completionYear) : 'N/A',
+    allFilters: state.filters
   });
   
   // 現在の建物リスト

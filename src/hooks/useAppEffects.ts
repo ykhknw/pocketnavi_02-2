@@ -100,7 +100,11 @@ export function useAppEffects() {
         const lat = latStr !== null ? parseFloat(latStr) : null;
         const lng = lngStr !== null ? parseFloat(lngStr) : null;
         
-        const completionYear = searchParams.get('year') ? Number(searchParams.get('year')) : undefined;
+        const completionYearParam = searchParams.get('year');
+        const completionYear = completionYearParam ? (() => {
+          const parsed = Number(completionYearParam);
+          return !Number.isNaN(parsed) ? parsed : undefined;
+        })() : undefined;
         
         console.log('🔍 URLから読み込んだ値:', {
           query,
@@ -222,6 +226,14 @@ export function useAppEffects() {
         prevFilters, 
         currentFilters: filters,
         buildingsCount: buildings.length 
+      });
+      
+      // 建築年フィルターの詳細ログ
+      console.log('🔍 フィルター変更時の建築年詳細:', {
+        completionYear: filters.completionYear,
+        completionYearType: typeof filters.completionYear,
+        isNumber: typeof filters.completionYear === 'number',
+        isNaN: typeof filters.completionYear === 'number' ? isNaN(filters.completionYear) : 'N/A'
       });
       
       // テキスト検索のみを履歴に更新（フィルター検索は別途記録）

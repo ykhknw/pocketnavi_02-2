@@ -190,19 +190,35 @@ function BuildingCardComponent({
     context.handleSearchStart();
   }, [context, location.pathname, navigate]);
 
-  const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: number) => {
+  const handleCompletionYearSearch = useCallback((e: React.MouseEvent, year: string | number) => {
     e.stopPropagation();
+    
+    // yearを数値に変換
+    const yearNumber = typeof year === 'string' ? parseInt(year, 10) : year;
+    
+    // 無効な数値の場合は処理を中断
+    if (isNaN(yearNumber)) {
+      console.warn('🔍 無効な建築年:', year);
+      return;
+    }
     
     // 建築家ページ内または建築物詳細ページ内ならホームに遷移してクエリを付与
     if (location.pathname.startsWith('/architect/') || location.pathname.startsWith('/building/')) {
       const params = new URLSearchParams();
-      params.set('year', year.toString());
+      params.set('year', yearNumber.toString());
       navigate(`/?${params.toString()}`);
       return;
     }
 
     // 既存フィルターを保持し、建築年の選択/解除を切り替え
-    const newCompletionYear = context.filters.completionYear === year ? null : year;
+    const newCompletionYear = context.filters.completionYear === yearNumber ? null : yearNumber;
+    
+    console.log('🔍 建築年フィルター設定:', { 
+      originalYear: year, 
+      yearNumber, 
+      newCompletionYear,
+      currentFilters: context.filters.completionYear 
+    });
     
     context.setFilters({
       ...context.filters,

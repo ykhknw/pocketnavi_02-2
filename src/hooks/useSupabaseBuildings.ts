@@ -41,9 +41,18 @@ export function useSupabaseBuildings(
 
       try {
         // Supabase API使用時
+        console.log('🔍 useSupabaseBuildings クエリ実行開始:', {
+          filters,
+          currentPage,
+          itemsPerPage,
+          language,
+          completionYear: filters.completionYear,
+          completionYearType: typeof filters.completionYear
+        });
 
-         const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage, language);
+        const result = await supabaseApiClient.searchBuildings(filters, currentPage, itemsPerPage, language);
         
+        console.log('✅ useSupabaseBuildings クエリ実行完了:', result);
         return result;
       } catch (err) {
         console.error('API Error:', err);

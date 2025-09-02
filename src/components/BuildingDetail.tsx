@@ -131,10 +131,19 @@ function BuildingDetailComponent({
     window.location.href = url;
   }, []);
 
-  const handleCompletionYearSearch = useCallback((year: number) => {
+  const handleCompletionYearSearch = useCallback((year: string | number) => {
+    // yearを数値に変換
+    const yearNumber = typeof year === 'string' ? parseInt(year, 10) : year;
+    
+    // 無効な数値の場合は処理を中断
+    if (isNaN(yearNumber)) {
+      console.warn('🔍 無効な建築年:', year);
+      return;
+    }
+    
     // 詳細ページから一覧ページに戻り、建築年の選択/解除を切り替え
     const searchParams = new URLSearchParams();
-    const newCompletionYear = context.filters.completionYear === year ? null : year;
+    const newCompletionYear = context.filters.completionYear === yearNumber ? null : yearNumber;
     if (newCompletionYear !== null) {
       searchParams.set('year', newCompletionYear.toString());
     }

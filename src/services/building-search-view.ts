@@ -25,6 +25,12 @@ export class BuildingSearchViewService {
 
       // フィルター条件に基づいて個別クエリを実行
       console.log('🔧 個別クエリ方式で検索を実行します');
+      console.log('🔍 受け取ったフィルター:', {
+        completionYear: filters.completionYear,
+        completionYearType: typeof filters.completionYear,
+        isNumber: typeof filters.completionYear === 'number',
+        isNaN: typeof filters.completionYear === 'number' ? isNaN(filters.completionYear) : 'N/A'
+      });
       
       // 基本クエリの構築
       let query = supabase
@@ -47,7 +53,9 @@ export class BuildingSearchViewService {
       }
 
       if (typeof filters.completionYear === 'number' && !isNaN(filters.completionYear)) {
+        console.log('🔍 建築年フィルター適用:', { completionYear: filters.completionYear, type: typeof filters.completionYear });
         query = query.eq('completionYears', filters.completionYear);
+        console.log('🔍 建築年フィルター適用後:', { queryType: typeof query, hasEq: typeof query?.eq });
       }
 
       if (filters.architects && filters.architects.length > 0) {
@@ -120,6 +128,16 @@ export class BuildingSearchViewService {
           page,
           limit
         });
+        
+        // 最初の数件の建築年を確認
+        if (data && data.length > 0) {
+          console.log('🔍 検索結果の建築年サンプル:', data.slice(0, 3).map(building => ({
+            id: building.building_id,
+            title: building.title,
+            completionYears: building.completionYears,
+            completionYearsType: typeof building.completionYears
+          })));
+        }
         
         return {
           data: data || [],
