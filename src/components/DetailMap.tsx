@@ -135,7 +135,7 @@ export function DetailMap({ building, language, onSearchAround }: DetailMapProps
         })
         .bindPopup(`
           <div style="padding: 8px; min-width: 200px;">
-            <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 4px; color: #111827;">${language === 'ja' ? building.title : building.titleEn}</h3>
+            <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 8px; color: #111827;">${language === 'ja' ? building.title : building.titleEn}</h3>
             <p style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
               ${building.architects.map(a => {
                 const architectName = language === 'ja' ? a.architectJa : a.architectEn;

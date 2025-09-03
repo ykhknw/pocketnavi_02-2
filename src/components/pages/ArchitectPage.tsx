@@ -45,15 +45,36 @@ export function ArchitectPage() {
   // ページャー範囲計算
   const getPaginationRange = () => {
     const totalPages = Math.ceil(buildings.length / itemsPerPage);
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(totalPages, currentPage + 2);
-    
-    const pages = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+    const delta = 2; // 現在のページの前後2ページずつ表示
+    const range = [];
+    const rangeWithDots = [];
+
+    // 現在のページの前後のページを取得
+    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+      range.push(i);
     }
-    
-    return { pages, totalPages };
+
+    // 最初のページ
+    if (currentPage - delta > 2) {
+      rangeWithDots.push(1, '...');
+    } else {
+      rangeWithDots.push(1);
+    }
+
+    // 中間のページ
+    rangeWithDots.push(...range);
+
+    // 最後のページ
+    if (currentPage + delta < totalPages - 1) {
+      rangeWithDots.push('...', totalPages);
+    } else if (totalPages > 1) {
+      // 最後のページがまだ含まれていない場合のみ追加
+      if (!rangeWithDots.includes(totalPages)) {
+        rangeWithDots.push(totalPages);
+      }
+    }
+
+    return { pages: rangeWithDots, totalPages };
   };
 
   useEffect(() => {
@@ -257,17 +278,23 @@ export function ArchitectPage() {
                         disabled={currentPage === 1}
                         className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
                       >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
                         {language === 'ja' ? '前へ' : 'Previous'}
                       </button>
                       
-                      {getPaginationRange().pages.map(page => (
+                      {getPaginationRange().pages.map((page, index) => (
                         <button
-                          key={page}
-                          onClick={() => handlePageChange(page)}
-                          className={`px-3 py-2 text-sm border rounded-md ${
-                            page === currentPage
-                              ? 'bg-primary text-primary-foreground'
-                              : 'hover:bg-gray-50'
+                          key={index}
+                          onClick={() => typeof page === 'number' ? handlePageChange(page) : undefined}
+                          disabled={typeof page !== 'number'}
+                          className={`px-3 py-2 rounded-md text-sm font-medium ${
+                            typeof page === 'number'
+                              ? page === currentPage
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                              : 'text-gray-400 cursor-default'
                           }`}
                         >
                           {page}
@@ -280,6 +307,9 @@ export function ArchitectPage() {
                         className="px-6 py-3 rounded-lg bg-white border border-gray-300 text-base font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all duration-200 min-w-[80px] min-h-[44px] flex items-center justify-center gap-2"
                       >
                         {language === 'ja' ? '次へ' : 'Next'}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
                       </button>
                     </div>
                   </div>

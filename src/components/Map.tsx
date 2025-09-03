@@ -166,7 +166,7 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
           })
           .bindPopup(`
             <div style="padding: 8px; min-width: 200px;">
-              <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">${language === 'ja' ? building.title : building.titleEn}</h3>
+              <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${language === 'ja' ? building.title : building.titleEn}</h3>
               <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;">
                 ${building.architects.map(a => {
                   const architectName = language === 'ja' ? a.architectJa : a.architectEn;
@@ -174,9 +174,9 @@ function MapComponent({ buildings, selectedBuilding, onBuildingSelect, currentLo
                   return architectNames.map(name => {
                     const trimmedName = name.trim();
                     if (a.slug) {
-                      return `<a href="/architect/${a.slug}" style="background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#2563eb'" onmouseout="this.style.backgroundColor='#3b82f6'">${trimmedName}</a>`;
+                      return `<a href="/architect/${a.slug}" style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#bfdbfe'" onmouseout="this.style.backgroundColor='#dbeafe'">${trimmedName}</a>`;
                     } else {
-                      return `<span style="background-color: #f3f4f6; color: #374151; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
+                      return `<span style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
                     }
                   }).join('');
                 }).join('')}

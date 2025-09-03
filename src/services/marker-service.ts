@@ -141,17 +141,27 @@ export class MarkerService {
    */
   private static createBuildingPopup(building: Building, language: 'ja' | 'en'): string {
     const title = language === 'ja' ? building.title : building.titleEn;
-    const architects = building.architects.map(a => 
-      language === 'ja' ? a.architectJa : a.architectEn
-    ).join(', ');
     const location = language === 'ja' ? building.location : (building.locationEn || building.location);
     const buildingTypes = language === 'ja' ? building.buildingTypes : (building.buildingTypesEn || building.buildingTypes);
     const yearLabel = language === 'ja' ? '年' : '';
 
     return `
       <div style="padding: 8px; min-width: 200px;">
-        <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">${title}</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 8px;">${architects}</p>
+        <h3 style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${title}</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
+          ${building.architects.map(a => {
+            const architectName = language === 'ja' ? a.architectJa : a.architectEn;
+            const architectNames = architectName.split('　').filter(name => name.trim());
+            return architectNames.map(name => {
+              const trimmedName = name.trim();
+              if (a.slug) {
+                return `<a href="/architect/${a.slug}" style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#bfdbfe'" onmouseout="this.style.backgroundColor='#dbeafe'">${trimmedName}</a>`;
+              } else {
+                return `<span style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
+              }
+            }).join('');
+          }).join('')}
+        </div>
         <p style="font-size: 10px; color: #999; margin-bottom: 8px;">${location}</p>
         <div style="display: flex; gap: 4px; flex-wrap: wrap;">
           <span style="background-color: #dbeafe; color: #1e40af; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${building.completionYears}${yearLabel}</span>
@@ -168,15 +178,25 @@ export class MarkerService {
    */
   private static createSelectedBuildingPopup(building: Building, language: 'ja' | 'en'): string {
     const title = language === 'ja' ? building.title : building.titleEn;
-    const architects = building.architects.map(a => 
-      language === 'ja' ? a.architectJa : a.architectEn
-    ).join(', ');
     const location = language === 'ja' ? building.location : (building.locationEn || building.location);
 
     return `
       <div style="padding: 8px; min-width: 200px;">
-        <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">${title}</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 4px;">${architects}</p>
+        <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">${title}</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
+          ${building.architects.map(a => {
+            const architectName = language === 'ja' ? a.architectJa : a.architectEn;
+            const architectNames = architectName.split('　').filter(name => name.trim());
+            return architectNames.map(name => {
+              const trimmedName = name.trim();
+              if (a.slug) {
+                return `<a href="/architect/${a.slug}" style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500; text-decoration: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#bfdbfe'" onmouseout="this.style.backgroundColor='#dbeafe'">${trimmedName}</a>`;
+              } else {
+                return `<span style="background-color: #dbeafe; color: #2563eb; padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 500;">${trimmedName}</span>`;
+              }
+            }).join('');
+          }).join('')}
+        </div>
         <p style="font-size: 10px; color: #999;">${location}</p>
       </div>
     `;
