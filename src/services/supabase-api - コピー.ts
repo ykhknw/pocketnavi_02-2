@@ -216,84 +216,73 @@ class SupabaseApiClient {
   }
 
   // ビューデータからBuildingオブジェクトへの変換
-private async transformBuildingFromView(buildingView: any): Promise<Building> {
-  // デバッグログ
-  console.log('🔍 transformBuildingFromView Debug:', {
-    buildingId: buildingView.building_id,
-    title: buildingView.title,
-    architect_names_ja: buildingView.architect_names_ja,
-    architect_names_en: buildingView.architect_names_en,
-    buildingViewKeys: Object.keys(buildingView)
-  });
+  private async transformBuildingFromView(buildingView: any): Promise<Building> {
+    // デバッグログ
+    console.log('🔍 transformBuildingFromView Debug:', {
+      buildingId: buildingView.building_id,
+      title: buildingView.title,
+      location: buildingView.location,
+      locationEn_from_datasheetChunkEn: buildingView.locationEn_from_datasheetChunkEn,
+      locationEn_from_datasheetChunkEnType: typeof buildingView.locationEn_from_datasheetChunkEn,
+      buildingViewKeys: Object.keys(buildingView),
+      hasLocationEnField: 'locationEn_from_datasheetChunkEn' in buildingView,
+      buildingViewRaw: buildingView
+    });
 
-  // 建築家情報の処理（ビューから直接取得）
-  let architects: Architect[] = [];
-  if (buildingView.architect_names_ja && buildingView.architect_names_ja.trim()) {
-    // カンマ区切りの建築家名を配列に変換
-    const architectNamesJa = buildingView.architect_names_ja.split(',').map(name => name.trim()).filter(name => name);
-    const architectNamesEn = buildingView.architect_names_en ? 
-      buildingView.architect_names_en.split(',').map(name => name.trim()).filter(name => name) : 
-      [];
-    
-    // 建築家情報を構築
-    architects = architectNamesJa.map((nameJa, index) => ({
-      architect_id: 0, // ビューには含まれていないため0
-      architectJa: nameJa,
-      architectEn: architectNamesEn[index] || nameJa,
-      slug: '', // ビューには含まれていないため空文字
-      websites: []
-    }));
-  }
-
-  // 文字列を配列に変換するヘルパー関数
-  const parseSlashSeparated = (value: any): string[] => {
-    if (!value) return [];
-    if (Array.isArray(value)) return value;
-    if (typeof value === 'string') {
-      return value.split('/').map(v => v.trim()).filter(v => v);
+    // 建築家情報の処理
+    let architects: Architect[] = [];
+    if (buildingView.architect_ids && buildingView.architect_ids.length > 0) {
+      architects = await this.getArchitectsByIds(buildingView.architect_ids);
     }
-    return [];
-  };
 
-  const transformedBuilding = {
-    id: buildingView.building_id,
-    uid: buildingView.uid || '',
-    title: buildingView.title,
-    titleEn: buildingView.titleEn,
-    thumbnailUrl: buildingView.thumbnailUrl || '',
-    youtubeUrl: buildingView.youtubeUrl || '',
-    completionYears: buildingView.completionYears,
-    parentBuildingTypes: [], // ビューには含まれていないため空配列
-    buildingTypes: parseSlashSeparated(buildingView.buildingTypes),
-    buildingTypesEn: parseSlashSeparated(buildingView.buildingTypesEn),
-    parentStructures: [], // ビューには含まれていないため空配列
-    structures: [], // ビューには含まれていないため空配列
-    prefectures: buildingView.prefectures,
-    prefecturesEn: buildingView.prefecturesEn,
-    areas: buildingView.areas,
-    areasEn: buildingView.areasEn,
-    location: buildingView.location || '',
-    locationEn: buildingView.locationEn_from_datasheetChunkEn || buildingView.location || '',
-    architectDetails: buildingView.architect_names_ja || '', // 建築家名を設定
-    lat: buildingView.lat,
-    lng: buildingView.lng,
-    slug: buildingView.slug,
-    architects, // 修正された建築家情報
-    photos: [], // 空の配列を設定（ビューには含まれていないため）
-    likes: 0, // ビューには含まれていないためデフォルト値
-    created_at: buildingView.created_at || new Date().toISOString(),
-    updated_at: buildingView.updated_at || new Date().toISOString()
-  };
+    // 文字列を配列に変換するヘルパー関数
+    const parseSlashSeparated = (value: any): string[] => {
+      if (!value) return [];
+      if (Array.isArray(value)) return value;
+      if (typeof value === 'string') {
+        return value.split('/').map(v => v.trim()).filter(v => v);
+      }
+      return [];
+    };
 
-  console.log('🔍 transformBuildingFromView Result:', {
-    buildingId: transformedBuilding.id,
-    architects: transformedBuilding.architects,
-    architectsCount: transformedBuilding.architects.length
-  });
+    const transformedBuilding = {
+      id: buildingView.building_id,
+      uid: buildingView.uid,
+      title: buildingView.title,
+      titleEn: buildingView.titleEn,
+      thumbnailUrl: buildingView.thumbnailUrl,
+      youtubeUrl: buildingView.youtubeUrl,
+      completionYears: buildingView.completionYears,
+      parentBuildingTypes: [], // ビューには含まれていないため空配列
+      buildingTypes: parseSlashSeparated(buildingView.buildingTypes),
+      buildingTypesEn: parseSlashSeparated(buildingView.buildingTypesEn),
+      parentStructures: [], // ビューには含まれていないため空配列
+      structures: [], // ビューには含まれていないため空配列
+      prefectures: buildingView.prefectures,
+      prefecturesEn: buildingView.prefecturesEn,
+      areas: buildingView.areas,
+      areasEn: buildingView.areasEn,
+      location: buildingView.location,
+      locationEn: buildingView.locationEn_from_datasheetChunkEn,
+      architectDetails: '', // ビューには含まれていないため空文字
+      lat: buildingView.lat,
+      lng: buildingView.lng,
+      slug: buildingView.slug,
+      architects,
+      photos: [], // 空の配列を設定（ビューには含まれていないため）
+      likes: 0, // ビューには含まれていないためデフォルト値
+      created_at: buildingView.created_at,
+      updated_at: buildingView.updated_at
+    };
 
-  return transformedBuilding;
-}
+    console.log('🔍 transformBuildingFromView Result:', {
+      buildingId: transformedBuilding.id,
+      locationEn: transformedBuilding.locationEn,
+      locationEnType: typeof transformedBuilding.locationEn
+    });
 
+    return transformedBuilding;
+  }
 
   // フォールバック用の既存検索（統合版）
   private async searchBuildingsWithFallback(
