@@ -32,7 +32,7 @@ export class BuildingSearchViewService {
         isNaN: typeof filters.completionYear === 'number' ? isNaN(filters.completionYear) : 'N/A'
       });
       
-      // 基本クエリの構築
+      // 基本クエリの構築（新しいビューを使用）
       let query = supabase
         .from('buildings_search_view')
         .select('*', { count: 'exact' });

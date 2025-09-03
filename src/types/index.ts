@@ -34,6 +34,7 @@ export interface Architect {
   architectJa: string;
   architectEn: string;
   slug?: string;
+  order_index?: number; // order_indexプロパティを追加
   websites: Website[];
 }
 

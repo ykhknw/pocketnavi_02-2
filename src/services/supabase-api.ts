@@ -159,17 +159,54 @@ class SupabaseApiClient {
     }
   }
 
-  // 地点検索用の関数：PostGIS関数が存在しないため、フォールバック検索を使用
+  // 地点検索用の関数：新しいビューを使用して距離検索を実行
   private async searchBuildingsWithDistance(
     filters: SearchFilters,
     page: number = 1,
     limit: number = 10,
     language: 'ja' | 'en' = 'ja'
   ): Promise<{ buildings: Building[], total: number }> {
-    console.log('🔍 PostGIS関数が存在しないため、フォールバック検索を使用');
+    console.log('🔍 地点検索: 新しいビューを使用して距離検索を実行');
     
-    // PostGIS関数が存在しないため、直接フォールバック検索を使用
-    return this.searchBuildingsWithFallback(filters, page, limit, language);
+    try {
+      // BuildingSearchViewServiceを使用して距離検索を実行
+      const result = await this.buildingSearchViewService.searchBuildings(
+        filters,
+        language,
+        page,
+        limit
+      );
+      
+      console.log('✅ 地点検索完了:', {
+        resultCount: result.data.length,
+        totalCount: result.count,
+        page: result.page,
+        totalPages: result.totalPages
+      });
+
+      // データ変換（設計者情報を含む）
+      const transformedBuildings: Building[] = [];
+      for (const building of result.data) {
+        try {
+          const transformed = await this.transformBuildingFromView(building);
+          transformedBuildings.push(transformed);
+        } catch (error) {
+          console.warn('地点検索: ビューデータ変換エラー:', error);
+        }
+      }
+
+      return {
+        buildings: transformedBuildings,
+        total: result.count
+      };
+
+    } catch (error) {
+      console.error('❌ 地点検索でエラー:', error);
+      
+      // フォールバック: 既存の検索エンジンを使用
+      console.log(' フォールバック: 既存の検索エンジンを使用');
+      return this.searchBuildingsWithFallback(filters, page, limit, language);
+    }
   }
 
   // ID配列から建築家情報を取得
@@ -226,7 +263,7 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
     buildingViewKeys: Object.keys(buildingView)
   });
 
-  // 建築家情報の処理（ビューから直接取得）
+  // 建築家情報の処理（新しいビューからorder_index情報を含めて取得）
   let architects: Architect[] = [];
   if (buildingView.architect_names_ja && buildingView.architect_names_ja.trim()) {
     // カンマ区切りの建築家名を配列に変換
@@ -235,14 +272,29 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
       buildingView.architect_names_en.split(',').map(name => name.trim()).filter(name => name) : 
       [];
     
-    // 建築家情報を構築
+    // order_index情報がある場合はそれを使用、ない場合は配列のインデックスを使用
+    const orderIndices = buildingView.architect_order_indices || [];
+    
+    // 建築家情報を構築（order_index順でソート）
     architects = architectNamesJa.map((nameJa, index) => ({
-      architect_id: 0, // ビューには含まれていないため0
+      architect_id: buildingView.architect_ids?.[index] || 0,
       architectJa: nameJa,
       architectEn: architectNamesEn[index] || nameJa,
-      slug: '', // ビューには含まれていないため空文字
+      slug: '', // 必要に応じて後で設定
       websites: []
     }));
+
+    // order_indexによる並び替えを適用（order_index情報がある場合）
+    if (orderIndices.length > 0 && orderIndices.length === architects.length) {
+      // order_indexと建築家情報をペアにしてソート
+      const architectsWithOrder = architects.map((arch, index) => ({
+        ...arch,
+        order_index: orderIndices[index] || index
+      }));
+      
+      architectsWithOrder.sort((a, b) => a.order_index - b.order_index);
+      architects = architectsWithOrder.map(({ order_index, ...arch }) => arch);
+    }
   }
 
   // 文字列を配列に変換するヘルパー関数
@@ -914,7 +966,10 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
           .flat()
           .filter(architect => architect !== null);
 
-        console.log('新しいテーブル構造から取得した建築家データ:', architects);
+        // order_indexによる並び替えを適用
+        architects.sort((a, b) => a.order_index - b.order_index);
+
+        console.log('新しいテーブル構造から取得した建築家データ（並び替え後）:', architects);
       } catch (error) {
         console.error('新しいテーブル構造での建築家データ取得エラー:', error);
         architects = [];
@@ -1043,12 +1098,21 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
     try {
       console.log(`🔍 新しいテーブル構造で建築物建築家取得開始: ${buildingId}`);
       
-      // 段階的にクエリを実行して問題を特定
+      // 単一のクエリで建築家情報を取得（パフォーマンス向上）
       const { data, error } = await supabase
         .from('building_architects')
         .select(`
           architect_id,
-          architect_order
+          architect_order,
+          architect_compositions!inner(
+            order_index,
+            individual_architects!inner(
+              individual_architect_id,
+              name_ja,
+              name_en,
+              slug
+            )
+          )
         `)
         .eq('building_id', buildingId)
         .order('architect_order');
@@ -1060,35 +1124,12 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
 
       console.log(`✅ building_architects取得成功: ${data.length}件`, data);
 
-      // 各architect_idに対して個別に建築家情報を取得
+      // 結果を平坦化して配列に変換
       const architects: NewArchitect[] = [];
       
       for (const buildingArchitect of data) {
-        try {
-          // architect_compositionsから建築家情報を取得（すべてのindividual_architect_idを取得）
-          const { data: compositionData, error: compositionError } = await supabase
-            .from('architect_compositions')
-            .select(`
-              order_index,
-              individual_architects(
-                individual_architect_id,
-                name_ja,
-                name_en,
-                slug
-              )
-            `)
-            .eq('architect_id', buildingArchitect.architect_id)
-            .order('order_index');
-
-          if (compositionError || !compositionData) {
-            console.warn(`architect_compositions取得エラー (architect_id: ${buildingArchitect.architect_id}):`, compositionError);
-            continue;
-          }
-
-          console.log(`✅ architect_compositions取得成功 (architect_id: ${buildingArchitect.architect_id}): ${compositionData.length}件`, compositionData);
-
-          // 各compositionに対して建築家情報を追加
-          for (const composition of compositionData) {
+        if (buildingArchitect.architect_compositions) {
+          for (const composition of buildingArchitect.architect_compositions) {
             if (composition.individual_architects) {
               architects.push({
                 architect_id: buildingArchitect.architect_id,
@@ -1103,9 +1144,6 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
               console.log(`✅ 建築家追加: ${composition.individual_architects.name_ja} (${composition.individual_architects.slug})`);
             }
           }
-        } catch (compositionError) {
-          console.warn(`個別建築家情報取得エラー (architect_id: ${buildingArchitect.architect_id}):`, compositionError);
-          continue;
         }
       }
 
@@ -1114,8 +1152,11 @@ private async transformBuildingFromView(buildingView: any): Promise<Building> {
         index === self.findIndex(a => a.individual_architect_id === architect.individual_architect_id)
       );
 
-      console.log(`✅ 最終的な建築家情報: ${uniqueArchitects.length}件 (重複除去後)`, uniqueArchitects);
-      return uniqueArchitects;
+      // order_indexによる並び替えを適用
+      const sortedArchitects = uniqueArchitects.sort((a, b) => a.order_index - b.order_index);
+
+      console.log(`✅ 最終的な建築家情報: ${sortedArchitects.length}件 (重複除去・並び替え後)`, sortedArchitects);
+      return sortedArchitects;
 
     } catch (error) {
       console.error('新しいテーブル構造での建築物建築家取得エラー:', error);

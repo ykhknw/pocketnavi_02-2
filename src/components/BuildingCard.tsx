@@ -101,11 +101,16 @@ function BuildingCardComponent({
     e.stopPropagation();
     
     // 建築物の詳細ページに遷移（単数形に統一）
+    const currentFilters = context.filters;
     if (building.slug) {
-      navigate(`/building/${building.slug}`);
+      navigate(`/building/${building.slug}`, { 
+        state: { fromList: true, building, displayIndex: index + 1, filters: currentFilters } 
+      });
     } else {
       // slugがない場合はIDで遷移
-      navigate(`/building/${building.id}`);
+      navigate(`/building/${building.id}`, { 
+        state: { fromList: true, building, displayIndex: index + 1, filters: currentFilters } 
+      });
     }
     
     // 必要に応じてonSelectも呼び出し
@@ -328,27 +333,36 @@ function BuildingCardComponent({
         </div>
 
         <div className="space-y-3 mb-3">
-          {/* 建築家バッジ - architectsが存在し、空でない場合のみ表示 */}
-          {(() => {
-            // デバッグ用: 建築家情報の詳細確認
-            console.log(`🔍 BuildingCard ${building.id} (${building.title}) の建築家情報:`, {
-              architects: building.architects,
-              architectsLength: building.architects?.length,
-              firstArchitect: building.architects?.[0],
-              architectJa: building.architects?.[0]?.architectJa,
-              architectEn: building.architects?.[0]?.architectEn,
-              slug: building.architects?.[0]?.slug
-            });
-            
-            if (!building.architects || building.architects.length === 0) {
-              console.log(`⚠️ 建築物 ${building.id} の建築家情報がありません`);
-              return null;
-            }
-            
-            return (
-              <div>
-                <div className="flex flex-wrap gap-1">
-                  {building.architects.map(architect => {
+                     {/* 建築家バッジ - architectsが存在し、空でない場合のみ表示 */}
+           {(() => {
+             // デバッグ用: 建築家情報の詳細確認
+             console.log(`🔍 BuildingCard ${building.id} (${building.title}) の建築家情報:`, {
+               architects: building.architects,
+               architectsLength: building.architects?.length,
+               firstArchitect: building.architects?.[0],
+               architectJa: building.architects?.[0]?.architectJa,
+               architectEn: building.architects?.[0]?.architectEn,
+               slug: building.architects?.[0]?.slug
+             });
+             
+             if (!building.architects || building.architects.length === 0) {
+               console.log(`⚠️ 建築物 ${building.id} の建築家情報がありません`);
+               return null;
+             }
+             
+             // order_indexによる並び替えを保証（フロントエンドでの二重保証）
+             const sortedArchitects = [...building.architects].sort((a, b) => {
+               // order_indexプロパティがある場合はそれを使用、ない場合は配列の順序を維持
+               if (a.order_index !== undefined && b.order_index !== undefined) {
+                 return a.order_index - b.order_index;
+               }
+               return 0; // 順序を変更しない
+             });
+             
+             return (
+               <div>
+                 <div className="flex flex-wrap gap-1">
+                   {sortedArchitects.map(architect => {
                     const architectName = language === 'ja' ? architect.architectJa : architect.architectEn;
                     
                     console.log(`🔍 建築家 ${architect.architect_id}:`, {

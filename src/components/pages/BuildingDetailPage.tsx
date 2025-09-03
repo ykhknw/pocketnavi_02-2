@@ -114,7 +114,28 @@ export function BuildingDetailPage() {
                 <div className="flex items-center gap-4">
                   <Button
                     variant="outline"
-                    onClick={() => navigate(-1)}
+                    onClick={() => {
+                      // 一覧ページに確実に戻る
+                      if (location.state?.fromList) {
+                        // 一覧ページから来た場合は履歴を戻る
+                        navigate(-1);
+                      } else {
+                        // 直接アクセスや他のページからの場合は一覧ページに遷移
+                        // 検索条件があれば保持して戻る
+                        const searchParams = new URLSearchParams();
+                        if (location.state?.filters) {
+                          Object.entries(location.state.filters).forEach(([key, value]) => {
+                            if (value && Array.isArray(value) && value.length > 0) {
+                              searchParams.set(key, value.join(','));
+                            } else if (value && typeof value === 'string') {
+                              searchParams.set(key, value);
+                            }
+                          });
+                        }
+                        const queryString = searchParams.toString();
+                        navigate(queryString ? `/?${queryString}` : '/');
+                      }
+                    }}
                     className="flex items-center gap-2"
                   >
                     <ArrowLeft className="h-4 w-4" />
